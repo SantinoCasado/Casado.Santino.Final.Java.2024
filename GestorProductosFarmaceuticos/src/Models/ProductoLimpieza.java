@@ -1,26 +1,21 @@
 package Models;
 
-import Interfaces.IMapAbleJson;
-import Interfaces.ISerializableCsv;
-import Validaciones.ValidadorProductosLimpieza;
+import Enums.MedidasConcentracion;
+import Validations.ValidadorDatosProductos;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 
-public abstract class ProductoLimpieza implements ISerializableCsv, IMapAbleJson{
+public abstract class ProductoLimpieza {
     protected String nombreComercial;
-    protected String concentracion;
     protected LocalDate fechaVencimiento;
+    protected MedidasConcentracion concentracion;
 
-    public ProductoLimpieza(String nombreComercial, String concentracion, LocalDate fechaVencimiento) {
+    public ProductoLimpieza(String nombreComercial, MedidasConcentracion concentracion , LocalDate fechaVencimiento) {
         this.nombreComercial = nombreComercial;
         this.concentracion = concentracion;
         this.fechaVencimiento = fechaVencimiento;
     }
-
-    
     
     public ProductoLimpieza() {
     }
@@ -31,16 +26,16 @@ public abstract class ProductoLimpieza implements ISerializableCsv, IMapAbleJson
     }
 
     public void setNombreComercial(String nombreComercial) {
-        ValidadorProductosLimpieza.validarNombre(nombreComercial);
+        ValidadorDatosProductos.validarNombre(nombreComercial);
         this.nombreComercial = nombreComercial;
     }
 
-    public String getConcentración() {
-        return concentracion;
+    public MedidasConcentracion getConcentración() {
+        return this.concentracion;
     }
 
-    public void setConcentración(String concentración) {
-        ValidadorProductosLimpieza.validarConcentracion(concentracion);
+    public void setConcentración(MedidasConcentracion concentración) {
+        ValidadorDatosProductos.validarConcentracion(concentracion);
         this.concentracion = concentración;
     }
 
@@ -49,7 +44,7 @@ public abstract class ProductoLimpieza implements ISerializableCsv, IMapAbleJson
     }
 
     public void setFechaVencimiento(LocalDate fechaVencimiento) {
-        ValidadorProductosLimpieza.ValidarFechaVencimiento(fechaVencimiento);
+        ValidadorDatosProductos.ValidarFechaVencimiento(fechaVencimiento);
         this.fechaVencimiento = fechaVencimiento;
     }
 
@@ -80,25 +75,10 @@ public abstract class ProductoLimpieza implements ISerializableCsv, IMapAbleJson
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("nombreComercial=").append(nombreComercial);
-        sb.append(", concentraci\u00f3n=").append(concentracion);
-        sb.append(", fechaVencimiento=").append(fechaVencimiento);
-        sb.append('}');
+        sb.append(nombreComercial.toUpperCase() + "\n");
+        sb.append("[");
+        sb.append("Concentracion: ").append(concentracion + "   |   ");
+        sb.append("Fecha de Vencimiento: ").append(fechaVencimiento + "   |   ");
         return sb.toString();
     }
-    
-    @Override
-    public String toCSV(){
-        return nombreComercial + "," + concentracion + "," + fechaVencimiento;
-    }
-    
-    @Override
-    public Map<String, String> toMap() {
-        Map<String,String> datos = new HashMap<>();
-        datos.put("nombreComercial", nombreComercial);
-        datos.put("concentracion", concentracion);
-        datos.put("fechaVencimiento", fechaVencimiento.toString());
-        return datos;
-    }
-
 }

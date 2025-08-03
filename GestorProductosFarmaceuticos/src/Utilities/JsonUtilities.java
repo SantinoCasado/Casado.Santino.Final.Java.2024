@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
 import java.io.*;
 import java.util.*;
 
-public class JsonSave {
+public class JsonUtilities {
 
     private static final String RUTA_JSON = "src/DatosFormularios/productosProximosVencer.json";
     

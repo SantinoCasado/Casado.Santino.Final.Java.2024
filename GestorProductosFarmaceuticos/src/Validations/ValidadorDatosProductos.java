@@ -1,18 +1,17 @@
-package Validaciones;
+package Validations;
 
+import Enums.MedidasConcentracion;
 import Exceptions.*;
 import java.time.LocalDate;
 
-
-public class ValidadorProductosLimpieza {
-
+public class ValidadorDatosProductos {
     public static void validarNombre(String nombre){
         if (nombre == null || nombre.isBlank()) {
             throw new DatoErroneoException("El nombre no puede estar vacío.");
         }
     }
-     public static void validarConcentracion(String concentracion){
-        if (concentracion == null || concentracion.isBlank()) {
+     public static void validarConcentracion(MedidasConcentracion concentracion){
+        if (concentracion == null) {
             throw new DatoErroneoException("La concentracion no puede estar vacía.");
         }
       }
@@ -25,7 +24,4 @@ public class ValidadorProductosLimpieza {
             throw new ProductoVencidoException("No se puede agregar productos vencidos!!");
         }
     }
-
 }
-
-

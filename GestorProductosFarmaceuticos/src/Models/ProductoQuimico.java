@@ -1,17 +1,14 @@
 package Models;
 
 import Enums.Advertencia;
-import Exceptions.DatoErroneoException;
-import Interfaces.ISerializableCsv;
+import Enums.MedidasConcentracion;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 
-public class ProductoQuimico extends ProductoLimpieza implements ISerializableCsv{
+public class ProductoQuimico extends ProductoLimpieza{
     private Advertencia tipoAdvertencia;
 
-    public ProductoQuimico(Advertencia tipoAdvertencia, String nombreComercial, String concentración, LocalDate fechaVencimiento) {
+    public ProductoQuimico(Advertencia tipoAdvertencia, String nombreComercial, MedidasConcentracion concentración, LocalDate fechaVencimiento) {
         super(nombreComercial, concentración, fechaVencimiento);
         this.tipoAdvertencia = tipoAdvertencia;
     }
@@ -48,46 +45,11 @@ public class ProductoQuimico extends ProductoLimpieza implements ISerializableCs
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("ProductoQuimico{");
         sb.append(super.toString());
-        sb.append("tipoAdvertencia=").append(tipoAdvertencia);
-        sb.append('}');
+        sb.append("Tipo: ").append("ProductoQuimico" + "   |   ");
+        sb.append("Advertencia: ").append(tipoAdvertencia);
+        sb.append(']');
         return sb.toString();
     }
-    
-    public String toCSV(){
-        StringBuilder sb = new StringBuilder();
-        sb.append(super.toCSV()).append(", ProductoQuimico");    
 
-        sb.append(",").append(this.tipoAdvertencia);
-        
-        return sb.toString();
-    }
-    
-    @Override
-    public ProductoQuimico fromCSV(String line) {
-        String[] result = line.split(",");
-
-        String nombre = result[0];
-        String concentracion = result[1];
-        LocalDate fecha = LocalDate.parse(result[2]);
-        String tipo = result[3];
-        
-        String advertenciaTexto = result[4].trim();
-        try {
-        tipoAdvertencia = Advertencia.valueOf(advertenciaTexto);
-        } catch (IllegalArgumentException e) {
-        throw new DatoErroneoException("Advertencia inválida: " + advertenciaTexto);
-        }
-
-        return new ProductoQuimico( tipoAdvertencia, nombre, concentracion, fecha);
-    }
-    
-    @Override
-    public Map<String, String> toMap() {
-        Map<String, String> datos = new HashMap<>(super.toMap()); // Copia datos comunes de la clase padre
-        datos.put("tipo", "ProuductoQuimico");       
-        datos.put("Tipo de Advertencia", this.getTipoAdvertencia().name()); 
-        return datos;
-    }
 }

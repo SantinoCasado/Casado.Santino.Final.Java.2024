@@ -1,10 +1,10 @@
 package Interfaces;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 
-public interface IMapAbleJson<T> {
-     Map<String, String> toMap();
-    T fromMap(Map<String, String> map);
-
+public interface IMapAbleJson<T>{
+    Map<T, T> toMap(); 
+    ArrayList<T> fromMap(Map<T, T> map);
 }
