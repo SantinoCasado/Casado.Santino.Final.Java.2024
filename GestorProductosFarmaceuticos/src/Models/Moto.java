@@ -1,9 +1,10 @@
 package Models;
 
 import Interfaces.IMantenible;
-import Models.Enums.EstadoVehiculo;
-import Models.Enums.MarcasMoto;
-import Models.Enums.TipoCombustible;
+import Enums.EstadoVehiculo;
+import Enums.MarcasMoto;
+import Enums.TipoCombustible;
+import Enums.TipoVehiculos;
 
 public class Moto extends Vehiculo implements IMantenible{
     private MarcasMoto marca;
@@ -14,16 +15,14 @@ public class Moto extends Vehiculo implements IMantenible{
     public Moto() {
     }
 
-    public Moto(String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso) {
-        super(patente, añoFabricacion, tipoCombustible, horasUso);
+    public Moto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estado) {
+        super(tipo, patente, añoFabricacion, tipoCombustible, horasUso, estado);
         this.marca = MarcasMoto.HONDA;
         this.cilindrada = 125;
     }
 
-    public Moto(String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estadoVehiculo, MarcasMoto marca, int cilindrada) {
-        super(patente, añoFabricacion, tipoCombustible, horasUso, estadoVehiculo);
-        this.marca = marca;
-        this.cilindrada = cilindrada;
+    public Moto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estado, MarcasMoto marca, int cilindrada){
+        super(tipo, patente, añoFabricacion, tipoCombustible, horasUso, estado);
     }
     
     //Getters y Setters
@@ -47,7 +46,7 @@ public class Moto extends Vehiculo implements IMantenible{
     @Override
     public String mostrarDetalles() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Auto" + "\t");
+        sb.append("Moto" + "\t");
         sb.append(super.getPatente() + "\t");
         sb.append(super.getAñoFabricacion() + "\t");
         sb.append(super.getTipoCombustible() + "\t");
@@ -65,6 +64,6 @@ public class Moto extends Vehiculo implements IMantenible{
     
     @Override
     public void realizarMatenimiento(){
-        super.setEstadoAlquiler(EstadoVehiculo.EN_MANTENIMIENTO);
+        super.setEstadoVehiculo(EstadoVehiculo.EN_MANTENIMIENTO);
     }
 }

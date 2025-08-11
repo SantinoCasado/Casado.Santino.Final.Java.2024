@@ -1,28 +1,29 @@
 package Models;
 
 import Interfaces.IMantenible;
-import Models.Enums.EstadoVehiculo;
-import Models.Enums.MarcasCamioneta;
-import Models.Enums.TipoCombustible;
+import Enums.EstadoVehiculo;
+import Enums.MarcasCamioneta;
+import Enums.TipoCombustible;
+import Enums.TipoVehiculos;
 
 public class Camioneta extends Vehiculo implements IMantenible{
     private MarcasCamioneta marca;
-    private double campacidadCargaKg;
+    private float campacidadCargaKg;
     
     //Constructores
     public Camioneta() {
     }
 
-    public Camioneta(String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, MarcasCamioneta marca, double campacidadCargaKg) {
-        super(patente, añoFabricacion, tipoCombustible, horasUso);
+    public Camioneta(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estado,  MarcasCamioneta marca, float campacidadCargaKg) {
+        super(tipo, patente, añoFabricacion, tipoCombustible, horasUso, estado);
         this.marca = marca;
         this.campacidadCargaKg = campacidadCargaKg;
     }
 
-    public Camioneta(String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estadoVehiculo) {
-        super(patente, añoFabricacion, tipoCombustible, horasUso, estadoVehiculo);
-        this.marca = MarcasCamioneta.JEEP;
-        this.campacidadCargaKg = 1000.0;
+    public Camioneta(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estado){
+        super(tipo, patente, añoFabricacion, tipoCombustible, horasUso, estado);
+        this.marca = MarcasCamioneta.DODGE;
+        this.campacidadCargaKg = 500;
     }
     
     
@@ -38,7 +39,7 @@ public class Camioneta extends Vehiculo implements IMantenible{
     public double getCampacidadCargaKg() {
         return campacidadCargaKg;
     }
-    public void setCampacidadCargaKg(double campacidadCargaKg) {
+    public void setCampacidadCargaKg(float campacidadCargaKg) {
         this.campacidadCargaKg = campacidadCargaKg;
     }
     
@@ -46,7 +47,7 @@ public class Camioneta extends Vehiculo implements IMantenible{
     @Override
     public String mostrarDetalles() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Auto" + "\t");
+        sb.append("Camioneta" + "\t");
         sb.append(super.getPatente() + "\t");
         sb.append(super.getAñoFabricacion() + "\t");
         sb.append(super.getTipoCombustible() + "\t");
@@ -64,7 +65,7 @@ public class Camioneta extends Vehiculo implements IMantenible{
     
     @Override
     public void realizarMatenimiento(){
-        super.setEstadoAlquiler(EstadoVehiculo.EN_MANTENIMIENTO);
+        super.setEstadoVehiculo(EstadoVehiculo.EN_MANTENIMIENTO);
     }
     
 }

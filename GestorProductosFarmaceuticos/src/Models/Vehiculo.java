@@ -1,12 +1,14 @@
 package Models;
 
-import Models.Enums.EstadoVehiculo;
-import Models.Enums.TipoCombustible;
+import Enums.EstadoVehiculo;
+import Enums.TipoCombustible;
+import Enums.TipoVehiculos;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
+    TipoVehiculos tipo;
     private String patente;
     private int añoFabricacion;
     private TipoCombustible tipoCombustible;
@@ -17,7 +19,8 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
     public Vehiculo() {
     }
 
-    public Vehiculo(String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso) {
+    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso) {
+        this.tipo = tipo;
         this.patente = patente;
         this.añoFabricacion = añoFabricacion;
         this.tipoCombustible = tipoCombustible;
@@ -25,7 +28,8 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.estadoVehiculo = EstadoVehiculo.DISPONIBLE; // Valor por defecto
     }
 
-    public Vehiculo(String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estadoVehiculo) {
+    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estadoVehiculo) {
+        this.tipo = tipo;
         this.patente = patente;
         this.añoFabricacion = añoFabricacion;
         this.tipoCombustible = tipoCombustible;
@@ -38,7 +42,15 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.horasUso += horas;
     }
 
-    // Getters y Setters
+    // Getters y Setters    
+    public TipoVehiculos getTipo() {
+        return tipo;
+    }
+    public void setTipo(TipoVehiculos tipo) {
+        this.tipo = tipo;
+    }
+    
+    
     public String getPatente() { 
         return patente; 
     }
@@ -70,12 +82,13 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
     }
     
     
-    public EstadoVehiculo getEstadoAlquiler() { 
+    public EstadoVehiculo getEstadoVehiculo() { 
         return estadoVehiculo; 
     }
-    public void setEstadoAlquiler(EstadoVehiculo estadoVehiculo) { 
+    public void setEstadoVehiculo(EstadoVehiculo estadoVehiculo) { 
         this.estadoVehiculo = estadoVehiculo; 
     }
+    
     
     // Métodos abstractos
     public abstract String mostrarDetalles();
@@ -89,8 +102,7 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
     //Hash code y equals
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 13 * hash + Objects.hashCode(this.patente);
+        int hash = 7;
         return hash;
     }
 
@@ -108,5 +120,5 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         final Vehiculo other = (Vehiculo) obj;
         return Objects.equals(this.patente, other.patente);
     }
-     
+    
 }

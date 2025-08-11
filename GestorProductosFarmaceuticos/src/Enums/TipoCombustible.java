@@ -1,4 +1,4 @@
-package Models.Enums;
+package Enums;
 
 
 public enum TipoCombustible {

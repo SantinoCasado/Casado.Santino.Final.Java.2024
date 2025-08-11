@@ -1,9 +1,10 @@
 package Models;
 
 import Interfaces.IMantenible;
-import Models.Enums.EstadoVehiculo;
-import Models.Enums.MarcasAuto;
-import Models.Enums.TipoCombustible;
+import Enums.EstadoVehiculo;
+import Enums.MarcasAuto;
+import Enums.TipoCombustible;
+import Enums.TipoVehiculos;
 
 public class Auto extends Vehiculo implements IMantenible{
     private MarcasAuto marca;
@@ -12,14 +13,14 @@ public class Auto extends Vehiculo implements IMantenible{
     public Auto(){        
     }
     
-    public Auto(String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estadoVehiculo){
-        super(patente, añoFabricacion, tipoCombustible, horasUso);
+    public Auto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estadoVehiculo){
+        super(tipo, patente, añoFabricacion, tipoCombustible, horasUso, estadoVehiculo);
         this.marca = MarcasAuto.FORD;
         this.numPuertas = 4;
     }
     
-    public Auto(String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estadoVehiculo, MarcasAuto marca, int numPuertas){
-        super(patente, añoFabricacion, tipoCombustible, horasUso);
+    public Auto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estadoVehiculo, MarcasAuto marca, int numPuertas){
+        super(tipo, patente, añoFabricacion, tipoCombustible, horasUso, estadoVehiculo);
         this.marca = marca;
         this.numPuertas = numPuertas;
     }
@@ -65,7 +66,7 @@ public class Auto extends Vehiculo implements IMantenible{
     
     @Override
     public void realizarMatenimiento(){
-        super.setEstadoAlquiler(EstadoVehiculo.EN_MANTENIMIENTO);
+        super.setEstadoVehiculo(EstadoVehiculo.EN_MANTENIMIENTO);
     }
     
     

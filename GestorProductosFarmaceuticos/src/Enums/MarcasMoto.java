@@ -1,9 +1,11 @@
-package Models.Enums;
+package Enums;
 
 public enum MarcasMoto {
     HONDA, 
     YAMAHA, 
     SUZUKI, 
-    KAWASAKI, 
+    KAWASAKI,
+    BMW,
+    DUCATI,
     MOTOMEL;
 }

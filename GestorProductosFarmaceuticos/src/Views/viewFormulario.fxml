@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="698.0" prefWidth="535.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="Controllers.ViewFormularioController">
+   <children>
+      <Pane prefHeight="698.0" prefWidth="529.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="137.0" layoutY="14.0" prefHeight="26.0" prefWidth="256.0" text="Datos del Vehiculo" textAlignment="CENTER">
+               <font>
+                  <Font name="Gill Sans MT" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="38.0" layoutY="73.0" prefHeight="26.0" prefWidth="144.0" text="Tipo de Vehiculo:" textAlignment="CENTER">
+               <font>
+                  <Font name="Gill Sans MT" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="38.0" layoutY="336.0" prefHeight="26.0" prefWidth="123.0" text="Patente:" textAlignment="CENTER">
+               <font>
+                  <Font name="Gill Sans MT" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="38.0" layoutY="418.0" prefHeight="26.0" prefWidth="152.0" text="Año de Fabricación:" textAlignment="CENTER">
+               <font>
+                  <Font name="Gill Sans MT" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="38.0" layoutY="162.0" prefHeight="26.0" prefWidth="165.0" text="Tipo de Combustible:" textAlignment="CENTER">
+               <font>
+                  <Font name="Gill Sans MT" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblTiempoRenta" layoutX="300.0" layoutY="244.0" prefHeight="26.0" prefWidth="152.0" text="Tiempo de Renta:" textAlignment="CENTER">
+               <font>
+                  <Font name="Gill Sans MT" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="38.0" layoutY="244.0" prefHeight="26.0" prefWidth="165.0" text="Estado del Vehiculo:" textAlignment="CENTER">
+               <font>
+                  <Font name="Gill Sans MT" size="18.0" />
+               </font>
+            </Label>
+            <TextField layoutX="38.0" layoutY="362.0" />
+            <ChoiceBox fx:id="cbTipoVehiculo" layoutX="39.0" layoutY="99.0" prefWidth="150.0" />
+            <TextField layoutX="34.0" layoutY="444.0" />
+            <ChoiceBox fx:id="cbTipoCombustible" layoutX="39.0" layoutY="188.0" prefHeight="26.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="cbEstadoVehiculo" layoutX="39.0" layoutY="270.0" prefWidth="150.0" />
+            <DatePicker fx:id="dpRenta" layoutX="286.0" layoutY="270.0" />
+            <Button fx:id="btnAceptar" layoutX="85.0" layoutY="570.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="105.0" text="Aceptar" />
+            <Button fx:id="btnCancelar" layoutX="341.0" layoutY="570.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="105.0" text="Cancelar" />
+            <Label fx:id="lblPrimerAtributo" layoutX="300.0" layoutY="336.0" prefHeight="26.0" prefWidth="152.0" text="Primer Atributo:" textAlignment="CENTER">
+               <font>
+                  <Font name="Gill Sans MT" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblSegundoAtributo" layoutX="300.0" layoutY="418.0" prefHeight="26.0" prefWidth="152.0" text="Segundo Atributo:" textAlignment="CENTER">
+               <font>
+                  <Font name="Gill Sans MT" size="18.0" />
+               </font>
+            </Label>
+            <TextField layoutX="294.0" layoutY="362.0" />
+            <TextField layoutX="300.0" layoutY="444.0" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

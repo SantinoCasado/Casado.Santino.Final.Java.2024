@@ -1,10 +1,14 @@
-package Models.Enums;
+package Enums;
 
 public enum MarcasAuto {
      //Autos
     FORD, 
     CHEVROLET, 
     TOYOTA, 
-    VOLKSWAGEN, 
+    VOLKSWAGEN,
+    BMW,
+    FIAT,
+    RENAULT,
+    NISSAN,
     PEUGEOT;
 }
