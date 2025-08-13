@@ -23,7 +23,7 @@
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="38.0" layoutY="336.0" prefHeight="26.0" prefWidth="123.0" text="Patente:" textAlignment="CENTER">
+            <Label layoutX="38.0" layoutY="336.0" prefHeight="26.0" prefWidth="63.0" text="Patente:" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
@@ -48,9 +48,9 @@
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <TextField layoutX="38.0" layoutY="362.0" />
+            <TextField fx:id="txtPatente1" layoutX="34.0" layoutY="363.0" prefHeight="26.0" prefWidth="63.0" />
             <ChoiceBox fx:id="cbTipoVehiculo" layoutX="39.0" layoutY="99.0" prefWidth="150.0" />
-            <TextField layoutX="34.0" layoutY="444.0" />
+            <TextField fx:id="txtAñoFabricacion" layoutX="34.0" layoutY="444.0" />
             <ChoiceBox fx:id="cbTipoCombustible" layoutX="39.0" layoutY="188.0" prefHeight="26.0" prefWidth="150.0" />
             <ChoiceBox fx:id="cbEstadoVehiculo" layoutX="39.0" layoutY="270.0" prefWidth="150.0" />
             <DatePicker fx:id="dpRenta" layoutX="286.0" layoutY="270.0" />
@@ -66,8 +66,14 @@
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <TextField layoutX="300.0" layoutY="444.0" />
+            <TextField fx:id="txtSegundoAtributo" layoutX="300.0" layoutY="444.0" />
             <ChoiceBox fx:id="cbMarca" layoutX="296.0" layoutY="363.0" prefWidth="150.0" />
+            <Label layoutX="107.0" layoutY="369.0" prefHeight="26.0" prefWidth="6.0" text="-" textAlignment="CENTER">
+               <font>
+                  <Font name="Gill Sans MT" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtPatente2" layoutX="121.0" layoutY="363.0" prefHeight="26.0" prefWidth="63.0" />
          </children>
       </Pane>
    </children>

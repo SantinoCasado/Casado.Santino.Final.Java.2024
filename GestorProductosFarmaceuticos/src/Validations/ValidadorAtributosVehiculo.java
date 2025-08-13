@@ -54,9 +54,11 @@ public class ValidadorAtributosVehiculo {
         }
     }
     
-    public static boolean validarFecha(LocalDate fecha) {
+    public static void validarFecha(LocalDate fecha) {
         LocalDate hoy = LocalDate.now();
-        return !fecha.isBefore(hoy); // true si es hoy o en el futuro
+        if (fecha.isBefore(hoy)) {
+             throw new DatoErroneoException("La fecha no puede ser anterior a hoy!.");
+        }
     }
     
     public static void validarTipoCombustible(TipoCombustible combustible){

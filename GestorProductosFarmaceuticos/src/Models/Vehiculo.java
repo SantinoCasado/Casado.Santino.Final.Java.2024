@@ -5,6 +5,10 @@ import Enums.TipoCombustible;
 import Enums.TipoVehiculos;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
@@ -97,6 +101,16 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
     @Override
     public int compareTo(Vehiculo otroVehiculo) {
         return Integer.compare(this.añoFabricacion, otroVehiculo.añoFabricacion);
+    }
+    
+    public float obtenerHorasUso(LocalDate fechaFinUso){
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime finEstimado = fechaFinUso.atTime(LocalTime.MAX); //fin de la fecha 23:59:59.9
+        
+        long horasEstimadas = ChronoUnit.HOURS.between(ahora, finEstimado);
+        if (horasEstimadas < 0) horasEstimadas = 0;
+        
+        return horasEstimadas;
     }
 
     //Hash code y equals
