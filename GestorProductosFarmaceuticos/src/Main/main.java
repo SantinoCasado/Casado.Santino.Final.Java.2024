@@ -11,7 +11,7 @@ public class main extends Application{
     @Override
     public void start(Stage stage) throws Exception{
         //Cargo la vista de fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/mainView.fxml"));
         
         //Creo la escena
         Scene scene = new Scene(loader.load()); //Utilizo el metodo que viene con FXMLLoader

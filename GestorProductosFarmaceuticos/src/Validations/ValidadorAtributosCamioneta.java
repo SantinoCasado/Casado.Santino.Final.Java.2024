@@ -4,7 +4,7 @@ import Enums.MarcasCamioneta;
 import Exceptions.DatoErroneoException;
 
 public class ValidadorAtributosCamioneta {
-    public static void validarMarca(MarcasCamioneta marca){
+    public static void validarMarca(String marca){
         if(marca == null){
             throw new DatoErroneoException("Seleccione una marca de camioneta.");
         }
@@ -12,7 +12,7 @@ public class ValidadorAtributosCamioneta {
     
     public static void validarCapacidadaCarga(String capacidadCargaKg){
         if( capacidadCargaKg == null || capacidadCargaKg.trim().isEmpty()){
-            throw new DatoErroneoException("Informe del estado del vehiculo.");
+            throw new DatoErroneoException("Informe su capacidad de carga.");
         }else{
             try {
                 float capacidadFloat = Float.parseFloat(capacidadCargaKg.trim());

@@ -21,7 +21,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jdk.jfr.Label;
+import javafx.scene.control.Label;
 
 public class MainViewController implements Initializable {
     @FXML

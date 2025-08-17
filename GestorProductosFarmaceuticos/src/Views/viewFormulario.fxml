@@ -11,69 +11,69 @@
 
 <AnchorPane id="AnchorPane" prefHeight="698.0" prefWidth="535.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ViewFormularioController">
    <children>
-      <Pane prefHeight="698.0" prefWidth="529.0">
+      <Pane layoutX="14.0" prefHeight="698.0" prefWidth="529.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="137.0" layoutY="14.0" prefHeight="26.0" prefWidth="256.0" text="Datos del Vehiculo" textAlignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="117.0" layoutY="14.0" prefHeight="26.0" prefWidth="256.0" text="Datos del Vehiculo" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="38.0" layoutY="73.0" prefHeight="26.0" prefWidth="144.0" text="Tipo de Vehiculo:" textAlignment="CENTER">
+            <Label layoutX="214.0" layoutY="439.0" prefHeight="26.0" prefWidth="63.0" text="Patente:" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="38.0" layoutY="336.0" prefHeight="26.0" prefWidth="63.0" text="Patente:" textAlignment="CENTER">
+            <Label layoutX="286.0" layoutY="362.0" prefHeight="26.0" prefWidth="152.0" text="Año de Fabricación:" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="38.0" layoutY="418.0" prefHeight="26.0" prefWidth="152.0" text="Año de Fabricación:" textAlignment="CENTER">
+            <Label layoutX="25.0" layoutY="148.0" prefHeight="26.0" prefWidth="165.0" text="Tipo de Combustible:" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="38.0" layoutY="162.0" prefHeight="26.0" prefWidth="165.0" text="Tipo de Combustible:" textAlignment="CENTER">
+            <Label fx:id="lblTiempoRenta" layoutX="286.0" layoutY="140.0" prefHeight="26.0" prefWidth="152.0" text="Tiempo de Renta:" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="lblTiempoRenta" layoutX="300.0" layoutY="244.0" prefHeight="26.0" prefWidth="152.0" text="Tiempo de Renta:" textAlignment="CENTER">
+            <Label layoutX="32.0" layoutY="257.0" prefHeight="26.0" prefWidth="165.0" text="Estado del Vehiculo:" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="38.0" layoutY="244.0" prefHeight="26.0" prefWidth="165.0" text="Estado del Vehiculo:" textAlignment="CENTER">
+            <TextField fx:id="txtPatente1" layoutX="255.0" layoutY="479.0" prefHeight="26.0" prefWidth="63.0" />
+            <TextField fx:id="txtAñoFabricacion" layoutX="286.0" layoutY="391.0" />
+            <ChoiceBox fx:id="cbTipoCombustible" layoutX="32.0" layoutY="174.0" prefHeight="26.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="cbEstadoVehiculo" layoutX="32.0" layoutY="283.0" prefWidth="150.0" />
+            <DatePicker fx:id="dpRenta" layoutX="272.0" layoutY="174.0" />
+            <Button fx:id="btnAceptar" layoutX="78.0" layoutY="540.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="105.0" text="Aceptar" />
+            <Button fx:id="btnCancelar" layoutX="329.0" layoutY="540.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="105.0" text="Cancelar" />
+            <Label fx:id="lblPrimerAtributo" alignment="CENTER" layoutX="286.0" layoutY="257.0" prefHeight="26.0" prefWidth="152.0" text="Marca:" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="txtPatente1" layoutX="34.0" layoutY="363.0" prefHeight="26.0" prefWidth="63.0" />
-            <ChoiceBox fx:id="cbTipoVehiculo" layoutX="39.0" layoutY="99.0" prefWidth="150.0" />
-            <TextField fx:id="txtAñoFabricacion" layoutX="34.0" layoutY="444.0" />
-            <ChoiceBox fx:id="cbTipoCombustible" layoutX="39.0" layoutY="188.0" prefHeight="26.0" prefWidth="150.0" />
-            <ChoiceBox fx:id="cbEstadoVehiculo" layoutX="39.0" layoutY="270.0" prefWidth="150.0" />
-            <DatePicker fx:id="dpRenta" layoutX="286.0" layoutY="270.0" />
-            <Button fx:id="btnAceptar" layoutX="85.0" layoutY="570.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="105.0" text="Aceptar" />
-            <Button fx:id="btnCancelar" layoutX="341.0" layoutY="570.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="105.0" text="Cancelar" />
-            <Label fx:id="lblPrimerAtributo" layoutX="300.0" layoutY="336.0" prefHeight="26.0" prefWidth="152.0" text="Marca:" textAlignment="CENTER">
+            <Label fx:id="lblSegundoAtributo" layoutX="38.0" layoutY="362.0" prefHeight="26.0" prefWidth="152.0" text="Segundo Atributo:" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="lblSegundoAtributo" layoutX="300.0" layoutY="418.0" prefHeight="26.0" prefWidth="152.0" text="Segundo Atributo:" textAlignment="CENTER">
+            <TextField fx:id="txtSegundoAtributo" layoutX="31.0" layoutY="391.0" />
+            <ChoiceBox fx:id="cbMarca" layoutX="287.0" layoutY="283.0" prefWidth="150.0" />
+            <Label layoutX="242.0" layoutY="479.0" prefHeight="26.0" prefWidth="6.0" text="-" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="txtSegundoAtributo" layoutX="300.0" layoutY="444.0" />
-            <ChoiceBox fx:id="cbMarca" layoutX="296.0" layoutY="363.0" prefWidth="150.0" />
-            <Label layoutX="107.0" layoutY="369.0" prefHeight="26.0" prefWidth="6.0" text="-" textAlignment="CENTER">
+            <TextField fx:id="txtPatente2" layoutX="166.0" layoutY="479.0" prefHeight="26.0" prefWidth="63.0" />
+            <Label layoutX="170.0" layoutY="73.0" prefHeight="26.0" prefWidth="135.0" text="Tipo de Vehiculo:" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="txtPatente2" layoutX="121.0" layoutY="363.0" prefHeight="26.0" prefWidth="63.0" />
+            <ChoiceBox fx:id="cbTipoVehiculo" layoutX="162.0" layoutY="99.0" prefHeight="26.0" prefWidth="150.0" />
          </children>
       </Pane>
    </children>

@@ -4,7 +4,7 @@ import Enums.MarcasAuto;
 import Exceptions.DatoErroneoException;
 
 public class ValidadorAtributosAuto {
-    public static void validarMarca(MarcasAuto marca){
+    public static void validarMarca(String marca){
         if(marca == null){
             throw new DatoErroneoException("Seleccione una marca de auto.");
         }

@@ -7,36 +7,28 @@ import Exceptions.DatoErroneoException;
 import java.time.LocalDate;
 
 public class ValidadorAtributosVehiculo {
-    public static void validarPatente(String patente){
-        if (patente == null || patente.isBlank()) {
-            throw new DatoErroneoException("La patente no puede estar vacia");
-        }
-
-        if(patente.length() != 7){
-             throw new DatoErroneoException("La patente de una vehiculo tiene 7 caracteres");
-        }else{
-             //Validacion de la primer parte solo letras
-            for (int i = 0; i < 2; i++) {
-               if(!esLetra(patente.charAt(i))){
-                    throw new DatoErroneoException("La primer parte de la patente solo tiene letras");
-               }
-            }
-
-            //Validacion de la segunda parte solo numeros
-           for (int i = 2; i < 5; i++) {
-               if(!esLetra(patente.charAt(i))){
-                    throw new DatoErroneoException("La segunda parte de la patente solo tiene numeros");
-               }
-            }
-
-            //Validacion de la tercer parte solo letras
-            for (int i = 5; i < 7; i++) {
-                if(!esDigito(patente.charAt(i))){
-                    throw new DatoErroneoException("La tercer parte de la patente solo tiene letras");
-                }
-            }
-        }
+   public static void validarPatenteVieja(String parte1, String parte2) {
+    if (parte1 == null || parte1.isBlank() || parte2 == null || parte2.isBlank()) {
+        throw new DatoErroneoException("La patente no puede estar vacía");
     }
+
+    String patente = (parte1 + parte2).toUpperCase().trim();
+
+    if (patente.length() != 6) {
+        throw new DatoErroneoException("La patente vieja debe tener exactamente 6 caracteres");
+    }
+
+    String letras = patente.substring(0, 3); // ABC
+    String numeros = patente.substring(3, 6); // 123
+
+    if (!letras.matches("[A-Z]{3}")) {
+        throw new DatoErroneoException("Los tres primeros caracteres deben ser letras (A-Z)");
+    }
+
+    if (!numeros.matches("\\d{3}")) {
+        throw new DatoErroneoException("Los tres últimos caracteres deben ser números (0-9)");
+    }
+}
     
     public static void validarAñoFabricacion(int añoFabricacion){
          Integer añoInteger = añoFabricacion;
