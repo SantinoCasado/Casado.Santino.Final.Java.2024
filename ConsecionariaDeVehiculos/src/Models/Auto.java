@@ -48,16 +48,23 @@ public class Auto extends Vehiculo implements IMantenible{
     @Override
     public String mostrarDetalles() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Auto" + "\t");
-        sb.append(super.getPatente() + "\t");
-        sb.append(super.getAñoFabricacion() + "\t");
-        sb.append(super.getTipoCombustible() + "\t");
-        sb.append(super.getHorasUso() + "\t");
-        sb.append(this.marca + "\t");
-        sb.append(this.numPuertas + "\t");
+        sb.append("\t" + "  Auto" + "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(    super.getPatente() + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(super.getAñoFabricacion() + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(super.getTipoCombustible() + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(super.getHorasUso() + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(this.marca + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(this.numPuertas + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
         
         return sb.toString();
     }
+
+    @Override
+    public String toString() {
+        return this.mostrarDetalles();
+    }
+    
+    
 
     @Override
     public float calcularCostoAlquiler(int dias) {

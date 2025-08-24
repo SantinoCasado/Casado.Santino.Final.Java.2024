@@ -56,6 +56,11 @@ public class Moto extends Vehiculo implements IMantenible{
         
         return sb.toString();
     }
+    
+    @Override
+    public String toString() {
+        return this.mostrarDetalles();
+    }
 
     @Override
     public float calcularCostoAlquiler(int dias) {

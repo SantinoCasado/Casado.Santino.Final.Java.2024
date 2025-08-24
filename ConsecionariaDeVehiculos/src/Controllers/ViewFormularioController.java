@@ -78,43 +78,30 @@ public class ViewFormularioController implements Initializable {
         return this.v;
     }
     
-    @FXML
+   @FXML
     void cambiadoTipo(ActionEvent event) {
-        //Dependiento del valor del choiseBox seteo un valor al label del datoExtra
+        // Clear the ChoiceBox regardless of its state
+        this.cbMarca.getItems().clear();
+
         switch(cbTipoVehiculo.getValue()){
-            
             case AUTO -> {
                 lblSegundoAtributo.setText("Cantidad de Puertas: ");
-                if(!(cbMarca != null)){
-                    cbMarca.getItems().clear();
-                }else{
-                     this.cbMarca.getItems().addAll("FORD", "CHEVROLET", "TOYOTA", "VOLKSWAGEN", "BMW", "FIAT", "RENAULT", "NISSAN", "PEUGEOT");
-                     this.cbMarca.setValue("FIAT");
-                }
+                this.cbMarca.getItems().addAll("FORD", "CHEVROLET", "TOYOTA", "VOLKSWAGEN", "BMW", "FIAT", "RENAULT", "NISSAN", "PEUGEOT");
                 this.cbMarca.setValue("FIAT");
             }
-            
+
             case CAMIONETA -> {
                 lblSegundoAtributo.setText("Capacidad de Carga: ");
-                 if(!(cbMarca != null)){
-                    cbMarca.getItems().clear();
-                }else{
-                    this.cbMarca.getItems().addAll("RENAULT", "NISSAN", "JEEP", "DODGE", "RAM");
-                    this.cbMarca.setValue("RAM");
-
-                }
+                this.cbMarca.getItems().addAll("RENAULT", "NISSAN", "JEEP", "DODGE", "RAM");
+                this.cbMarca.setValue("RAM");
             }
             case MOTO -> {
                 lblSegundoAtributo.setText("Cilindrada: ");
-                if(!(cbMarca != null)){
-                    cbMarca.getItems().clear();
-                }else{
-                    this.cbMarca.getItems().addAll("HONDA",  "YAMAHA", "SUZUKI", "KAWASAKI", "BMW", "DUCATI", "MOTOMEL");
-                    this.cbMarca.setValue("HONDA");
-                }
+                this.cbMarca.getItems().addAll("HONDA", "YAMAHA", "SUZUKI", "KAWASAKI", "BMW", "DUCATI", "MOTOMEL");
+                this.cbMarca.setValue("HONDA");
             }
-        }  
-    }
+        }
+}
     
         @FXML
         void aceptar(ActionEvent event) {
@@ -134,7 +121,6 @@ public class ViewFormularioController implements Initializable {
 
              int añoFabricacion = Integer.parseInt(txtAñoFabricacion.getText().trim());
              TipoCombustible combustible = cbTipoCombustible.getValue();
-             float horasUsadas = this.v.obtenerHorasUso(fechaRenta);
              String marca = cbMarca.getValue();
 
              //ESTADO
@@ -152,10 +138,10 @@ public class ViewFormularioController implements Initializable {
 
               try {
                 //Validaciones comunes
-                ValidadorAtributosVehiculo.validarPatenteVieja(patenteParte1, patenteParte2);
-                ValidadorAtributosVehiculo.validarAñoFabricacion(añoFabricacion);
-                ValidadorAtributosVehiculo.validarTipoCombustible(combustible);
-                ValidadorAtributosVehiculo.validarFecha(fechaRenta);
+               // ValidadorAtributosVehiculo.validarPatenteVieja(patenteParte1, patenteParte2);
+                //ValidadorAtributosVehiculo.validarAñoFabricacion(añoFabricacion);
+                //ValidadorAtributosVehiculo.validarTipoCombustible(combustible);
+                //ValidadorAtributosVehiculo.validarFecha(fechaRenta);
 
                 //Si se esta editando
                 if (v != null) {
@@ -214,12 +200,13 @@ public class ViewFormularioController implements Initializable {
                 }else{
                     // Crear nuevo objeto según el tipo
                     switch (tipo) {
-                        case AUTO -> this.v = new Auto(TipoVehiculos.AUTO, patenteCompleta, añoFabricacion, combustible, horasUsadas, estado, MarcasAuto.valueOf(marca), numPuertas);
-                        case CAMIONETA -> this.v = new Camioneta(tipo, patenteCompleta, añoFabricacion, combustible, horasUsadas, estado, MarcasCamioneta.valueOf(marca), capacidadCargaKg);
-                        case MOTO -> this.v = new Moto(tipo, patenteCompleta, añoFabricacion, combustible, horasUsadas, estado, MarcasMoto.valueOf(marca), cilindrada);
+                        case AUTO -> this.v = new Auto(TipoVehiculos.AUTO, patenteCompleta, añoFabricacion, combustible, 0, estado, MarcasAuto.valueOf(marca), numPuertas);
+                        case CAMIONETA -> this.v = new Camioneta(tipo, patenteCompleta, añoFabricacion, combustible, 0, estado, MarcasCamioneta.valueOf(marca), capacidadCargaKg);
+                        case MOTO -> this.v = new Moto(tipo, patenteCompleta, añoFabricacion, combustible, 0, estado, MarcasMoto.valueOf(marca), cilindrada);
                     }
                 }
                 cerrar();
+                float horasUsadas = this.v.obtenerHorasUso(fechaRenta);
             }catch (DatoErroneoException | PatenteRepetidaException | NumberFormatException e) {
                 // Podés mostrar un Alert personalizado si querés
                 System.err.println("Error: " + e.getMessage());
@@ -232,61 +219,6 @@ public class ViewFormularioController implements Initializable {
         }
     
         public void setVehiculo(Vehiculo v) {
-            this.v = v;
-
-            if (v != null) {
-                // Campos comunes
-                txtAñoFabricacion.setText(String.valueOf(v.getAñoFabricacion()));
-                cbTipoVehiculo.setValue(v.getTipo());
-                cbTipoCombustible.setValue(v.getTipoCombustible());
-                dpRenta.setValue(getFechaRenta());
-                txtPatente1.setText(v.getPatente().substring(0, 3)); // Letras
-                txtPatente2.setText(v.getPatente().substring(3, 6)); // Números
-                String marca = "";
-
-                if (v instanceof Auto auto) {
-                    lblSegundoAtributo.setText("Cantidad Puertas: ");
-                    txtSegundoAtributo.setText(String.valueOf(auto.getNumPuertas()));
-                    if (!(cbMarca == null)) {
-                        cbMarca.getItems().clear();
-                    }else{
-                        cbMarca.getItems().addAll("FORD", "CHEVROLET", "TOYOTA", "VOLKSWAGEN", "BMW", "FIAT", "RENAULT", "NISSAN", "PEUGEOT");
-                        cbMarca.setValue(String.valueOf(auto.getMarca()));
-                    }
-                } else if(v instanceof Camioneta camioneta) {
-                    lblSegundoAtributo.setText("Capacidad de Carga: ");
-                    txtSegundoAtributo.setText(String.valueOf(camioneta.getCampacidadCargaKg()));
-                    if (!(cbMarca == null)) {
-                        cbMarca.getItems().clear();
-                    }else{
-                        cbMarca.getItems().addAll("RENAULT", "NISSAN", "JEEP", "DODGE", "RAM");
-                        cbMarca.setValue(String.valueOf(camioneta.getMarca()));
-                    }
-                }else if(v instanceof Moto moto) {
-                    lblSegundoAtributo.setText("Cilindrada: ");
-                    txtSegundoAtributo.setText(String.valueOf(moto.getCilindrada()));
-                    if (!(cbMarca == null)) {
-                        cbMarca.getItems().clear();
-                    }else{
-                        cbMarca.getItems().addAll("HONDA",  "YAMAHA", "SUZUKI", "KAWASAKI", "BMW", "DUCATI", "MOTOMEL");
-                        cbMarca.setValue(String.valueOf(moto.getMarca()));
-                    }
-
-            } else {
-                // Si es nuevo, limpiar campos
-                txtAñoFabricacion.clear();
-                txtPatente1.clear();
-                txtPatente2.clear();
-                cbEstadoVehiculo.getItems().clear();
-                cbMarca.getItems().clear();
-                cbTipoCombustible.getItems().clear();
-                cbTipoVehiculo.getItems().clear();
-                dpRenta.setValue(null);
-            }
-
-        // Aplicar visibilidad según el tipo seleccionado
-        cambiadoTipo(null);
-        }
     }
     
     public LocalDate getFechaRenta(){

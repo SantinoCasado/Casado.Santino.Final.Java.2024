@@ -7,7 +7,7 @@ import Interfaces.CRUD;
 import Models.Vehiculo;
 import java.util.ArrayList;
 
-public class AdministradorVehiculos implements CRUD{
+public class AdministradorVehiculos implements CRUD<Vehiculo>{
     private ArrayList<Vehiculo> vehiculos;
     private ArrayList <Vehiculo> vehiculosFiltrados;
     

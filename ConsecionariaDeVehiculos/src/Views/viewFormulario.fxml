@@ -55,7 +55,7 @@
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="lblSegundoAtributo" layoutX="38.0" layoutY="362.0" prefHeight="26.0" prefWidth="152.0" text="Segundo Atributo:" textAlignment="CENTER">
+            <Label fx:id="lblSegundoAtributo" alignment="CENTER" layoutX="1.0" layoutY="362.0" prefHeight="26.0" prefWidth="213.0" text="Segundo Atributo:" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
@@ -73,7 +73,7 @@
                   <Font name="Gill Sans MT" size="18.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="cbTipoVehiculo" layoutX="162.0" layoutY="99.0" prefHeight="26.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="cbTipoVehiculo" layoutX="162.0" layoutY="99.0" onAction="#cambiadoTipo" prefHeight="26.0" prefWidth="150.0" />
          </children>
       </Pane>
    </children>

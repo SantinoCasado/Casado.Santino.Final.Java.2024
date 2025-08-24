@@ -1,5 +1,6 @@
 package Controllers;
 
+import Enums.EstadoVehiculo;
 import Enums.TipoVehiculos;
 import Exceptions.PatenteRepetidaException;
 import Gestor.AdministradorVehiculos;
@@ -44,7 +45,7 @@ public class MainViewController implements Initializable {
     
     //Choice Box
     @FXML
-    private ChoiceBox<String> cbFiltrarEstado;
+    private ChoiceBox<EstadoVehiculo> cbFiltrarEstado;
     @FXML
     private ChoiceBox<TipoVehiculos> cbFiltrarTipo;
     
@@ -58,8 +59,8 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Inicializo los Choice Boxes
-        this.cbFiltrarEstado.getItems().addAll("Disponible", "En Uso", "En Mantenimiento", "TODOS");
-        this.cbFiltrarEstado.setValue("TODOS");
+        cbFiltrarEstado.getItems().addAll(EstadoVehiculo.values());
+        this.cbFiltrarEstado.setValue(EstadoVehiculo.TODOS);
         
         this.cbFiltrarTipo.getItems().addAll(TipoVehiculos.AUTO, TipoVehiculos.CAMIONETA, TipoVehiculos.MOTO, TipoVehiculos.TODOS);
         this.cbFiltrarTipo.setValue(TipoVehiculos.TODOS);
