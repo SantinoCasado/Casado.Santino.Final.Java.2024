@@ -48,8 +48,8 @@
             <ChoiceBox fx:id="cbTipoCombustible" layoutX="32.0" layoutY="174.0" prefHeight="26.0" prefWidth="150.0" />
             <ChoiceBox fx:id="cbEstadoVehiculo" layoutX="32.0" layoutY="283.0" prefWidth="150.0" />
             <DatePicker fx:id="dpRenta" layoutX="272.0" layoutY="174.0" />
-            <Button fx:id="btnAceptar" layoutX="78.0" layoutY="540.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="105.0" text="Aceptar" />
-            <Button fx:id="btnCancelar" layoutX="329.0" layoutY="540.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="105.0" text="Cancelar" />
+            <Button fx:id="btnAceptar" layoutX="78.0" layoutY="540.0" mnemonicParsing="false" onAction="#aceptar" prefHeight="39.0" prefWidth="105.0" text="Aceptar" />
+            <Button fx:id="btnCancelar" layoutX="329.0" layoutY="540.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="39.0" prefWidth="105.0" text="Cancelar" />
             <Label fx:id="lblPrimerAtributo" alignment="CENTER" layoutX="286.0" layoutY="257.0" prefHeight="26.0" prefWidth="152.0" text="Marca:" textAlignment="CENTER">
                <font>
                   <Font name="Gill Sans MT" size="18.0" />

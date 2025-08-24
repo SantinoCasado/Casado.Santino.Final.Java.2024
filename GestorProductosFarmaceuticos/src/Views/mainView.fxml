@@ -49,9 +49,9 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnAgregar" layoutX="29.0" layoutY="680.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="132.0" text="Agregar Vehiculo" />
-            <Button fx:id="btnModificar" layoutX="176.0" layoutY="680.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="132.0" text="Modificar Vehiculo" />
-            <Button fx:id="btnEliminar" layoutX="329.0" layoutY="680.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="132.0" text="Eliminar Vehiculo" />
+            <Button fx:id="btnAgregar" layoutX="29.0" layoutY="680.0" mnemonicParsing="false" onAction="#agregar" prefHeight="35.0" prefWidth="132.0" text="Agregar Vehiculo" />
+            <Button fx:id="btnModificar" layoutX="176.0" layoutY="680.0" mnemonicParsing="false" onAction="#modificar" prefHeight="35.0" prefWidth="132.0" text="Modificar Vehiculo" />
+            <Button fx:id="btnEliminar" layoutX="329.0" layoutY="680.0" mnemonicParsing="false" onAction="#eliminar" prefHeight="35.0" prefWidth="132.0" text="Eliminar Vehiculo" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="838.0" layoutY="653.0" prefHeight="17.0" prefWidth="119.0" text="Filtrar por Tipo">
                <font>
                   <Font size="14.0" />
@@ -64,8 +64,8 @@
             </Label>
             <ChoiceBox fx:id="cbFiltrarTipo" layoutX="822.0" layoutY="680.0" prefWidth="150.0" />
             <ChoiceBox fx:id="cbFiltrarEstado" layoutX="982.0" layoutY="680.0" prefWidth="150.0" />
-            <Button fx:id="btnGuardarTodo" layoutX="574.0" layoutY="668.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" text="Guardar Todo" />
-            <Button fx:id="btnGuardarFiltrado" layoutX="574.0" layoutY="703.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" text="Guardar Filtrado" />
+            <Button fx:id="btnGuardarTodo" layoutX="574.0" layoutY="668.0" mnemonicParsing="false" onAction="#guardarTodo" prefHeight="25.0" prefWidth="132.0" text="Guardar Todo" />
+            <Button fx:id="btnGuardarFiltrado" layoutX="574.0" layoutY="703.0" mnemonicParsing="false" onAction="#guardarFiltrado" prefHeight="25.0" prefWidth="132.0" text="Guardar Filtrado" />
              
          </children>
       </Pane>

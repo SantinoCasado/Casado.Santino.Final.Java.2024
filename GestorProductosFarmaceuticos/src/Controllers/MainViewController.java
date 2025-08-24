@@ -104,7 +104,16 @@ public class MainViewController implements Initializable {
          }
     }
     
+    @FXML
+    private void guardarTodo(ActionEvent event) {
+        // tu lógica acá
+    }
     
+    @FXML
+    private void guardarFiltrado(ActionEvent event) {
+        // lógica de guardado filtrado
+    }
+
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
     //Metodos especiales
     
