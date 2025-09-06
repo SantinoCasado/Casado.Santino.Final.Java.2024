@@ -1,5 +1,6 @@
 package Controllers;
 
+import Controllers.ViewFormularioController;
 import Enums.EstadoVehiculo;
 import Enums.TipoVehiculos;
 import Exceptions.PatenteRepetidaException;
@@ -42,6 +43,8 @@ public class MainViewController implements Initializable {
     private Button btnGuardarFiltrado;
     @FXML
     private Button btnGuardarTodo;
+    @FXML
+    private Button btnFiltrar;
     
     //Choice Box
     @FXML
@@ -72,7 +75,7 @@ public class MainViewController implements Initializable {
     //CRUD
     @FXML
     void agregar(ActionEvent event) {
-        this.AbrirFormulario(null);
+        this.AbrirView(null, "Formulario");
     }
     
     @FXML
@@ -101,9 +104,21 @@ public class MainViewController implements Initializable {
          Vehiculo v = this.ListViewVehiculos.getSelectionModel().getSelectedItem();
 
          if(v != null) {
-             this.AbrirFormulario(v);
+             this.AbrirView(v, "Formulario");
          }
     }
+    
+    @FXML
+    public void filtrar(ActionEvent event) {
+    // Lógica de filtrado
+    }
+    
+    @FXML
+    public void cambiarEstado(ActionEvent event) {
+        Vehiculo v = this.ListViewVehiculos.getSelectionModel().getSelectedItem();
+        this.AbrirView(v, "EstadoVehiculo");
+    }
+
     
     @FXML
     private void guardarTodo(ActionEvent event) {
@@ -119,36 +134,55 @@ public class MainViewController implements Initializable {
     //Metodos especiales
     
     //Abir viewForm
-    private void AbrirFormulario(Vehiculo v ) {
+    private void AbrirView(Vehiculo v, String name) {
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/viewFormulario.fxml"));
-    
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/view"+name+".fxml"));
             Scene scene = new Scene(loader.load());
-            ViewFormularioController controlador = loader.getController();
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(scene);               
-            controlador.setVehiculo(v);      
-            stage.showAndWait();
-            Vehiculo resultado = controlador.getVehiculo();    
-   
+            
+            if (name.equals("Formulario")) {
+                ViewFormularioController cfc = (ViewFormularioController) loader.getController();
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);               
+                cfc.setVehiculo(v);      
+                stage.showAndWait();
+                Vehiculo resultado = cfc.getVehiculo();    
 
-                if(resultado != null) {                        
+
+                    if(resultado != null) {                        
+                        if(v == null){       
+                            if (!administrador.listarTodo().contains(resultado)){       
+                                this.administrador.agregar(resultado);
+                            }
+                        }
+                    }
+                    this.refrescarVista();
+                }
+            if (name.equals("EstadoVehiculo")) {
+                ViewEstadoVehiculoController cevc = loader.getController();
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);               
+                cevc.setVehiculo(v);      
+                stage.showAndWait();
+                Vehiculo resultado = cevc.getVehiculo();    
+
+
+                 if(resultado != null) {                        
                     if(v == null){       
                         if (!administrador.listarTodo().contains(resultado)){       
                             this.administrador.agregar(resultado);
                         }
                     }
-                }
-                this.refrescarVista();
-        }
-        catch(IOException | PatenteRepetidaException e){
+                 }
+                 this.refrescarVista();
+            } 
+        }catch(IOException | PatenteRepetidaException e){
             System.out.println("Error:" + e.getMessage());
         }
+        
     }
-    
-    
-    
+ 
     //Actualiza la vista
     public void refrescarVista(){
         this.ListViewVehiculos.getItems().clear();

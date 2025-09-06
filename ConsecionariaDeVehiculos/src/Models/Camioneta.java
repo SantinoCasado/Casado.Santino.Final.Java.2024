@@ -1,12 +1,15 @@
 package Models;
 
-import Interfaces.IMantenible;
+import Interfaces.ICambiarEstado;
 import Enums.EstadoVehiculo;
 import Enums.MarcasCamioneta;
 import Enums.TipoCombustible;
 import Enums.TipoVehiculos;
+import Interfaces.ICambiarEstado;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
-public class Camioneta extends Vehiculo implements IMantenible{
+public class Camioneta extends Vehiculo implements ICambiarEstado{
     private MarcasCamioneta marca;
     private float campacidadCargaKg;
     
@@ -14,14 +17,14 @@ public class Camioneta extends Vehiculo implements IMantenible{
     public Camioneta() {
     }
 
-    public Camioneta(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estado,  MarcasCamioneta marca, float campacidadCargaKg) {
-        super(tipo, patente, añoFabricacion, tipoCombustible, horasUso, estado);
+    public Camioneta(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado,  MarcasCamioneta marca, float campacidadCargaKg) {
+        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado);
         this.marca = marca;
         this.campacidadCargaKg = campacidadCargaKg;
     }
 
-    public Camioneta(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estado){
-        super(tipo, patente, añoFabricacion, tipoCombustible, horasUso, estado);
+    public Camioneta(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado){
+        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado);
         this.marca = MarcasCamioneta.DODGE;
         this.campacidadCargaKg = 500;
     }
@@ -47,13 +50,13 @@ public class Camioneta extends Vehiculo implements IMantenible{
     @Override
     public String mostrarDetalles() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Camioneta" + "\t");
-        sb.append(super.getPatente() + "\t");
-        sb.append(super.getAñoFabricacion() + "\t");
-        sb.append(super.getTipoCombustible() + "\t");
-        sb.append(super.getHorasUso() + "\t");
-        sb.append(this.marca + "\t");
-        sb.append(this.campacidadCargaKg + "\t");
+        sb.append("\t" + "Camioneta" + "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(super.getPatente() + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(super.getAñoFabricacion() + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(super.getTipoCombustible() + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(super.getKilometros()+ "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(this.marca + "\t" + "\t" + "\t" + "\t" + "\t");
+        sb.append(this.campacidadCargaKg +  "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
         
         return sb.toString();
     }
@@ -69,8 +72,37 @@ public class Camioneta extends Vehiculo implements IMantenible{
     }
     
     @Override
-    public void realizarMatenimiento(){
+    public String ImprirTicker(LocalDate fechaAlquiler) {
+        LocalDate hoy = LocalDate.now();
+        int diasInt = (int) ChronoUnit.DAYS.between(fechaAlquiler, hoy);
+        
+        float precioTotalAlquiler = this.calcularCostoAlquiler(diasInt);
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("Camioneta" + "\n" + "\n");
+        sb.append(fechaAlquiler + "\n" + "\n");
+        sb.append(diasInt);
+        sb.append(" x ");
+        sb.append(diasInt + "\n" + "\n");
+        sb.append(precioTotalAlquiler + "\n");
+        
+        return sb.toString();
+    }
+
+    @Override
+    public void realizarMatenimiento() {
         super.setEstadoVehiculo(EstadoVehiculo.EN_MANTENIMIENTO);
     }
+
+    @Override
+    public void alquilarVehiculo() {
+        super.setEstadoVehiculo(EstadoVehiculo.ALQUILADO);
+    }
+
+    @Override
+    public void disponerVehiculo() {
+        super.setEstadoVehiculo(EstadoVehiculo.DISPONIBLE);
+    }
+    
     
 }

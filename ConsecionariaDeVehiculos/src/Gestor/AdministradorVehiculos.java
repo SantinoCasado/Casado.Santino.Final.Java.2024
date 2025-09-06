@@ -52,18 +52,6 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
     public void eliminar(Vehiculo vehiculo) {
         this.vehiculos.remove(vehiculo);
     }
-
-    @Override
-    public Vehiculo buscarPorPatente(String patente) {
-       Vehiculo vehiculoFiltrado = null;
-       
-       for (Vehiculo vehiculoFor : this.vehiculos){
-           if(patente.toUpperCase().equalsIgnoreCase(vehiculoFor.getPatente().toUpperCase())){
-               vehiculoFiltrado = vehiculoFor;
-           }
-       }
-       return vehiculoFiltrado;
-    }
     
     @Override
     public  ArrayList<Vehiculo> buscarPorTipos(TipoVehiculos tipoVehiculo, EstadoVehiculo estado){

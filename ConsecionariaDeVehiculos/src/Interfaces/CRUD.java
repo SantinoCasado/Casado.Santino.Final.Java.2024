@@ -11,7 +11,6 @@ public interface CRUD <T extends Vehiculo>{
     void modificar(T entidad);
     void eliminar(T entidad);
     
-    Vehiculo buscarPorPatente(String patente);
     ArrayList<T> buscarPorTipos(TipoVehiculos tipoVehiculo, EstadoVehiculo estado);
     ArrayList<T> listarTodo();
 }

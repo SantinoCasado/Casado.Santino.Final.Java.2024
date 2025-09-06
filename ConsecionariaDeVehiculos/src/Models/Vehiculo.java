@@ -16,19 +16,19 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
     private String patente;
     private int añoFabricacion;
     private TipoCombustible tipoCombustible;
-    private float horasUso;
+    private float kilometros;
     private EstadoVehiculo estadoVehiculo;
 
     // Constructores 
     public Vehiculo() {
     }
 
-    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso) {
+    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float  kilometros) {
         this.tipo = tipo;
         this.patente = patente;
         this.añoFabricacion = añoFabricacion;
         this.tipoCombustible = tipoCombustible;
-        this.horasUso = horasUso;
+        this.kilometros =  kilometros;
         this.estadoVehiculo = EstadoVehiculo.DISPONIBLE; // Valor por defecto
     }
 
@@ -37,13 +37,13 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.patente = patente;
         this.añoFabricacion = añoFabricacion;
         this.tipoCombustible = tipoCombustible;
-        this.horasUso = horasUso;
+        this. kilometros = horasUso;
         this.estadoVehiculo = estadoVehiculo;
     }
 
     // Método concreto
     public void registrarUso(float horas) {
-        this.horasUso += horas;
+        this. kilometros += horas;
     }
 
     // Getters y Setters    
@@ -78,11 +78,11 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.tipoCombustible = tipoCombustible; 
     }
     
-    public float getHorasUso() { 
-        return horasUso; 
+    public float getKilometros() { 
+        return  kilometros; 
     }
-    public void setHorasUso(float horasUso) { 
-        this.horasUso = horasUso; 
+    public void setKilometros(float  kilometros) { 
+        this. kilometros =  kilometros; 
     }
     
     
@@ -97,6 +97,8 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
     // Métodos abstractos
     public abstract String mostrarDetalles();
     public abstract float calcularCostoAlquiler(int dias);
+    public abstract String ImprirTicker(LocalDate fechaAlquiler);
+    
 
     @Override
     public int compareTo(Vehiculo otroVehiculo) {

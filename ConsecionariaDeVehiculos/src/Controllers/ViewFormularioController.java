@@ -1,5 +1,6 @@
 package Controllers;
 
+import Interfaces.IVehiculoEditable;
 import Enums.*;
 import static Enums.TipoVehiculos.AUTO;
 import static Enums.TipoVehiculos.CAMIONETA;
@@ -9,19 +10,17 @@ import Exceptions.PatenteRepetidaException;
 import Models.*;
 import Validations.*;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class ViewFormularioController implements Initializable {
+public class ViewFormularioController implements Initializable, IVehiculoEditable {
     //Botones
     @FXML
     private Button btnAceptar;
@@ -30,23 +29,15 @@ public class ViewFormularioController implements Initializable {
     
     //Choice Boxes
     @FXML
-    private ChoiceBox<String> cbEstadoVehiculo;
-    @FXML
     private ChoiceBox<TipoCombustible> cbTipoCombustible;
     @FXML
     private ChoiceBox<TipoVehiculos> cbTipoVehiculo;
     @FXML
     private ChoiceBox<String> cbMarca;
     
-    //Date picker
-    @FXML
-    private DatePicker dpRenta;
-    
     //Labels
     @FXML
     private Label lblSegundoAtributo;
-    @FXML
-    private Label lblTiempoRenta;
     
     //Text Fields
     @FXML
@@ -56,7 +47,9 @@ public class ViewFormularioController implements Initializable {
     @FXML
     private TextField txtAñoFabricacion;
     @FXML
-    private TextField txtSegundoAtributo;    
+    private TextField txtSegundoAtributo;
+    @FXML
+    private TextField txtKilometraje;        
     
     private Vehiculo v;
     
@@ -64,9 +57,6 @@ public class ViewFormularioController implements Initializable {
    @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Inicializo los ChoiceBox
-        this.cbEstadoVehiculo.getItems().addAll("Disponible", "En Uso", "En Matenimiento");
-        this.cbEstadoVehiculo.setValue("Disponible");
-        
         this.cbTipoCombustible.getItems().addAll(TipoCombustible.DIESEL, TipoCombustible.NAFTA, TipoCombustible.ELECTRICO, TipoCombustible.HIBRIDO);
         this.cbTipoCombustible.setValue(TipoCombustible.NAFTA);
         
@@ -74,6 +64,7 @@ public class ViewFormularioController implements Initializable {
         this.cbTipoVehiculo.setValue(TipoVehiculos.AUTO);
     }    
     
+    @Override
     public Vehiculo getVehiculo(){
         return this.v;
     }
@@ -105,52 +96,59 @@ public class ViewFormularioController implements Initializable {
     
         @FXML
         void aceptar(ActionEvent event) {
-            //Inicializo los atributos particulares
-            EstadoVehiculo estado = null;
-            int numPuertas = 0;
-            float capacidadCargaKg = 0f;
-            int cilindrada = 0;
-
-            //Seteo los valores comunes de los dos
-            LocalDate fechaRenta = this.getFechaRenta();
-             TipoVehiculos tipo = cbTipoVehiculo.getValue();
-
-             String patenteParte1 = txtPatente1.getText().trim();
-             String patenteParte2 = txtPatente2.getText().trim();
-             String patenteCompleta = ((patenteParte1 + patenteParte2).trim().toUpperCase());
-
-             int añoFabricacion = Integer.parseInt(txtAñoFabricacion.getText().trim());
-             TipoCombustible combustible = cbTipoCombustible.getValue();
-             String marca = cbMarca.getValue();
-
-             //ESTADO
-             switch(cbEstadoVehiculo.getValue()){
-                 case "Disponible" -> {
-                     estado = EstadoVehiculo.DISPONIBLE;
-                 }
-                 case "En Uso"-> {
-                     estado = EstadoVehiculo.ALQUILADO;
-                 }
-                 case "En Mantenimiento"-> {
-                     estado = EstadoVehiculo.EN_MANTENIMIENTO;
-                 }
-             }
-
               try {
+                //Inicializo los atributos particulares
+               EstadoVehiculo estado = EstadoVehiculo.DISPONIBLE;
+               int numPuertas = 0;
+               float capacidadCargaKg = 0f;
+               int cilindrada = 0;
+
+               //Obtengo los valores comunes de los dos
+                TipoVehiculos tipo = cbTipoVehiculo.getValue();
+                String valor = txtKilometraje.getText().trim();
+                String añoStr = txtAñoFabricacion.getText().trim();
+                String patenteParte1 = txtPatente1.getText().trim();
+                String patenteParte2 = txtPatente2.getText().trim();
+                String patenteCompleta = ((patenteParte1 + patenteParte2).trim().toUpperCase());
+
+                TipoCombustible combustible = cbTipoCombustible.getValue();
+                String marca = cbMarca.getValue();
+                  
                 //Validaciones comunes
-               // ValidadorAtributosVehiculo.validarPatenteVieja(patenteParte1, patenteParte2);
-                //ValidadorAtributosVehiculo.validarAñoFabricacion(añoFabricacion);
-                //ValidadorAtributosVehiculo.validarTipoCombustible(combustible);
-                //ValidadorAtributosVehiculo.validarFecha(fechaRenta);
+                ValidadorAtributosVehiculo.validarPatenteVieja(patenteParte1, patenteParte2);
+                ValidadorAtributosVehiculo.validarAñoFabricacion(añoStr);
+                ValidadorAtributosVehiculo.validarTipoCombustible(combustible);
+                ValidadorAtributosVehiculo.validarKilometraje(valor);
+                  switch (tipo) {
+                      case AUTO:
+                          ValidadorAtributosAuto.validarNumPuertas(txtSegundoAtributo.getText().trim());
+                          ValidadorAtributosAuto.validarMarca(marca);
+                          numPuertas = Integer.parseInt(txtSegundoAtributo.getText().trim());
+                          break;
+                      case MOTO:
+                          ValidadorAtributosMoto.validarMarca(marca);
+                          ValidadorAtributosMoto.validarCilindrada(txtSegundoAtributo.getText().trim());
+                          cilindrada = Integer.parseInt(txtSegundoAtributo.getText().trim());
+                          break;
+                      case CAMIONETA:
+                          ValidadorAtributosCamioneta.validarMarca(marca);
+                          ValidadorAtributosCamioneta.validarCapacidadaCarga(txtSegundoAtributo.getText().trim());
+                          capacidadCargaKg = Float.parseFloat(txtSegundoAtributo.getText().trim());
+                          break;
+                  }
+                
+                float kilometraje = Float.parseFloat(valor);
+                int añoFabricacion = Integer.parseInt(txtAñoFabricacion.getText().trim());
 
                 //Si se esta editando
                 if (v != null) {
                     // Actualiza atributos comunes
+                    v.setEstadoVehiculo(EstadoVehiculo.DISPONIBLE);
                     v.setPatente(patenteCompleta);
                     v.setAñoFabricacion(añoFabricacion);
                     v.setTipo(tipo);
                     v.setTipoCombustible(combustible);
-                    dpRenta.setValue(fechaRenta);
+                    v.setKilometros(kilometraje);
 
                     //seteo y pareceo segun cada caso
                     switch (tipo) {
@@ -166,9 +164,6 @@ public class ViewFormularioController implements Initializable {
                                 case "NISSAN"  -> ((Auto) v).setMarca(MarcasAuto.NISSAN);
                                 case "PEUGEOT"  -> ((Auto) v).setMarca(MarcasAuto.PEUGEOT);
                             }
-                            numPuertas = Integer.parseInt(txtSegundoAtributo.getText().trim());
-                            ValidadorAtributosAuto.validarNumPuertas(numPuertas);
-                            ValidadorAtributosAuto.validarMarca(marca); 
                         }
                         case CAMIONETA -> {
                             switch(marca){
@@ -178,9 +173,6 @@ public class ViewFormularioController implements Initializable {
                                 case "DODGE"  -> ((Camioneta) v).setMarca(MarcasCamioneta.DODGE);
                                 case "RAM"  -> ((Camioneta) v).setMarca(MarcasCamioneta.RAM);
                         }
-                            ValidadorAtributosCamioneta.validarMarca(marca);
-                            ValidadorAtributosCamioneta.validarCapacidadaCarga(txtSegundoAtributo.getText().trim());
-                            capacidadCargaKg = Float.parseFloat(txtSegundoAtributo.getText().trim());
                     }
                     case MOTO -> {
                             switch(marca){
@@ -192,39 +184,88 @@ public class ViewFormularioController implements Initializable {
                                 case "DUCATI" -> ((Moto) v).setMarca(MarcasMoto.DUCATI);
                                 case "MOTOMEL" -> ((Moto) v).setMarca(MarcasMoto.MOTOMEL);
                         }
-                            ValidadorAtributosMoto.validarMarca(marca);
-                            ValidadorAtributosMoto.validarCilindrada(txtSegundoAtributo.getText().trim());
-                            cilindrada = Integer.parseInt(txtSegundoAtributo.getText().trim());
                     }
                 } 
                 }else{
                     // Crear nuevo objeto según el tipo
                     switch (tipo) {
-                        case AUTO -> this.v = new Auto(TipoVehiculos.AUTO, patenteCompleta, añoFabricacion, combustible, 0, estado, MarcasAuto.valueOf(marca), numPuertas);
-                        case CAMIONETA -> this.v = new Camioneta(tipo, patenteCompleta, añoFabricacion, combustible, 0, estado, MarcasCamioneta.valueOf(marca), capacidadCargaKg);
-                        case MOTO -> this.v = new Moto(tipo, patenteCompleta, añoFabricacion, combustible, 0, estado, MarcasMoto.valueOf(marca), cilindrada);
+                        case AUTO -> this.v = new Auto(TipoVehiculos.AUTO, patenteCompleta, añoFabricacion, combustible, kilometraje, estado, MarcasAuto.valueOf(marca), numPuertas);
+                        case CAMIONETA -> this.v = new Camioneta(tipo, patenteCompleta, añoFabricacion, combustible, kilometraje, estado, MarcasCamioneta.valueOf(marca), capacidadCargaKg);
+                        case MOTO -> this.v = new Moto(tipo, patenteCompleta, añoFabricacion, combustible, kilometraje, estado, MarcasMoto.valueOf(marca), cilindrada);
                     }
                 }
                 cerrar();
-                float horasUsadas = this.v.obtenerHorasUso(fechaRenta);
             }catch (DatoErroneoException | PatenteRepetidaException | NumberFormatException e) {
-                // Podés mostrar un Alert personalizado si querés
-                System.err.println("Error: " + e.getMessage());
+                mostrarAlerta(e.getMessage());
             }
         }
-    
-        @FXML
-        void cancelar(ActionEvent event) {
+     
+    private void mostrarAlerta(String mensaje) {
+        javafx.scene.control.Alert alerta = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+        alerta.setTitle("Error de validación");
+        alerta.setHeaderText("Datos inválidos");
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
+    }
+     
+     @FXML
+     void cancelar(ActionEvent event) {
             this.cerrar();
-        }
-    
-        public void setVehiculo(Vehiculo v) {
     }
     
-    public LocalDate getFechaRenta(){
-        return dpRenta.getValue();
+     @Override
+    public void setVehiculo(Vehiculo v) {
+        this.v = v;
+         if (v != null) {
+             String patente = v.getPatente();
+             txtAñoFabricacion.setText(String.valueOf(v.getAñoFabricacion()));
+             txtKilometraje.setText(String.valueOf(v.getKilometros()));
+             
+             cbTipoCombustible.getItems().addAll(TipoCombustible.DIESEL, TipoCombustible.NAFTA, TipoCombustible.ELECTRICO, TipoCombustible.HIBRIDO);
+             cbTipoCombustible.setValue(v.getTipoCombustible());
+             
+             cbTipoVehiculo.getItems().addAll(TipoVehiculos.AUTO, TipoVehiculos.CAMIONETA, TipoVehiculos.MOTO);
+             cbTipoVehiculo.setValue(v.getTipo());
+
+             if (patente != null && patente.length() == 6) {
+                txtPatente1.setText(patente.substring(0, 3));
+             }
+             if (patente != null && patente.length() == 6) {
+                  txtPatente2.setText(patente.substring(3, 6));
+            }
+             
+            //Dependiendo del tipo de vehiculo
+            if(v instanceof Auto auto){
+                lblSegundoAtributo.setText("Cantidad de Puertas: ");
+                txtSegundoAtributo.setText(String.valueOf(auto.getNumPuertas()));
+                
+                this.cbMarca.getItems().addAll("FORD", "CHEVROLET", "TOYOTA", "VOLKSWAGEN", "BMW", "FIAT", "RENAULT", "NISSAN", "PEUGEOT");
+                this.cbMarca.setValue(String.valueOf(auto.getMarca()));
+            }else  if(v instanceof Moto moto){
+                lblSegundoAtributo.setText("Cilindrada: ");
+                txtSegundoAtributo.setText(String.valueOf(moto.getCilindrada()));
+                
+                this.cbMarca.getItems().addAll("HONDA", "YAMAHA", "SUZUKI", "KAWASAKI", "BMW", "DUCATI", "MOTOMEL");
+                this.cbMarca.setValue(String.valueOf(moto.getMarca()));
+            }else if(v instanceof Camioneta camioneta){
+                lblSegundoAtributo.setText("Capacidad de Carga: ");
+                txtSegundoAtributo.setText(String.valueOf(camioneta.getCampacidadCargaKg()));
+                
+                this.cbMarca.getItems().addAll("RENAULT", "NISSAN", "JEEP", "DODGE", "RAM");
+                this.cbMarca.setValue(String.valueOf(camioneta.getMarca()));
+            }
+         }else{
+             txtAñoFabricacion.clear();
+             txtKilometraje.clear();
+             txtPatente1.clear();
+             txtPatente2.clear();
+             txtSegundoAtributo.clear();
+             cbMarca.getSelectionModel().selectFirst();
+             cbTipoCombustible.getSelectionModel().selectFirst();
+             cbTipoVehiculo.getSelectionModel().selectFirst();
+         }
+         cambiadoTipo(null);
     }
-    
         
      //Metodo que cierra el formulario
     @FXML
