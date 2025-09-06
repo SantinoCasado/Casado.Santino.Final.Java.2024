@@ -32,16 +32,16 @@
             <Button fx:id="btnGuardarFiltrado" layoutX="544.0" layoutY="693.0" mnemonicParsing="false" onAction="#guardarFiltrado" prefHeight="25.0" prefWidth="166.0" text="Guardar Vehiculos Filtrados" />
             <Button fx:id="btnGuardarTodo" layoutX="544.0" layoutY="661.0" mnemonicParsing="false" onAction="#guardarTodo" prefHeight="25.0" prefWidth="166.0" text="Guardar Todo" />
             <Button fx:id="btnCambiarEstado" layoutX="115.0" layoutY="718.0" mnemonicParsing="false" onAction="#cambiarEstado" prefHeight="25.0" prefWidth="224.0" text="Camabiar Estado del Vehiculo" />
-            <TableView layoutX="1.0" layoutY="3.0" prefHeight="643.0" prefWidth="1163.0">
+            <TableView fx:id="tablaVehiculos" layoutX="1.0" layoutY="3.0" prefHeight="643.0" prefWidth="1163.0">
               <columns>
-                <TableColumn prefWidth="125.0" text="Tipo de Vehiculo" />
-                <TableColumn prefWidth="135.0" text="Patente" />
-                  <TableColumn minWidth="0.0" prefWidth="118.0" text="Año Fabricacion" />
-                  <TableColumn prefWidth="146.0" text="Tipo de Combustible" />
-                  <TableColumn minWidth="0.0" prefWidth="170.0" text="Kilometraje" />
-                  <TableColumn minWidth="0.0" prefWidth="170.0" text="Estado del Vehiculo" />
-                  <TableColumn minWidth="0.0" prefWidth="144.0" text="Marca" />
-                  <TableColumn minWidth="0.0" prefWidth="154.0" text="Segundo Atributo" />
+                <TableColumn fx:id="tipoCol" prefWidth="125.0" text="Tipo de Vehiculo" />
+                <TableColumn fx:id="patenteCol" prefWidth="135.0" text="Patente" />
+                  <TableColumn fx:id="añoCol" minWidth="0.0" prefWidth="118.0" text="Año Fabricacion" />
+                  <TableColumn fx:id="combustibleCol" prefWidth="146.0" text="Tipo de Combustible" />
+                  <TableColumn fx:id="kmCol" minWidth="0.0" prefWidth="170.0" text="Kilometraje" />
+                  <TableColumn fx:id="estadoCol" minWidth="0.0" prefWidth="170.0" text="Estado del Vehiculo" />
+                  <TableColumn fx:id="marcaCol" minWidth="0.0" prefWidth="144.0" text="Marca" />
+                  <TableColumn fx:id="segundoAtributoCol" minWidth="0.0" prefWidth="154.0" text="Segundo Atributo" />
               </columns>
             </TableView>
              
