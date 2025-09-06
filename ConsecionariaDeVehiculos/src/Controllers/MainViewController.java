@@ -1,6 +1,5 @@
 package Controllers;
 
-import Controllers.ViewFormularioController;
 import Enums.EstadoVehiculo;
 import Enums.TipoVehiculos;
 import Exceptions.PatenteRepetidaException;
@@ -20,14 +19,23 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 public class MainViewController implements Initializable {
-    @FXML
-    private ListView<Vehiculo> ListViewVehiculos;
+    @FXML private TableView<Vehiculo> tablaVehiculos;
+    @FXML private TableColumn<Vehiculo, String> tipoCol;
+    @FXML private TableColumn<Vehiculo, String> patenteCol;
+    @FXML private TableColumn<Vehiculo, Integer> añoCol;
+    @FXML private TableColumn<Vehiculo, String> combustibleCol;
+    @FXML private TableColumn<Vehiculo, Float> kmCol;
+    @FXML private TableColumn<Vehiculo, String> estadoCol;
+    @FXML private TableColumn<Vehiculo, String> marcaCol;
+    @FXML private TableColumn<Vehiculo, String> segundoAtributoCol;
+
     
     private ArrayList<Vehiculo> listaVehiculos;
     private AdministradorVehiculos administrador;
