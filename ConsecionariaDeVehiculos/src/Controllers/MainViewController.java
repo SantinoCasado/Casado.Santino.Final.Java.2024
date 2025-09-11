@@ -145,7 +145,15 @@ public class MainViewController implements Initializable {
 
     @FXML
     public void filtrar(ActionEvent event) {
-        // lógica de filtrado
+        TipoVehiculos tipoSeleccionado = cbFiltrarTipo.getValue();
+        EstadoVehiculo estadoSeleccionado = cbFiltrarEstado.getValue();
+
+        try {
+            ArrayList<Vehiculo> filtrados = administrador.buscarPorTipos(tipoSeleccionado, estadoSeleccionado);
+            refrescarVistaFiltrada(filtrados);
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta("Error", e.getMessage());
+        }
     }
 
     private void AbrirView(Vehiculo v, String name) {
@@ -186,5 +194,17 @@ public class MainViewController implements Initializable {
 
     public void refrescarVista() {
         tablaVehiculos.setItems(FXCollections.observableArrayList(administrador.listarTodo()));
+    }
+
+    private void refrescarVistaFiltrada(ArrayList<Vehiculo> lista) {
+        tablaVehiculos.setItems(FXCollections.observableArrayList(lista));
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.ERROR);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 }
