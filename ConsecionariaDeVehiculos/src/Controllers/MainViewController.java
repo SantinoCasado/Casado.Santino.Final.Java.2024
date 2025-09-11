@@ -187,7 +187,7 @@ public class MainViewController implements Initializable {
                     Vehiculo resultado = cevc.getVehiculo();
                     if (resultado != null) {
                         administrador.modificar(resultado); 
-                }
+                    }
                 }
 
             refrescarVista();
@@ -199,10 +199,12 @@ public class MainViewController implements Initializable {
 
     public void refrescarVista() {
         tablaVehiculos.setItems(FXCollections.observableArrayList(administrador.listarTodo()));
+        tablaVehiculos.refresh();
     }
 
     private void refrescarVistaFiltrada(ArrayList<Vehiculo> lista) {
         tablaVehiculos.setItems(FXCollections.observableArrayList(lista));
+        tablaVehiculos.refresh();
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {

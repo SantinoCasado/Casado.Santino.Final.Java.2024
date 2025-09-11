@@ -14,10 +14,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class ViewEstadoVehiculoController implements Initializable, IVehiculoEditable {
     @FXML
@@ -36,14 +38,20 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
     @FXML private TextField txtAñoFabricacion;
     @FXML private TextField txtSegundoAtributo;
     @FXML private TextField txtPatente;
-    @FXML private TextField txtKilometraje;;    
+    @FXML private TextField txtKilometraje;
+    
+    @FXML
+    private Button btnAceptar;
+    @FXML
+    private Button btnCancelar;
+    @FXML
+    private Button btnTicket;
 
     private Vehiculo v;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        cbEstadoVehiculo.getItems().addAll(EstadoVehiculo.values());
-        cbEstadoVehiculo.setValue(v.getEstadoVehiculo()); 
+        cbEstadoVehiculo.getItems().addAll(EstadoVehiculo.DISPONIBLE, EstadoVehiculo.ALQUILADO, EstadoVehiculo.EN_MANTENIMIENTO);
         dpFechaAlquiler.setValue(LocalDate.now());
     }
 
@@ -62,6 +70,8 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
 
             txtKilometraje.setText(String.valueOf(v.getKilometros()));
             txtKilometraje.setDisable(true);
+            
+            cbEstadoVehiculo.setValue(v.getEstadoVehiculo()); 
             
             if (v.getFechaAlquiler() != null) {
                 dpFechaAlquiler.setValue(v.getFechaAlquiler());
@@ -125,6 +135,28 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
         }
     }
     
+    
+    @FXML
+    void aceptar(ActionEvent event) {
+        if (v != null){
+            try {
+                Validations.ValidadorAtributosVehiculo.validarFechaFutura(dpFechaAlquiler);
+                v.setEstadoVehiculo(cbEstadoVehiculo.getValue());
+                v.setFechaAlquiler(dpFechaAlquiler.getValue());
+                
+                cerrar();
+            } catch (DatoErroneoException e) {
+                mostrarAlerta("Error", e.getMessage());
+            }
+ 
+        }
+    }
+
+    @FXML
+    void cancelar(ActionEvent event) {
+        this.cerrar();
+    }
+    
      private void mostrarAlerta(String titulo, String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.ERROR);
         alerta.setTitle(titulo);
@@ -132,4 +164,10 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
+     
+     @FXML
+     private void cerrar(){
+        Stage stage = (Stage)btnCancelar.getScene().getWindow();
+        stage.close();
+    } 
 }

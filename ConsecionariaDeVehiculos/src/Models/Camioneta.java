@@ -39,7 +39,7 @@ public class Camioneta extends Vehiculo implements ICambiarEstado{
     }
     
 
-    public double getCampacidadCargaKg() {
+    public float getCampacidadCargaKg() {
         return campacidadCargaKg;
     }
     public void setCampacidadCargaKg(float campacidadCargaKg) {
