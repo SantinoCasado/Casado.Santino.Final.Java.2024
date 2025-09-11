@@ -18,11 +18,12 @@ public class Moto extends Vehiculo implements ICambiarEstado{
     public Moto() {
     }
 
-    public Moto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado, LocalDate fechaAlquiler){ {
-        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado, fechaAlquiler);
-        this.marca = MarcasMoto.HONDA;
+    public Moto(String patente, String marca, int añoFabricacion, float kilometros, TipoVehiculos tipo, TipoCombustible tipoCombustible, EstadoVehiculo estadoVehiculo, LocalDate fechaAlquiler, int cilindrada) {
+        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estadoVehiculo, fechaAlquiler);
         this.cilindrada = 125;
+        this.marca = MarcasMoto.HONDA;
     }
+
 
     public Moto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado, MarcasMoto marca, int cilindrada, LocalDate fechaAlquiler) {
         super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado, fechaAlquiler);
@@ -103,5 +104,10 @@ public class Moto extends Vehiculo implements ICambiarEstado{
     @Override
     public void disponerVehiculo() {
         super.setEstadoVehiculo(EstadoVehiculo.DISPONIBLE);
+    }
+
+    @Override
+    public int compareTo(Vehiculo o) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

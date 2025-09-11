@@ -30,7 +30,7 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.añoFabricacion = añoFabricacion;
         this.tipoCombustible = tipoCombustible;
         this.kilometros =  kilometros;
-        this.estadoVehiculo = EstadoVehiculo.DISPONIBLE; // Valor por defecto
+        this.estadoVehiculo = EstadoVehiculo.DISPONIBLE; 
         this.fechaAlquiler = fechaAlquiler;
     }
 

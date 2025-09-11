@@ -26,8 +26,6 @@ public class Auto extends Vehiculo implements ICambiarEstado{
         this.marca = marca;
         this.numPuertas = numPuertas;
     }
-
-    public Auto() {}
     
     
     //Getters y Setters
@@ -106,6 +104,10 @@ public class Auto extends Vehiculo implements ICambiarEstado{
     public void disponerVehiculo() {
         super.setEstadoVehiculo(EstadoVehiculo.DISPONIBLE);
     }
-    
+
+    @Override
+    public int compareTo(Vehiculo o) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }
