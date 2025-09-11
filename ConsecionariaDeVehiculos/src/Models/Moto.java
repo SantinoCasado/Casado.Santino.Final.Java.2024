@@ -18,14 +18,14 @@ public class Moto extends Vehiculo implements ICambiarEstado{
     public Moto() {
     }
 
-    public Moto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado) {
-        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado);
+    public Moto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado, LocalDate fechaAlquiler){ {
+        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado, fechaAlquiler);
         this.marca = MarcasMoto.HONDA;
         this.cilindrada = 125;
     }
 
-    public Moto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado, MarcasMoto marca, int cilindrada){
-        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado);
+    public Moto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado, MarcasMoto marca, int cilindrada, LocalDate fechaAlquiler) {
+        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado, fechaAlquiler);
         this.marca = marca;
         this.cilindrada = cilindrada;
     }

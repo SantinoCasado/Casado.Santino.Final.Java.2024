@@ -18,32 +18,35 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
     private TipoCombustible tipoCombustible;
     private float kilometros;
     private EstadoVehiculo estadoVehiculo;
+    private LocalDate fechaAlquiler;
 
     // Constructores 
     public Vehiculo() {
     }
 
-    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float  kilometros) {
+    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float  kilometros, LocalDate fechaAlquiler) {
         this.tipo = tipo;
         this.patente = patente;
         this.añoFabricacion = añoFabricacion;
         this.tipoCombustible = tipoCombustible;
         this.kilometros =  kilometros;
         this.estadoVehiculo = EstadoVehiculo.DISPONIBLE; // Valor por defecto
+        this.fechaAlquiler = fechaAlquiler;
     }
 
-    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float horasUso, EstadoVehiculo estadoVehiculo) {
+    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estadoVehiculo, LocalDate fechaAlquiler) {
         this.tipo = tipo;
         this.patente = patente;
         this.añoFabricacion = añoFabricacion;
         this.tipoCombustible = tipoCombustible;
-        this. kilometros = horasUso;
+        this.kilometros = kilometros;
         this.estadoVehiculo = estadoVehiculo;
+        this.fechaAlquiler = fechaAlquiler;
     }
 
     // Método concreto
     public void registrarUso(float horas) {
-        this. kilometros += horas;
+        this.kilometros += horas;
     }
 
     // Getters y Setters    
@@ -92,6 +95,13 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
     public void setEstadoVehiculo(EstadoVehiculo estadoVehiculo) { 
         this.estadoVehiculo = estadoVehiculo; 
     }
+
+    public LocalDate getFechaAlquiler(){ 
+        return fechaAlquiler; 
+        }
+    public void setFechaAlquiler(LocalDate fechaAlquiler) { 
+        this.fechaAlquiler = fechaAlquiler; 
+    }
     
     
     // Métodos abstractos
@@ -99,11 +109,6 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
     public abstract float calcularCostoAlquiler(int dias);
     public abstract String ImprirTicker(LocalDate fechaAlquiler);
     
-
-    @Override
-    public int compareTo(Vehiculo otroVehiculo) {
-        return Integer.compare(this.añoFabricacion, otroVehiculo.añoFabricacion);
-    }
     
     public float obtenerHorasUso(LocalDate fechaFinUso){
         LocalDateTime ahora = LocalDateTime.now();

@@ -46,7 +46,7 @@ public class MainViewController implements Initializable {
 
     private AdministradorVehiculos administrador;
 
-    @FXML private Button btnAgregar, btnEliminar, btnModificar, btnGuardarFiltrado, btnGuardarTodo, btnFiltrar;
+    @FXML private Button btnAgregar, btnEliminar, btnModificar, btnGuardarFiltrado, btnGuardarTodo, btnFiltrar, btnCambiarEstado;
     @FXML private ChoiceBox<EstadoVehiculo> cbFiltrarEstado;
     @FXML private ChoiceBox<TipoVehiculos> cbFiltrarTipo;
     @FXML private Label lblPrimerAtributo, lblSegundoAtributo;
@@ -171,8 +171,12 @@ public class MainViewController implements Initializable {
                 cfc.setVehiculo(v);
                 stage.showAndWait();
                 Vehiculo resultado = cfc.getVehiculo();
-                if (resultado != null && (v == null || !administrador.listarTodo().contains(resultado))) {
-                    administrador.agregar(resultado);
+                if (resultado != null) {
+                    if (v == null || !administrador.listarTodo().contains(resultado)) {
+                        administrador.agregar(resultado);
+                } else {
+                    administrador.modificar(resultado);
+                    }
                 }
             }
 
@@ -181,8 +185,12 @@ public class MainViewController implements Initializable {
                 cevc.setVehiculo(v);
                 stage.showAndWait();
                 Vehiculo resultado = cevc.getVehiculo();
-                if (resultado != null && (v == null || !administrador.listarTodo().contains(resultado))) {
-                    administrador.agregar(resultado);
+                if (resultado != null) {
+                    if (v == null || !administrador.listarTodo().contains(resultado)) {
+                        administrador.agregar(resultado);
+                    } else {
+                        administrador.modificar(resultado); 
+                    }
                 }
             }
 

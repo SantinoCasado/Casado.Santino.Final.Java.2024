@@ -17,14 +17,14 @@ public class Camioneta extends Vehiculo implements ICambiarEstado{
     public Camioneta() {
     }
 
-    public Camioneta(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado,  MarcasCamioneta marca, float campacidadCargaKg) {
-        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado);
+    public Camioneta(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado,  MarcasCamioneta marca, float campacidadCargaKg, LocalDate fechaAlquiler) {
+        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado, fechaAlquiler);
         this.marca = marca;
         this.campacidadCargaKg = campacidadCargaKg;
     }
 
-    public Camioneta(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado){
-        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado);
+    public Camioneta(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado, LocalDate fechaAlquiler) {
+        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado, fechaAlquiler);
         this.marca = MarcasCamioneta.DODGE;
         this.campacidadCargaKg = 500;
     }

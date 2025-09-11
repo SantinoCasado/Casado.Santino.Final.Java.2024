@@ -15,17 +15,19 @@ public class Auto extends Vehiculo implements ICambiarEstado{
     public Auto(){        
     }
     
-    public Auto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float  kilometros, EstadoVehiculo estadoVehiculo){
-        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estadoVehiculo);
+    public Auto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float  kilometros, EstadoVehiculo estadoVehiculo, LocalDate fechaAlquiler){
+        super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estadoVehiculo, fechaAlquiler);
         this.marca = MarcasAuto.FORD;
         this.numPuertas = 4;
     }
     
-    public Auto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float  kilometros, EstadoVehiculo estadoVehiculo, MarcasAuto marca, int numPuertas){
-        super(tipo, patente, añoFabricacion, tipoCombustible,  kilometros, estadoVehiculo);
+    public Auto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float  kilometros, EstadoVehiculo estadoVehiculo, MarcasAuto marca, int numPuertas, LocalDate fechaAlquiler){
+        super(tipo, patente, añoFabricacion, tipoCombustible,  kilometros, estadoVehiculo, fechaAlquiler);
         this.marca = marca;
         this.numPuertas = numPuertas;
     }
+
+    public Auto() {}
     
     
     //Getters y Setters
