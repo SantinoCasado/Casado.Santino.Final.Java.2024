@@ -31,8 +31,12 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
     @FXML
     private Label lblSegundoAtributo;
     
-    @FXML
-    private TextField txtAñoFabricacion,  txtKilometraje, txtMarca,  txtPatente, txtSegundoAtributo, txtTipo;    
+    @FXML private TextField txtTipo;
+    @FXML private TextField txtMarca;
+    @FXML private TextField txtAñoFabricacion;
+    @FXML private TextField txtSegundoAtributo;
+    @FXML private TextField txtPatente;
+    @FXML private TextField txtKilometraje;;    
 
     private Vehiculo v;
 

@@ -187,13 +187,13 @@ public class MainViewController implements Initializable {
                     Vehiculo resultado = cevc.getVehiculo();
                     if (resultado != null) {
                         administrador.modificar(resultado); 
-                    }
+                }
                 }
 
             refrescarVista();
 
         } catch (IOException | PatenteRepetidaException e) {
-            mostrarAlerta("Error", e.getMessage());
+            System.out.println(e);
         }
     }
 
