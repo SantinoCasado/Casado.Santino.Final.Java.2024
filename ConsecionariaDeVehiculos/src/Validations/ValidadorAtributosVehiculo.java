@@ -4,7 +4,7 @@ package Validations;
 import Enums.EstadoVehiculo;
 import Enums.TipoCombustible;
 import Exceptions.DatoErroneoException;
-import java.time.LocalDate;
+import javafx.scene.control.DatePicker;
 
 public class ValidadorAtributosVehiculo {
    public static void validarPatenteVieja(String parte1, String parte2) {
@@ -81,7 +81,7 @@ public class ValidadorAtributosVehiculo {
         }
     }
 
-    private void validarFechaFutura(DatePicker dp) throws DatoErroneoException {
+    public static void validarFechaFutura(DatePicker dp){
         if (dp.getValue() == null || !dp.getValue().isAfter(java.time.LocalDate.now())) {
             throw new DatoErroneoException("La fecha debe ser posterior a la actual.");
         }

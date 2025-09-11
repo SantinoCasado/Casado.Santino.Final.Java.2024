@@ -1,6 +1,7 @@
 package Controllers;
 
 import Enums.EstadoVehiculo;
+import Exceptions.DatoErroneoException;
 import Interfaces.IVehiculoEditable;
 import Models.Auto;
 import Models.Camioneta;
@@ -12,6 +13,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -79,9 +81,12 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
         // Actualiza el estado y la fecha en el objeto antes de devolverlo
         if (v != null) {
             v.setEstadoVehiculo(cbEstadoVehiculo.getValue());
-
-            LocalDate fechaAlquilerNueva = dpFechaAlquiler.getValue();
-            Validations.ValidadorAtributosVehiculo.validarAñoFabricacion(añoFabricacion);
+            try {
+                LocalDate fechaAlquilerNueva = dpFechaAlquiler.getValue();
+                Validations.ValidadorAtributosVehiculo.validarFechaFutura(dpFechaAlquiler);
+            } catch (DatoErroneoException e) {
+                mostrarAlerta("Error", e.getMessage());
+            }
             v.setFechaAlquiler(dpFechaAlquiler.getValue());
         }
         return v;
@@ -96,5 +101,13 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
                 " - Estado: " + v.getEstadoVehiculo() +
                 " - Fecha alquiler: " + dpFechaAlquiler.getValue());
         }
+    }
+    
+     private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.ERROR);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 }

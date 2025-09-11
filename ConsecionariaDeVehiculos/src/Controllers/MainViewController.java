@@ -180,20 +180,20 @@ public class MainViewController implements Initializable {
                 }
             }
 
-            if (name.equals("EstadoVehiculo")) {
-                ViewEstadoVehiculoController cevc = loader.getController();
-                cevc.setVehiculo(v);
-                stage.showAndWait();
-                Vehiculo resultado = cevc.getVehiculo();
-                if (resultado != null) {
-                    administrador.modificar(resultado); 
+                if (name.equals("EstadoVehiculo")) {
+                    ViewEstadoVehiculoController cevc = loader.getController();
+                    cevc.setVehiculo(v);
+                    stage.showAndWait();
+                    Vehiculo resultado = cevc.getVehiculo();
+                    if (resultado != null) {
+                        administrador.modificar(resultado); 
+                    }
                 }
-            }
 
             refrescarVista();
 
         } catch (IOException | PatenteRepetidaException e) {
-            System.out.println("Error: " + e.getMessage());
+            mostrarAlerta("Error", e.getMessage());
         }
     }
 
