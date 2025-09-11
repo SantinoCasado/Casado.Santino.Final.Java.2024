@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="608.0" prefWidth="389.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="Controllers.ViewTicketController">
+   <children>
+      <Pane layoutX="7.0" layoutY="6.0" prefHeight="594.0" prefWidth="378.0">
+         <children>
+            <ListView fx:id="listViewTicket" layoutX="8.0" layoutY="46.0" prefHeight="489.0" prefWidth="363.0" />
+            <Label alignment="CENTER" layoutX="89.0" layoutY="14.0" prefHeight="27.0" prefWidth="202.0" text="Ticekt de Alquiler">
+               <font>
+                  <Font name="Lucida Console" size="18.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnCerrar" alignment="CENTER" layoutX="96.0" layoutY="550.0" mnemonicParsing="false" onAction="#cerrar" prefHeight="30.0" prefWidth="187.0" text="Cerrar">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

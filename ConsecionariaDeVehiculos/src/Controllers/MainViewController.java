@@ -186,7 +186,7 @@ public class MainViewController implements Initializable {
                 stage.showAndWait();
                 Vehiculo resultado = cevc.getVehiculo();
                 if (resultado != null) {
-                    administrador.modificar(resultado); // Siempre modifica, nunca agrega
+                    administrador.modificar(resultado); 
                 }
             }
 
