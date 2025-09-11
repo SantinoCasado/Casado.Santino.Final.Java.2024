@@ -2,6 +2,9 @@ package Controllers;
 
 import Enums.EstadoVehiculo;
 import Interfaces.IVehiculoEditable;
+import Models.Auto;
+import Models.Camioneta;
+import Models.Moto;
 import Models.Vehiculo;
 import java.net.URL;
 import java.time.LocalDate;
@@ -12,16 +15,22 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 public class ViewEstadoVehiculoController implements Initializable, IVehiculoEditable {
     @FXML
     private ChoiceBox<EstadoVehiculo> cbEstadoVehiculo;
+    
     @FXML
     private DatePicker dpFechaAlquiler;
+    
     @FXML
     private Label lblFecha;
     @FXML
     private Label lblSegundoAtributo;
+    
+    @FXML
+    private TextField txtAñoFabricacion,  txtKilometraje, txtMarca,  txtPatente, txtSegundoAtributo, txtTipo;    
 
     private Vehiculo v;
 
@@ -36,10 +45,31 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
     public void setVehiculo(Vehiculo v) {
         this.v = v;
         if (v != null) {
+            txtTipo.setText(v.getTipo().toString());
+            txtAñoFabricacion.setText(String.valueOf(v.getAñoFabricacion()));
+            txtPatente.setText(v.getPatente());
+            txtKilometraje.setText(String.valueOf(v.getKilometros()));
             cbEstadoVehiculo.setValue(v.getEstadoVehiculo());
-            // Si el vehículo tiene fecha de alquiler, mostrarla
             if (v.getFechaAlquiler() != null) {
                 dpFechaAlquiler.setValue(v.getFechaAlquiler());
+            }
+
+            // Cambia el label y el campo según el tipo de vehículo
+            if (v instanceof Auto) {
+                lblSegundoAtributo.setText("Cantidad de Puertas:");
+                txtSegundoAtributo.setText(String.valueOf(((Auto) v).getNumPuertas()));
+                txtMarca.setText(String.valueOf(((Auto) v).getMarca()));           
+            } else if (v instanceof Camioneta) {
+                lblSegundoAtributo.setText("Capacidad de Carga:");
+                txtSegundoAtributo.setText(String.valueOf(((Camioneta) v).getCampacidadCargaKg()));
+                txtMarca.setText(String.valueOf(((Camioneta) v).getMarca()));
+            } else if (v instanceof Moto) {
+                lblSegundoAtributo.setText("Cilindrada:");
+                txtSegundoAtributo.setText(String.valueOf(((Moto) v).getCilindrada()));
+                txtMarca.setText(String.valueOf(((Moto) v).getMarca()));
+            } else {
+                lblSegundoAtributo.setText("Segundo Atributo:");
+                txtSegundoAtributo.setText("");
             }
         }
     }
@@ -49,6 +79,9 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
         // Actualiza el estado y la fecha en el objeto antes de devolverlo
         if (v != null) {
             v.setEstadoVehiculo(cbEstadoVehiculo.getValue());
+
+            LocalDate fechaAlquilerNueva = dpFechaAlquiler.getValue();
+            Validations.ValidadorAtributosVehiculo.validarAñoFabricacion(añoFabricacion);
             v.setFechaAlquiler(dpFechaAlquiler.getValue());
         }
         return v;

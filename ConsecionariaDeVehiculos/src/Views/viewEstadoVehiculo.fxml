@@ -23,7 +23,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField layoutX="193.0" layoutY="95.0" prefHeight="25.0" prefWidth="170.0" />
+            <TextField fx:id="txtTipo" layoutX="193.0" layoutY="95.0" prefHeight="25.0" prefWidth="170.0" />
             <Label alignment="TOP_LEFT" layoutX="14.0" layoutY="54.0" prefHeight="27.0" prefWidth="257.0" text="Informacion del Vehiculo">
                <font>
                   <Font name="Berlin Sans FB" size="24.0" />
@@ -34,31 +34,31 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField layoutX="193.0" layoutY="122.0" prefHeight="25.0" prefWidth="170.0" />
+            <TextField fx:id="txtMarca" layoutX="193.0" layoutY="122.0" prefHeight="25.0" prefWidth="170.0" />
             <Label layoutX="14.0" layoutY="147.0" prefHeight="27.0" prefWidth="170.0" text="Año de Fabricacion:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField layoutX="193.0" layoutY="148.0" prefHeight="25.0" prefWidth="170.0" />
+            <TextField fx:id="txtAñoFabricacion" layoutX="193.0" layoutY="148.0" prefHeight="25.0" prefWidth="170.0" />
             <Label fx:id="lblSegundoAtributo" layoutX="14.0" layoutY="173.0" prefHeight="27.0" prefWidth="170.0" text="Segundo Atributo:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField layoutX="193.0" layoutY="174.0" prefHeight="25.0" prefWidth="170.0" />
+            <TextField fx:id="txtSegundoAtributo" layoutX="193.0" layoutY="174.0" prefHeight="25.0" prefWidth="170.0" />
             <Label layoutX="14.0" layoutY="200.0" prefHeight="27.0" prefWidth="91.0" text="Patente:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField layoutX="193.0" layoutY="201.0" prefHeight="25.0" prefWidth="170.0" />
+            <TextField fx:id="txtPatente" layoutX="193.0" layoutY="201.0" prefHeight="25.0" prefWidth="170.0" />
             <Label layoutX="14.0" layoutY="226.0" prefHeight="27.0" prefWidth="107.0" text="Kilometraje:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField layoutX="193.0" layoutY="227.0" prefHeight="25.0" prefWidth="170.0" />
+            <TextField fx:id="txtKilometraje" layoutX="193.0" layoutY="227.0" prefHeight="25.0" prefWidth="170.0" />
             <Label layoutX="8.0" layoutY="288.0" prefHeight="27.0" prefWidth="160.0" text="Estado del Vehiculo:">
                <font>
                   <Font size="18.0" />

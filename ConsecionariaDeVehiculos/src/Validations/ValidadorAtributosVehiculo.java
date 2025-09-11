@@ -80,6 +80,12 @@ public class ValidadorAtributosVehiculo {
             throw new DatoErroneoException("El kilometraje no puede ser negativo!");
         }
     }
+
+    private void validarFechaFutura(DatePicker dp) throws DatoErroneoException {
+        if (dp.getValue() == null || !dp.getValue().isAfter(java.time.LocalDate.now())) {
+            throw new DatoErroneoException("La fecha debe ser posterior a la actual.");
+        }
+    }
     
     
     private static boolean esLetra(char c){
