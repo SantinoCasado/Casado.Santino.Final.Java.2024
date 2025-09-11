@@ -54,19 +54,20 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
     }
     
     @Override
-    public  ArrayList<Vehiculo> buscarPorTipos(TipoVehiculos tipoVehiculo, EstadoVehiculo estado){
-        if (tipoVehiculo == null | estado == null) {
+    public ArrayList<Vehiculo> buscarPorTipos(TipoVehiculos tipoVehiculo, EstadoVehiculo estado) {
+        if (tipoVehiculo == null || estado == null) {
             throw new IllegalArgumentException("Tipo o estado de vehiculo invalido");
         }
-        for (Vehiculo vehiculoFor : vehiculos){
+        ArrayList<Vehiculo> filtrados = new ArrayList<>();
+        for (Vehiculo vehiculoFor : vehiculos) {
             boolean coincideTipo = (tipoVehiculo == TipoVehiculos.TODOS || vehiculoFor.getTipo() == tipoVehiculo);
             boolean coincideEstado = (estado == EstadoVehiculo.TODOS || vehiculoFor.getEstadoVehiculo() == estado);
-            
-            if(coincideTipo && coincideEstado){
-                this.vehiculosFiltrados.add(vehiculoFor);
+
+            if (coincideTipo && coincideEstado) {
+                filtrados.add(vehiculoFor);
             }
         }
-        return this.vehiculosFiltrados;
+        return filtrados;
     }
 
     @Override
