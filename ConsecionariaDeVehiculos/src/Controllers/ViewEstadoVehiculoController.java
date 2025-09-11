@@ -43,7 +43,7 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cbEstadoVehiculo.getItems().addAll(EstadoVehiculo.values());
-        cbEstadoVehiculo.setValue(EstadoVehiculo.DISPONIBLE); // Valor por defecto
+        cbEstadoVehiculo.setValue(v.getEstadoVehiculo()); 
         dpFechaAlquiler.setValue(LocalDate.now());
     }
 
@@ -52,10 +52,17 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
         this.v = v;
         if (v != null) {
             txtTipo.setText(v.getTipo().toString());
+            txtTipo.setDisable(true);
+
             txtAñoFabricacion.setText(String.valueOf(v.getAñoFabricacion()));
+            txtAñoFabricacion.setDisable(true);
+
             txtPatente.setText(v.getPatente());
+            txtPatente.setDisable(true);
+
             txtKilometraje.setText(String.valueOf(v.getKilometros()));
-            cbEstadoVehiculo.setValue(v.getEstadoVehiculo());
+            txtKilometraje.setDisable(true);
+            
             if (v.getFechaAlquiler() != null) {
                 dpFechaAlquiler.setValue(v.getFechaAlquiler());
             }
@@ -64,18 +71,30 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
             if (v instanceof Auto) {
                 lblSegundoAtributo.setText("Cantidad de Puertas:");
                 txtSegundoAtributo.setText(String.valueOf(((Auto) v).getNumPuertas()));
-                txtMarca.setText(String.valueOf(((Auto) v).getMarca()));           
+                txtSegundoAtributo.setDisable(true);
+                
+                txtMarca.setText(String.valueOf(((Auto) v).getMarca()));
+                txtMarca.setDisable(true);
             } else if (v instanceof Camioneta) {
                 lblSegundoAtributo.setText("Capacidad de Carga:");
                 txtSegundoAtributo.setText(String.valueOf(((Camioneta) v).getCampacidadCargaKg()));
+                txtSegundoAtributo.setDisable(true);
+                
                 txtMarca.setText(String.valueOf(((Camioneta) v).getMarca()));
+                txtMarca.setDisable(true);
             } else if (v instanceof Moto) {
                 lblSegundoAtributo.setText("Cilindrada:");
                 txtSegundoAtributo.setText(String.valueOf(((Moto) v).getCilindrada()));
+                txtSegundoAtributo.setDisable(true);
+                
                 txtMarca.setText(String.valueOf(((Moto) v).getMarca()));
+                txtMarca.setDisable(true);
             } else {
                 lblSegundoAtributo.setText("Segundo Atributo:");
                 txtSegundoAtributo.setText("");
+                txtSegundoAtributo.setDisable(true);
+                
+                txtMarca.setDisable(true);
             }
         }
     }
@@ -86,7 +105,6 @@ public class ViewEstadoVehiculoController implements Initializable, IVehiculoEdi
         if (v != null) {
             v.setEstadoVehiculo(cbEstadoVehiculo.getValue());
             try {
-                LocalDate fechaAlquilerNueva = dpFechaAlquiler.getValue();
                 Validations.ValidadorAtributosVehiculo.validarFechaFutura(dpFechaAlquiler);
             } catch (DatoErroneoException e) {
                 mostrarAlerta("Error", e.getMessage());
