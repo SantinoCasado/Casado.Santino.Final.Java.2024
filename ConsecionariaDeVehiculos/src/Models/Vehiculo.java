@@ -3,15 +3,18 @@ package Models;
 import Enums.EstadoVehiculo;
 import Enums.TipoCombustible;
 import Enums.TipoVehiculos;
+import Interfaces.IMapAbleJson;
+import Interfaces.ISerializableCsv;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
+public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable, IMapAbleJson, ISerializableCsv {
     TipoVehiculos tipo;
     private String patente;
     private int añoFabricacion;
@@ -20,8 +23,19 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
     private EstadoVehiculo estadoVehiculo;
     private LocalDate fechaAlquiler;
 
-    // Constructores 
+    // ----------------------------------- CONSTRUCTORES ------------------------------------------------------------------------------------------------------------------------------------------------------
     public Vehiculo() {
+    }
+
+    // Constructor desde Map (para deserializar JSON)
+    public Vehiculo(Map<String, String> map) {
+        this.tipo = TipoVehiculos.valueOf(map.get("tipo"));
+        this.patente = map.get("patente");
+        this.añoFabricacion = Integer.parseInt(map.get("añoFabricacion"));
+        this.tipoCombustible = TipoCombustible.valueOf(map.get("tipoCombustible"));
+        this.kilometros = Float.parseFloat(map.get("kilometros"));
+        this.estadoVehiculo = EstadoVehiculo.valueOf(map.get("estadoVehiculo"));
+        this.fechaAlquiler = map.get("fechaAlquiler").isEmpty() ? null : LocalDate.parse(map.get("fechaAlquiler"));
     }
 
     public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float  kilometros, LocalDate fechaAlquiler) {
@@ -44,12 +58,8 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.fechaAlquiler = fechaAlquiler;
     }
 
-    // Método concreto
-    public void registrarUso(float horas) {
-        this.kilometros += horas;
-    }
-
-    // Getters y Setters    
+    // ----------------------------------- GETERS Y SETERS ------------------------------------------------------------------------------------------------------------------------------------------------------
+    //TIPO
     public TipoVehiculos getTipo() {
         return tipo;
     }
@@ -57,7 +67,7 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.tipo = tipo;
     }
     
-    
+    //PATENTE
     public String getPatente() { 
         return patente; 
     }
@@ -65,7 +75,7 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.patente = patente; 
     }
     
-    
+    //AÑO FABRICACION
     public int getAñoFabricacion() { 
         return añoFabricacion; 
     }
@@ -73,7 +83,7 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.añoFabricacion = añoFabricacion; 
     }
     
-    
+    //TIPO COMBUSTIBLE
     public TipoCombustible getTipoCombustible() { 
         return tipoCombustible; 
     }
@@ -81,6 +91,7 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.tipoCombustible = tipoCombustible; 
     }
     
+    //KILOMETROS
     public float getKilometros() { 
         return  kilometros; 
     }
@@ -88,7 +99,7 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this. kilometros =  kilometros; 
     }
     
-    
+    //ESTADO VEHICULO
     public EstadoVehiculo getEstadoVehiculo() { 
         return estadoVehiculo; 
     }
@@ -96,6 +107,7 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.estadoVehiculo = estadoVehiculo; 
     }
 
+    //FECHA ALQUILER
     public LocalDate getFechaAlquiler(){ 
         return fechaAlquiler; 
         }
@@ -103,12 +115,47 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         this.fechaAlquiler = fechaAlquiler; 
     }
     
+    // ----------------------------------- ARCHIVOS  ------------------------------------------------------------------------------------------------------------------------------------------------------
+    @Override
+    public String toCSV() {
+        return String.format("%s,%s,%d,%s,%.2f,%s,%s",
+            tipo.name(),
+            patente,
+            añoFabricacion,
+            tipoCombustible.name(),
+            kilometros,
+            estadoVehiculo.name(),
+            fechaAlquiler != null ? fechaAlquiler.toString() : ""
+        );
+    }
+
+    public static Vehiculo fromCSV(String linea) {
+        return null;
+    }
+
+    @Override
+    public Map<String, String> toMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("tipo", tipo.name());
+        map.put("patente", patente);
+        map.put("añoFabricacion", String.valueOf(añoFabricacion));
+        map.put("tipoCombustible", tipoCombustible.name());
+        map.put("kilometros", String.valueOf(kilometros));
+        map.put("estadoVehiculo", estadoVehiculo.name());
+        map.put("fechaAlquiler", fechaAlquiler != null ? fechaAlquiler.toString() : "");
+        return map;
+    }
     
-    // Métodos abstractos
+    // ----------------------------------- METODOS ABSTRACTOS  ------------------------------------------------------------------------------------------------------------------------------------------------------
     public abstract String mostrarDetalles();
     public abstract float calcularCostoAlquiler(int dias);
     public abstract String ImprirTicker(LocalDate fechaAlquiler);
     
+    // ----------------------------------- METODOS DE CLASE ------------------------------------------------------------------------------------------------------------------------------------------------------
+    @Override
+    public int compareTo(Vehiculo otro) {
+        return this.patente.compareTo(otro.patente);
+    }
     
     public float obtenerHorasUso(LocalDate fechaFinUso){
         LocalDateTime ahora = LocalDateTime.now();
@@ -118,6 +165,10 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable {
         if (horasEstimadas < 0) horasEstimadas = 0;
         
         return horasEstimadas;
+    }
+    
+    public void registrarUso(float horas) {
+        this.kilometros += horas;
     }
 
     //Hash code y equals

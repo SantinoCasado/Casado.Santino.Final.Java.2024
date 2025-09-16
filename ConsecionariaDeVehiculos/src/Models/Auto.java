@@ -5,14 +5,26 @@ import Enums.EstadoVehiculo;
 import Enums.MarcasAuto;
 import Enums.TipoCombustible;
 import Enums.TipoVehiculos;
+import Interfaces.IMapAbleJson;
+import Interfaces.ISerializableCsv;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
+import java.util.HashMap;
 
-public class Auto extends Vehiculo implements ICambiarEstado{
+public class Auto extends Vehiculo implements ICambiarEstado, IMapAbleJson, ISerializableCsv {
     private MarcasAuto marca;
     private int numPuertas;
     
-    public Auto(){        
+    // ----------------------------------- CONSTRUCTORES ------------------------------------------------------------------------------------------------------------------------------------------------------
+    public Auto() {
+    }
+
+    // Constructor desde Map (para deserializar JSON)
+    public Auto(Map<String, String> map) {
+        super(map);
+        this.marca = MarcasAuto.valueOf(map.get("marca"));
+        this.numPuertas = Integer.parseInt(map.get("numPuertas"));
     }
     
     public Auto(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float  kilometros, EstadoVehiculo estadoVehiculo, LocalDate fechaAlquiler){
@@ -28,7 +40,8 @@ public class Auto extends Vehiculo implements ICambiarEstado{
     }
     
     
-    //Getters y Setters
+    // ----------------------------------- GETERS Y SETERS ------------------------------------------------------------------------------------------------------------------------------------------------------
+    //MARCA
     public MarcasAuto getMarca() {
         return marca;
     }
@@ -37,59 +50,95 @@ public class Auto extends Vehiculo implements ICambiarEstado{
     }
     
 
+    //PUERTAS
     public int getNumPuertas() {
         return numPuertas;
     }
-
     public void setNumPuertas(int numPuertas) {
         this.numPuertas = numPuertas;
     }
     
-    
-    //Override de motodos abstractos
+    // ----------------------------------- ARCHIVOS  ------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
-    public String mostrarDetalles() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\t" + "  Auto" + "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(super.getPatente() + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(super.getAñoFabricacion() + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(super.getTipoCombustible() + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(super.getKilometros()+ "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(this.marca + "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(this.numPuertas + "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
-        
-        return sb.toString();
+    public String toCSV() {
+        return super.toCSV() + "," + marca.name() + "," + numPuertas;
+    }
+    
+    public static Auto fromCSV(String linea) {
+        String[] parts = linea.split(",");
+        // Heredados
+        TipoVehiculos tipo = TipoVehiculos.valueOf(parts[0]);
+        String patente = parts[1];
+        int añoFabricacion = Integer.parseInt(parts[2]);
+        TipoCombustible tipoCombustible = TipoCombustible.valueOf(parts[3]);
+        float kilometros = Float.parseFloat(parts[4]);
+        EstadoVehiculo estadoVehiculo = EstadoVehiculo.valueOf(parts[5]);
+        LocalDate fechaAlquiler = parts[6].isEmpty() ? null : LocalDate.parse(parts[6]);
+
+        // Propios
+        MarcasAuto marca = MarcasAuto.valueOf(parts[7]);
+        int numPuertas = Integer.parseInt(parts[8]);
+
+        // Constructor completo
+        Auto auto = new Auto(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estadoVehiculo, fechaAlquiler);
+        auto.setMarca(marca);
+        auto.setNumPuertas(numPuertas);
+
+        return auto;
     }
 
     @Override
-    public String toString() {
-        return this.mostrarDetalles();
+    public Map<String, String> toMap() {
+        Map<String, String> map = (Map<String, String>) super.toMap();
+        map.put("marca", marca.name());
+        map.put("numPuertas", String.valueOf(numPuertas));
+        return map;
+    }
+
+    public static Auto fromMap(Map<String, String> map) {
+        return new Auto(map);
     }
     
     
+    // ----------------------------------- METODOS ABSTRACTOS  ------------------------------------------------------------------------------------------------------------------------------------------------------  
     @Override
     public float calcularCostoAlquiler(int dias) {
-       return dias * 50.0f;     //Declaro el numero como float
+       return dias * 50.0f;
+    }
+
+    @Override
+    public String mostrarDetalles() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%-80s %s%n", "Tipo de vehiculo:", "Auto"));
+        sb.append(String.format("%-85s %s%n", "Patente:", super.getPatente()));
+        sb.append(String.format("%-80s %d%n", "Año de Fabricacion:", super.getAñoFabricacion()));
+        sb.append(String.format("%-76s %s%n", "Tipo de Combustible:", super.getTipoCombustible()));
+        sb.append(String.format("%-80s %.2f%n", "Kilometros:", super.getKilometros()));
+        sb.append(String.format("%-75s %s%n", "Fecha de Alquiler:", String.valueOf(super.getFechaAlquiler())));
+        sb.append(String.format("%-83s %s%n", "Marca:", this.marca));
+        sb.append(String.format("%-80s %d%n", "Numero de Puertas:", this.numPuertas));
+        return sb.toString();
     }
 
     @Override
     public String ImprirTicker(LocalDate fechaAlquiler) {
         LocalDate hoy = LocalDate.now();
-        int diasInt = (int) ChronoUnit.DAYS.between(fechaAlquiler, hoy);
-        
+        int diasInt = (int) Math.abs(ChronoUnit.DAYS.between(fechaAlquiler, hoy));
         float precioTotalAlquiler = this.calcularCostoAlquiler(diasInt);
-        
+
         StringBuilder sb = new StringBuilder();
-        sb.append("Auto" + "\n" + "\n");
-        sb.append(fechaAlquiler + "\n" + "\n");
-        sb.append(diasInt);
-        sb.append(" x ");
-        sb.append(diasInt + "\n" + "\n");
-        sb.append(precioTotalAlquiler + "\n");
-        
+        sb.append(this.mostrarDetalles());
+        sb.append(String.format("%-80s %d dias x 50%n", "Precio por dia:", diasInt));
+        sb.append(String.format("%-80s %.2f%n", "Precio Total:", precioTotalAlquiler));
         return sb.toString();
     }
 
+    @Override
+    public int compareTo(Vehiculo otro) {
+        return this.getPatente().compareTo(otro.getPatente());
+    }
+
+    // ----------------------------------- METODOS DE INTERFAZ ------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public void realizarMatenimiento() {
         super.setEstadoVehiculo(EstadoVehiculo.EN_MANTENIMIENTO);
@@ -103,11 +152,5 @@ public class Auto extends Vehiculo implements ICambiarEstado{
     @Override
     public void disponerVehiculo() {
         super.setEstadoVehiculo(EstadoVehiculo.DISPONIBLE);
-    }
-
-    @Override
-    public int compareTo(Vehiculo o) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
+    }    
 }

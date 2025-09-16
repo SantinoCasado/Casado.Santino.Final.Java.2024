@@ -133,7 +133,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
                           break;
                       case CAMIONETA:
                           ValidadorAtributosCamioneta.validarMarca(marca);
-                          ValidadorAtributosCamioneta.validarCapacidadaCarga(txtSegundoAtributo.getText().trim());
+                          ValidadorAtributosCamioneta.validarCapacidadCarga(txtSegundoAtributo.getText().trim());
                           capacidadCargaKg = Float.parseFloat(txtSegundoAtributo.getText().trim());
                           break;
                   }

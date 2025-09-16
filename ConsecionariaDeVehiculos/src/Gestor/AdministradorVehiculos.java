@@ -8,17 +8,25 @@ import Models.Auto;
 import Models.Camioneta;
 import Models.Moto;
 import Models.Vehiculo;
+import Utilities.CsvUtilities;
+import Utilities.JsonUtilities;
+import Utilities.TxtUtilities;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class AdministradorVehiculos implements CRUD<Vehiculo>{
     private ArrayList<Vehiculo> vehiculos;
     private ArrayList <Vehiculo> vehiculosFiltrados;
     
+
+    // Constructor
     public AdministradorVehiculos(){
         this.vehiculos = new ArrayList<>();
         this.vehiculosFiltrados = new ArrayList<>();
     }
 
+    //----------------------------------- IMPLEMENTACION DE CRUD ------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public void agregar(Vehiculo entidad) throws PatenteRepetidaException {
         if (this.vehiculos.contains(entidad)){
@@ -76,6 +84,7 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
         this.vehiculos.remove(vehiculo);
     }
     
+    //FILTRADO POR TIPO Y ESTADO
     @Override
     public ArrayList<Vehiculo> buscarPorTipos(TipoVehiculos tipoVehiculo, EstadoVehiculo estado) {
         if (tipoVehiculo == null || estado == null) {
@@ -96,5 +105,70 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
     @Override
     public ArrayList<Vehiculo> listarTodo() {
         return this.vehiculos;
+    }
+
+    //----------------------------------- ARCHIVOS ------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Guardar en CSV
+    public void guardarCSV() throws Exception {
+        CsvUtilities.guardarVehiculosCSV(vehiculos);
+    }
+
+    // Cargar desde CSV
+    public void cargarCSV() throws Exception {
+        this.vehiculos = CsvUtilities.cargarVehiculosCSV(Auto::fromCSV);    // Usa el parseador adecuado según el tipo de vehículo
+    }
+
+    // Guardar en JSON
+    public void guardarJSON() throws Exception {
+        JsonUtilities.guardarVehiculosJSON(vehiculos);
+    }
+
+    // Cargar desde JSON
+    public void cargarJSON() {
+      List<Map<String, String>> datos = JsonUtilities.cargarVehiculosJSON();
+      ArrayList<Vehiculo> lista = new ArrayList<>();
+      
+      for (Map<String, String> map : datos) {
+          TipoVehiculos tipo = TipoVehiculos.valueOf(map.get("tipo"));
+          Vehiculo v;
+          
+          switch (tipo) {
+              case AUTO:
+                  v = new Auto(map);
+                  break;
+              case MOTO:
+                  v = new Moto(map);
+                  break;
+              case CAMIONETA:
+                  v = new Camioneta(map);
+                  break;
+              default:
+                  continue;
+          }
+          lista.add(v);
+      }
+      this.vehiculos = lista;
+  }
+
+    // Exportar listado filtrado a TXT
+    public void exportarListadoFiltradoTXT(ArrayList<Vehiculo> listaFiltrada, String encabezado) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        sb.append(encabezado).append("\n");
+        sb.append("Patente\tTipo\tMarca\tAño\tEstado\tKm\n");
+        for (Vehiculo v : listaFiltrada) {
+            String marca = "";
+            if (v instanceof Auto) marca = ((Auto)v).getMarca().name();
+            else if (v instanceof Moto) marca = ((Moto)v).getMarca().name();
+            else if (v instanceof Camioneta) marca = ((Camioneta)v).getMarca().name();
+            sb.append(String.format("%s\t%s\t%s\t%d\t%s\t%.2f\n",
+                v.getPatente(),
+                v.getTipo().name(),
+                marca,
+                v.getAñoFabricacion(),
+                v.getEstadoVehiculo().name(),
+                v.getKilometros()
+            ));
+        }
+        TxtUtilities.guardarTexto(sb.toString());
     }
 }

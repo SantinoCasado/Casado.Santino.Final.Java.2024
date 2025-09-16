@@ -1,0 +1,3 @@
+Listado de Vehículos
+Patente	Tipo	Marca	Año	Estado	Km
+AAA111	AUTO	FIAT	2010	DISPONIBLE	12312.00

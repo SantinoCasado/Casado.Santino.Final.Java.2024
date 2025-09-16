@@ -1,5 +1,7 @@
 package Controllers;
 
+import Controllers.ViewEstadoVehiculoController;
+import Controllers.ViewFormularioController;
 import Enums.EstadoVehiculo;
 import Enums.TipoVehiculos;
 import Exceptions.PatenteRepetidaException;
@@ -23,6 +25,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
@@ -33,7 +36,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 public class MainViewController implements Initializable {
-
+    //------------------------------------------ ATRIBUTOS DE CLASE  --------------------------------------------------------------------------------------------------------------
+    // TABLE
     @FXML private TableView<Vehiculo> tablaVehiculos;
     @FXML private TableColumn<Vehiculo, String> tipoCol;
     @FXML private TableColumn<Vehiculo, String> patenteCol;
@@ -44,63 +48,91 @@ public class MainViewController implements Initializable {
     @FXML private TableColumn<Vehiculo, String> marcaCol;
     @FXML private TableColumn<Vehiculo, String> segundoAtributoCol;
 
-    private AdministradorVehiculos administrador;
-
-    @FXML private Button btnAgregar, btnEliminar, btnModificar, btnGuardarFiltrado, btnGuardarTodo, btnFiltrar, btnCambiarEstado;
+    //BOTONES
+    @FXML private Button btnAgregar;
+    @FXML private Button btnEliminar;
+    @FXML private Button btnModificar;
+    @FXML private Button btnFiltrar;
+    @FXML private Button btnCambiarEstado;
+    @FXML private Button btnAceptar;
+    
+    //CHOICE BOXES
     @FXML private ChoiceBox<EstadoVehiculo> cbFiltrarEstado;
     @FXML private ChoiceBox<TipoVehiculos> cbFiltrarTipo;
-    @FXML private Label lblPrimerAtributo, lblSegundoAtributo;
+    @FXML private ChoiceBox<String> cbSave;
+    
+    //LABELS
+    @FXML private Label lblPrimerAtributo;
+    @FXML private Label lblSegundoAtributo;
 
+    // ADMINISTRADOR
+    private AdministradorVehiculos administrador;
+
+    //------------------------------------------------- INICIALIZADOR -----------------------------------------------------------------------------------------------------
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        cbFiltrarEstado.getItems().addAll(EstadoVehiculo.values());
+        //CHOICES BOXES
+        cbFiltrarEstado.getItems().addAll(EstadoVehiculo.values());                                                                  //  Estados del Vehiculo
         cbFiltrarEstado.setValue(EstadoVehiculo.TODOS);
 
-        cbFiltrarTipo.getItems().addAll(TipoVehiculos.AUTO, TipoVehiculos.CAMIONETA, TipoVehiculos.MOTO, TipoVehiculos.TODOS);
+        cbFiltrarTipo.getItems().addAll(TipoVehiculos.AUTO, TipoVehiculos.CAMIONETA, TipoVehiculos.MOTO, TipoVehiculos.TODOS);      //  Tipos de vehiculo 
         cbFiltrarTipo.setValue(TipoVehiculos.TODOS);
 
-        administrador = new AdministradorVehiculos();
+        cbSave.getItems().addAll(                                                                                                   // Achivos
+                    "Guardar CSV",
+                    "Cargar CSV",
+                    "Guardar JSON",
+                    "Cargar JSON",
+                    "Exportar TXT"
+        );
+        cbSave.setValue("Guardar CSV");
+
+        administrador = new AdministradorVehiculos();                                                                               //Inicializo el administrador
 
         // Configuración de columnas
-        tipoCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTipo().toString()));
-        patenteCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPatente()));
-        añoCol.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getAñoFabricacion()).asObject());
-        combustibleCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTipoCombustible().toString()));
-        kmCol.setCellValueFactory(cell -> new SimpleFloatProperty(cell.getValue().getKilometros()).asObject());
-        estadoCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getEstadoVehiculo().toString()));
+        tipoCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTipo().toString()));                        // Tipo
+        patenteCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPatente()));                             // Patente
+        añoCol.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getAñoFabricacion()).asObject());              // Año
+        combustibleCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTipoCombustible().toString()));      // Combustible
+        kmCol.setCellValueFactory(cell -> new SimpleFloatProperty(cell.getValue().getKilometros()).asObject());                     // Kilometros
+        estadoCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getEstadoVehiculo().toString()));            // Estado
         
-        marcaCol.setCellValueFactory(cell -> {
+        marcaCol.setCellValueFactory(cell -> {                                                                                      // Marca
+            Vehiculo v = cell.getValue();   // Obtiene el valor de la celda
+            // Dependiendo de su instancia
+            if (v instanceof Auto) {
+                return new SimpleStringProperty(((Auto) v).getMarca().toString());      // marcasAuto
+            } else if (v instanceof Moto) {
+                return new SimpleStringProperty(((Moto) v).getMarca().toString());      // marcasMoto
+            } else if (v instanceof Camioneta) {
+                return new SimpleStringProperty(((Camioneta) v).getMarca().toString()); // marcasCamioneta
+            }
+            return new SimpleStringProperty("-");                                       // Valor nulo
+        });
+
+        segundoAtributoCol.setCellValueFactory(cell -> {                                                                             // Segundo Atributo  
             Vehiculo v = cell.getValue();
             if (v instanceof Auto) {
-                return new SimpleStringProperty(((Auto) v).getMarca().toString());
+                return new SimpleStringProperty(String.valueOf(((Auto) v).getNumPuertas()));    // Metodo de Auto
             } else if (v instanceof Moto) {
-                return new SimpleStringProperty(((Moto) v).getMarca().toString());
+                return new SimpleStringProperty(String.valueOf(((Moto) v).getCilindrada()));    // Metodo de Moto
             } else if (v instanceof Camioneta) {
-                return new SimpleStringProperty(((Camioneta) v).getMarca().toString());
+                return new SimpleStringProperty(String.valueOf(((Camioneta) v).getCampacidadCargaKg()));    // Metodo de Camioneta
             }
             return new SimpleStringProperty("-");
         });
 
-        segundoAtributoCol.setCellValueFactory(cell -> {
-            Vehiculo v = cell.getValue();
-            if (v instanceof Auto) {
-                return new SimpleStringProperty(String.valueOf(((Auto) v).getNumPuertas()));
-            } else if (v instanceof Moto) {
-                return new SimpleStringProperty(String.valueOf(((Moto) v).getCilindrada()));
-            } else if (v instanceof Camioneta) {
-                return new SimpleStringProperty(String.valueOf(((Camioneta) v).getCampacidadCargaKg()));
-            }
-            return new SimpleStringProperty("-");
-        });
-
-        refrescarVista();
+        refrescarVista();       // Refresco de vista por predeterminado
     }
 
+    // ----------------------------------------------------- ON ACTIONS -----------------------------------------------------------------------------------------------
+    // AGREGAR
     @FXML
     void agregar(ActionEvent event) {
         AbrirView(null, "Formulario");
     }
 
+    // ELIMINAR
     @FXML
     void eliminar(ActionEvent event) {
         Vehiculo seleccionado = tablaVehiculos.getSelectionModel().getSelectedItem();
@@ -118,6 +150,7 @@ public class MainViewController implements Initializable {
         }
     }
 
+    // MODIFICAR
     @FXML
     void modificar(ActionEvent event) {
         Vehiculo seleccionado = tablaVehiculos.getSelectionModel().getSelectedItem();
@@ -126,6 +159,7 @@ public class MainViewController implements Initializable {
         }
     }
 
+    // ------------------------------------------------ CAMBIO DE ESTADO -------------------------------
     @FXML
     public void cambiarEstado(ActionEvent event) {
         Vehiculo seleccionado = tablaVehiculos.getSelectionModel().getSelectedItem();
@@ -134,16 +168,42 @@ public class MainViewController implements Initializable {
         }
     }
 
+    // ------------------------------------------------- ARCHIVOS -------------------------------------------
     @FXML
-    private void guardarTodo(ActionEvent event) {
-        // lógica de guardado completo
+    private void aceptarAccion(ActionEvent event) throws Exception {
+        String accion = cbSave.getValue();
+        try{
+            switch (accion) {
+                case "Guardar CSV":
+                    administrador.guardarCSV();
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo CSV guardado correctamente.");
+                    break;
+                case "Cargar CSV":
+                    administrador.cargarCSV();
+                    refrescarVista();
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo CSV cargado correctamente.");
+                    break;
+                case "Guardar JSON":
+                    administrador.guardarJSON();
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo JSON guardado correctamente.");
+                    break;
+                case "Cargar JSON":
+                    administrador.cargarJSON();
+                    refrescarVista();
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo JSON cargado correctamente.");
+                    break;
+                case "Exportar TXT":
+                    ArrayList<Vehiculo> filtrados = administrador.buscarPorTipos(TipoVehiculos.TODOS, EstadoVehiculo.TODOS);
+                    administrador.exportarListadoFiltradoTXT(filtrados, "Listado de Vehículos");
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo TXT exportado correctamente.");
+                    break;
+        }
+        } catch (Exception e) {
+            mostrarAlerta(AlertType.ERROR, "Error", "Ocurrió un error: " + e.getMessage());
+        }
     }
 
-    @FXML
-    private void guardarFiltrado(ActionEvent event) {
-        // lógica de guardado filtrado
-    }
-
+    // ------------------------------------------------- FILTRADO ---------------------------------------
     @FXML
     public void filtrar(ActionEvent event) {
         TipoVehiculos tipoSeleccionado = cbFiltrarTipo.getValue();
@@ -153,10 +213,12 @@ public class MainViewController implements Initializable {
             ArrayList<Vehiculo> filtrados = administrador.buscarPorTipos(tipoSeleccionado, estadoSeleccionado);
             refrescarVistaFiltrada(filtrados);
         } catch (IllegalArgumentException e) {
-            mostrarAlerta("Error", e.getMessage());
+            mostrarAlerta(AlertType.ERROR,"Error", e.getMessage());
         }
     }
 
+    // ------------------------------------------------- METODOS PARTICULARES -----------------------------------------------------------------------------------
+    // Apertura de views
     private void AbrirView(Vehiculo v, String name) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/view" + name + ".fxml"));
@@ -197,21 +259,24 @@ public class MainViewController implements Initializable {
         }
     }
 
+    // Refresco de la vista
     public void refrescarVista() {
         tablaVehiculos.setItems(FXCollections.observableArrayList(administrador.listarTodo()));
         tablaVehiculos.refresh();
     }
 
+    // Refresco de la vista SOLO si se filtra
     private void refrescarVistaFiltrada(ArrayList<Vehiculo> lista) {
         tablaVehiculos.setItems(FXCollections.observableArrayList(lista));
         tablaVehiculos.refresh();
     }
 
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alerta = new Alert(Alert.AlertType.ERROR);
-        alerta.setTitle(titulo);
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
+    // Alert
+    private void mostrarAlerta(AlertType tipo, String titulo, String mensaje) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }

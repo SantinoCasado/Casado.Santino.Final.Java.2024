@@ -1,0 +1,13 @@
+[
+  {
+    "añoFabricacion": "2010",
+    "marca": "FIAT",
+    "tipo": "AUTO",
+    "tipoCombustible": "DIESEL",
+    "estadoVehiculo": "DISPONIBLE",
+    "kilometros": "12312.0",
+    "numPuertas": "4",
+    "patente": "AAA111",
+    "fechaAlquiler": "2025-09-13"
+  }
+]

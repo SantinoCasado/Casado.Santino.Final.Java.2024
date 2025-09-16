@@ -1,21 +1,29 @@
 package Models;
 
-import Interfaces.ICambiarEstado;
 import Enums.EstadoVehiculo;
 import Enums.MarcasMoto;
 import Enums.TipoCombustible;
 import Enums.TipoVehiculos;
 import Interfaces.ICambiarEstado;
+import Interfaces.IMapAbleJson;
+import Interfaces.ISerializableCsv;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 
-public class Moto extends Vehiculo implements ICambiarEstado{
+public class Moto extends Vehiculo implements ICambiarEstado, IMapAbleJson, ISerializableCsv{
     private MarcasMoto marca;
     private int cilindrada;
     
-    
-    //Constructores
+    // ----------------------------------- CONSTRUCTORES ------------------------------------------------------------------------------------------------------------------------------------------------------
     public Moto() {
+    }
+
+    // Constructor desde Map (para deserializar JSON)
+    public Moto(Map<String, String> map) {
+        super(map);
+        this.marca = MarcasMoto.valueOf(map.get("marca"));
+        this.cilindrada = Integer.parseInt(map.get("cilindrada"));
     }
 
     public Moto(String patente, String marca, int añoFabricacion, float kilometros, TipoVehiculos tipo, TipoCombustible tipoCombustible, EstadoVehiculo estadoVehiculo, LocalDate fechaAlquiler, int cilindrada) {
@@ -31,7 +39,8 @@ public class Moto extends Vehiculo implements ICambiarEstado{
         this.cilindrada = cilindrada;
     }
     
-    //Getters y Setters
+    //----------------------------------- GETTERS Y SETTERS ------------------------------------------------------------------------------------------------------------------------------------------------------
+    //MARCA
     public MarcasMoto getMarca() {
         return marca;
     }
@@ -39,27 +48,73 @@ public class Moto extends Vehiculo implements ICambiarEstado{
         this.marca = marca;
     }
     
-
+    //CILINDRADA
     public int getCilindrada() {
         return cilindrada;
     }
-
     public void setCilindrada(int cilindrada) {
         this.cilindrada = cilindrada;
     }
+
+    // ----------------------------------- ARCHIVOS ------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Implementación de IMapAbleJson
+    @Override
+    public Map<String, String> toMap() {
+        Map<String, String> map = super.toMap();
+        map.put("marca", marca.name());
+        map.put("cilindrada", String.valueOf(cilindrada));
+        return map;
+    }
+
+    public static Moto fromMap(Map<String, String> map) {
+        return new Moto(map);
+    }
+
+    // Implementación de ISerializableCsv
+    @Override
+    public String toCSV() {
+        return super.toCSV() + "," + marca.name() + "," + cilindrada;
+    }
     
-    //Override de metodos abstractos
+    public static Moto fromCSV(String linea) {
+        String[] parts = linea.split(",");
+        TipoVehiculos tipo = TipoVehiculos.valueOf(parts[0]);
+        String patente = parts[1];
+        int añoFabricacion = Integer.parseInt(parts[2]);
+        TipoCombustible tipoCombustible = TipoCombustible.valueOf(parts[3]);
+        float kilometros = Float.parseFloat(parts[4]);
+        EstadoVehiculo estadoVehiculo = EstadoVehiculo.valueOf(parts[5]);
+        LocalDate fechaAlquiler = parts[6].isEmpty() ? null : LocalDate.parse(parts[6]);
+        MarcasMoto marca = MarcasMoto.valueOf(parts[7]);
+        int cilindrada = Integer.parseInt(parts[8]);
+        return new Moto(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estadoVehiculo, marca, cilindrada, fechaAlquiler);
+    }
+    
+    //----------------------------------- MÉTODOS ABSTRACTOS ------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public String mostrarDetalles() {
         StringBuilder sb = new StringBuilder();
-        sb.append( "\t" + "Moto" +  "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(super.getPatente() +  "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(super.getAñoFabricacion() +  "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(super.getTipoCombustible() +  "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(super.getKilometros()+  "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(this.marca + "\t" + "\t" + "\t" + "\t" + "\t");
-        sb.append(this.cilindrada +  "\t" + "\t" + "\t" + "\t" + "\t" + "\t");
-        
+        sb.append(String.format("%-80s %s%n", "Tipo de vehiculo: ", "Moto"));
+        sb.append(String.format("%-85s %s%n", "Patente: ", super.getPatente()));
+        sb.append(String.format("%-80s %d%n", "Año de Fabricacion: ", super.getAñoFabricacion()));
+        sb.append(String.format("%-76s %s%n", "Tipo de Combustible: ", super.getTipoCombustible()));
+        sb.append(String.format("%-80s %.2f%n", "Kilometros: ", super.getKilometros()));
+        sb.append(String.format("%-75s %s%n", "Fecha de Alquiler: ", String.valueOf(super.getFechaAlquiler())));
+        sb.append(String.format("%-83s %s%n", "Marca: ", this.marca));
+        sb.append(String.format("%-80s %d%n", "Cilindrada: ", this.cilindrada));
+        return sb.toString();
+    }
+
+    @Override
+    public String ImprirTicker(LocalDate fechaAlquiler) {
+        LocalDate hoy = LocalDate.now();
+        int diasInt = (int) Math.abs(ChronoUnit.DAYS.between(fechaAlquiler, hoy));
+        float precioTotalAlquiler = this.calcularCostoAlquiler(diasInt);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.mostrarDetalles());
+        sb.append(String.format("%-80s %d dias x 50%n", "Precio por dia: ", diasInt));
+        sb.append(String.format("%-80s %.2f%n", "Precio Total: ", precioTotalAlquiler));
         return sb.toString();
     }
     
@@ -72,25 +127,13 @@ public class Moto extends Vehiculo implements ICambiarEstado{
     public float calcularCostoAlquiler(int dias) {
        return dias * 30.0f;     //Declaro el numero como float
     }
-    
+
     @Override
-    public String ImprirTicker(LocalDate fechaAlquiler) {
-        LocalDate hoy = LocalDate.now();
-        int diasInt = (int) ChronoUnit.DAYS.between(fechaAlquiler, hoy);
-        
-        float precioTotalAlquiler = this.calcularCostoAlquiler(diasInt);
-        
-        StringBuilder sb = new StringBuilder();
-        sb.append("Moto" + "\n" + "\n");
-        sb.append(fechaAlquiler + "\n" + "\n");
-        sb.append(diasInt);
-        sb.append(" x ");
-        sb.append(diasInt + "\n" + "\n");
-        sb.append(precioTotalAlquiler + "\n");
-        
-        return sb.toString();
+    public int compareTo(Vehiculo otro) {
+        return this.getPatente().compareTo(otro.getPatente());
     }
 
+    //----------------------------------- IMPLEMENTACION DE INTERFACES ------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public void realizarMatenimiento() {
         super.setEstadoVehiculo(EstadoVehiculo.EN_MANTENIMIENTO);
@@ -104,10 +147,5 @@ public class Moto extends Vehiculo implements ICambiarEstado{
     @Override
     public void disponerVehiculo() {
         super.setEstadoVehiculo(EstadoVehiculo.DISPONIBLE);
-    }
-
-    @Override
-    public int compareTo(Vehiculo o) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

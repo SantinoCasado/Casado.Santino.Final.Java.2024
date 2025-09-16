@@ -11,11 +11,11 @@
 
 <AnchorPane id="AnchorPane" prefHeight="780.0" prefWidth="1159.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.MainViewController">
    <children>
-      <Pane layoutX="14.0" layoutY="6.0" prefHeight="769.0" prefWidth="1170.0">
+      <Pane layoutX="14.0" layoutY="6.0" prefHeight="780.0" prefWidth="1170.0">
          <children>
-            <Button fx:id="btnAgregar" layoutX="16.0" layoutY="675.0" mnemonicParsing="false" onAction="#agregar" prefHeight="35.0" prefWidth="132.0" text="Agregar Vehiculo" />
-            <Button fx:id="btnModificar" layoutX="161.0" layoutY="675.0" mnemonicParsing="false" onAction="#modificar" prefHeight="35.0" prefWidth="132.0" text="Modificar Vehiculo" />
-            <Button fx:id="btnEliminar" layoutX="304.0" layoutY="675.0" mnemonicParsing="false" onAction="#eliminar" prefHeight="35.0" prefWidth="132.0" text="Eliminar Vehiculo" />
+            <Button fx:id="btnAgregar" layoutX="14.0" layoutY="676.0" mnemonicParsing="false" onAction="#agregar" prefHeight="35.0" prefWidth="132.0" text="Agregar Vehiculo" />
+            <Button fx:id="btnModificar" layoutX="159.0" layoutY="677.0" mnemonicParsing="false" onAction="#modificar" prefHeight="35.0" prefWidth="132.0" text="Modificar Vehiculo" />
+            <Button fx:id="btnEliminar" layoutX="304.0" layoutY="677.0" mnemonicParsing="false" onAction="#eliminar" prefHeight="35.0" prefWidth="132.0" text="Eliminar Vehiculo" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="798.0" layoutY="653.0" prefHeight="17.0" prefWidth="119.0" text="Tipo de Vehiculo">
                <font>
                   <Font size="14.0" />
@@ -29,9 +29,7 @@
             <ChoiceBox fx:id="cbFiltrarTipo" layoutX="783.0" layoutY="680.0" prefWidth="150.0" />
             <ChoiceBox fx:id="cbFiltrarEstado" layoutX="969.0" layoutY="681.0" prefWidth="150.0" />
             <Button fx:id="btnFiltrar" layoutX="898.0" layoutY="718.0" mnemonicParsing="false" onAction="#filtrar" prefHeight="25.0" prefWidth="109.0" text="FILTRAR" />
-            <Button fx:id="btnGuardarFiltrado" layoutX="544.0" layoutY="693.0" mnemonicParsing="false" onAction="#guardarFiltrado" prefHeight="25.0" prefWidth="166.0" text="Guardar Vehiculos Filtrados" />
-            <Button fx:id="btnGuardarTodo" layoutX="544.0" layoutY="661.0" mnemonicParsing="false" onAction="#guardarTodo" prefHeight="25.0" prefWidth="166.0" text="Guardar Todo" />
-            <Button fx:id="btnCambiarEstado" layoutX="115.0" layoutY="718.0" mnemonicParsing="false" onAction="#cambiarEstado" prefHeight="25.0" prefWidth="224.0" text="Camabiar Estado del Vehiculo" />
+            <Button fx:id="btnCambiarEstado" layoutX="113.0" layoutY="731.0" mnemonicParsing="false" onAction="#cambiarEstado" prefHeight="25.0" prefWidth="224.0" text="Camabiar Estado del Vehiculo" />
             <TableView fx:id="tablaVehiculos" layoutX="1.0" layoutY="3.0" prefHeight="643.0" prefWidth="1163.0">
               <columns>
                 <TableColumn fx:id="tipoCol" prefWidth="125.0" text="Tipo de Vehiculo" />
@@ -44,6 +42,9 @@
                   <TableColumn fx:id="segundoAtributoCol" minWidth="0.0" prefWidth="154.0" text="Segundo Atributo" />
               </columns>
             </TableView>
+            <Label alignment="CENTER" layoutX="521.0" layoutY="655.0" prefHeight="17.0" prefWidth="158.0" text="GUARDADO DE ARCHIVOS" textFill="#eb0d0d" />
+            <ChoiceBox fx:id="cbSave" layoutX="525.0" layoutY="680.0" prefWidth="150.0" />
+            <Button fx:id="btnAceptar" layoutX="525.0" layoutY="718.0" mnemonicParsing="false" onAction="#aceptarAccion" prefHeight="25.0" prefWidth="150.0" text="Acpetar" />
              
          </children>
       </Pane>
