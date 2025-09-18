@@ -18,7 +18,7 @@ public class CsvUtilities<T extends ISerializableCsv> {
         if (!dir.exists()) {    // Crear el directorio si no existe
             dir.mkdirs();
         }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ARCHIVO_CSV))) { // Sobrescribe el archivo
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ARCHIVO_CSV, true))) { // Sobrescribe el archivo
             // Escribir cada objeto en una línea
             for (T item : lista) {
                 bw.write(item.toCSV());

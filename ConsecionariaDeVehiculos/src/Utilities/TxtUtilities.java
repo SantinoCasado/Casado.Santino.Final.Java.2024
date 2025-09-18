@@ -16,7 +16,7 @@ public class TxtUtilities {
         if (!dir.exists()) {        //Verificar si el directorio existe, si no, crearlo
             dir.mkdirs();
         }
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_TXT))) { //Escribir el contenido en el archivo
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_TXT, true))) { //Escribir el contenido en el archivo
             writer.write(contenido);
             System.out.println("Archivo TXT guardado en: " + ARCHIVO_TXT);
         }

@@ -28,7 +28,7 @@ public class JsonUtilities {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();         // Crear el JSON con formato
         String json = gson.toJson(listaExportable);                         // Convertir la lista de Maps a JSON
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_JSON))) {        // Escribir el JSON en el archivo
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_JSON, true))) {        // Escribir el JSON en el archivo
             writer.write(json);
             System.out.println("Lista serializada en: " + ARCHIVO_JSON);
         } catch (IOException e) {

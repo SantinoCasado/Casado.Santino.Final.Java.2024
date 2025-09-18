@@ -115,7 +115,29 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
 
     // Cargar desde CSV
     public void cargarCSV() throws Exception {
-        this.vehiculos = CsvUtilities.cargarVehiculosCSV(Auto::fromCSV);    // Usa el parseador adecuado según el tipo de vehículo
+        ArrayList<String> lineas = CsvUtilities.leerCSV();
+        ArrayList<Vehiculo> lista = new ArrayList<>();
+        for (String linea : lineas) {
+            String[] partes = linea.split(",");
+            if (partes.length < 1) continue;
+            TipoVehiculos tipo = TipoVehiculos.valueOf(partes[0]);
+            Vehiculo v = null;
+            switch (tipo) {
+                case AUTO:
+                    v = Auto.fromCSV(linea);
+                    break;
+                case MOTO:
+                    v = Moto.fromCSV(linea);
+                    break;
+                case CAMIONETA:
+                    v = Camioneta.fromCSV(linea);
+                    break;
+                default:
+                    continue;
+            }
+            if (v != null) lista.add(v);
+        }
+        this.vehiculos = lista;
     }
 
     // Guardar en JSON

@@ -35,7 +35,7 @@ public class Camioneta extends Vehiculo implements ICambiarEstado, IMapAbleJson,
     public Camioneta(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estado, LocalDate fechaAlquiler) {
         super(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado, fechaAlquiler);
         this.marca = MarcasCamioneta.DODGE;
-        this.campacidadCargaKg = 500;
+        this.campacidadCargaKg = 500.0f;
     }
     
     
@@ -75,23 +75,27 @@ public class Camioneta extends Vehiculo implements ICambiarEstado, IMapAbleJson,
     public String toCSV() { 
         return super.toCSV() + "," + marca.name() + "," + campacidadCargaKg;
     }
-
+    
     public static Camioneta fromCSV(String linea) {
-        String[] partes = linea.split(",");
-        if (partes.length < 9) {
-            throw new IllegalArgumentException("Línea CSV inválida para Camioneta: " + linea);
-        }
-        TipoVehiculos tipo = TipoVehiculos.valueOf(partes[0]);
-        String patente = partes[1];
-        int añoFabricacion = Integer.parseInt(partes[2]);
-        TipoCombustible tipoCombustible = TipoCombustible.valueOf(partes[3]);
-        float kilometros = Float.parseFloat(partes[4]);
-        EstadoVehiculo estado = EstadoVehiculo.valueOf(partes[5]);
-        LocalDate fechaAlquiler = partes[6].isEmpty() ? null : LocalDate.parse(partes[6]);
-        MarcasCamioneta marca = MarcasCamioneta.valueOf(partes[7]);
-        float campacidadCargaKg = Float.parseFloat(partes[8]);
-
-        return new Camioneta(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado, marca, campacidadCargaKg, fechaAlquiler);
+    System.out.println("Línea recibida: " + linea);
+    String[] partes = linea.split(",");
+    if (partes.length < 9) {
+        throw new IllegalArgumentException("Línea CSV inválida para Camioneta: " + linea);
+    }
+    TipoVehiculos tipo = TipoVehiculos.valueOf(partes[0]);
+    String patente = partes[1];
+    int añoFabricacion = Integer.parseInt(partes[2]);
+    TipoCombustible tipoCombustible = TipoCombustible.valueOf(partes[3]);
+    float kilometros = Float.parseFloat(partes[4]);
+    EstadoVehiculo estado = EstadoVehiculo.valueOf(partes[5]);
+    LocalDate fechaAlquiler = partes[6].isEmpty() ? null : LocalDate.parse(partes[6]);
+    MarcasCamioneta marca = MarcasCamioneta.valueOf(partes[7]);
+        System.out.println("Valor a parsear: " + partes[8]);
+    float campacidadCargaKg = Float.parseFloat(partes[8]);
+    
+    Camioneta camioneta =  new Camioneta(tipo, patente, añoFabricacion, tipoCombustible, kilometros, estado, marca, campacidadCargaKg, fechaAlquiler);
+    
+    return camioneta;
     }
     // ----------------------------------- MÉTODOS ABSTRACTOS ------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
@@ -104,7 +108,7 @@ public class Camioneta extends Vehiculo implements ICambiarEstado, IMapAbleJson,
         sb.append(String.format("%-80s %.2f%n", "Kilometros:", super.getKilometros()));
         sb.append(String.format("%-75s %s%n", "Fecha de Alquiler:", String.valueOf(super.getFechaAlquiler())));
         sb.append(String.format("%-83s %s%n", "Marca:", this.marca));
-        sb.append(String.format("%-80s %.2f kg%n", "Capacidad de Carga:", this.campacidadCargaKg));
+        sb.append(String.format("%-77s %.2f kg%n", "Capacidad de Carga:", this.campacidadCargaKg));
         return sb.toString();
     }
 

@@ -40,7 +40,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="txtAñoFabricacion" layoutX="193.0" layoutY="148.0" prefHeight="25.0" prefWidth="170.0" />
+            <TextField fx:id="txtAnioFabricacion" layoutX="193.0" layoutY="148.0" prefHeight="25.0" prefWidth="170.0" />
             <Label fx:id="lblSegundoAtributo" layoutX="14.0" layoutY="173.0" prefHeight="27.0" prefWidth="170.0" text="Segundo Atributo:">
                <font>
                   <Font size="18.0" />
