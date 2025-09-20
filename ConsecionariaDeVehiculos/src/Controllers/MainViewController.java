@@ -139,8 +139,8 @@ public class MainViewController implements Initializable {
         if (seleccionado != null) {
             Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
             alerta.setTitle("Confirmar eliminación");
-            alerta.setHeaderText("¿Estás seguro de eliminar este vehículo?");
-            alerta.setContentText(seleccionado.toString());
+            alerta.setHeaderText("¿Estás seguro de eliminar este vehículo? Este sera eliminado de todos los archivos tambien!");
+            alerta.setContentText(seleccionado.mostrarDetalles());
 
             Optional<ButtonType> resultado = alerta.showAndWait();
             if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
@@ -198,8 +198,8 @@ public class MainViewController implements Initializable {
                     mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo TXT exportado correctamente.");
                     break;
         }
-        } catch (Exception e) {
-            mostrarAlerta(AlertType.ERROR, "Error", "Ocurrió un error: " + e.getMessage());
+        }catch (PatenteRepetidaException  e) {
+            mostrarAlerta(AlertType.WARNING, "Error", "Ocurrió un error: " + e.getMessage());
         }
     }
 
@@ -230,32 +230,34 @@ public class MainViewController implements Initializable {
 
             if (name.equals("Formulario")) {
                 ViewFormularioController cfc = loader.getController();
+                
+                // ¡AGREGAR ESTAS LÍNEAS CRÍTICAS!
+                cfc.setAdministrador(this.administrador); // Pasar el administrador
+                if (v == null) {
+                    cfc.setIndiceVehiculo(-1); // Nuevo vehículo
+                } else {
+                    int indice = administrador.listarTodo().indexOf(v);
+                    cfc.setIndiceVehiculo(indice); // Vehículo existente
+                }
+                
                 cfc.setVehiculo(v);
                 stage.showAndWait();
-                Vehiculo resultado = cfc.getVehiculo();
+            }
+
+            if (name.equals("EstadoVehiculo")) {
+                ViewEstadoVehiculoController cevc = loader.getController();
+                cevc.setVehiculo(v);
+                stage.showAndWait();
+                Vehiculo resultado = cevc.getVehiculo();
                 if (resultado != null) {
-                    if (v == null || !administrador.listarTodo().contains(resultado)) {
-                        administrador.agregar(resultado);
-                } else {
-                    administrador.modificar(resultado);
-                    }
+                    administrador.modificar(resultado); 
                 }
             }
 
-                if (name.equals("EstadoVehiculo")) {
-                    ViewEstadoVehiculoController cevc = loader.getController();
-                    cevc.setVehiculo(v);
-                    stage.showAndWait();
-                    Vehiculo resultado = cevc.getVehiculo();
-                    if (resultado != null) {
-                        administrador.modificar(resultado); 
-                    }
-                }
-
             refrescarVista();
 
-        } catch (IOException | PatenteRepetidaException e) {
-            System.out.println(e);
+        } catch (IOException e) {
+            mostrarAlerta(AlertType.ERROR, "Error", "Error al abrir la vista: " + e.getMessage());
         }
     }
 

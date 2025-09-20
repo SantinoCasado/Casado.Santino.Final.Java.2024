@@ -181,9 +181,9 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable, IM
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == null || !(obj instanceof Vehiculo)) return false; // ← CORREGIDO
         Vehiculo other = (Vehiculo) obj;
         return patente != null && patente.equals(other.patente);
     }
-    
+
 }

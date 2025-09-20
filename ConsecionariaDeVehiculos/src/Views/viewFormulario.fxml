@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="556.0" prefWidth="543.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ViewFormularioController">
+<AnchorPane id="AnchorPane" prefHeight="556.0" prefWidth="543.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ViewFormularioController">
    <children>
       <Pane layoutX="14.0" prefHeight="567.0" prefWidth="529.0">
          <children>

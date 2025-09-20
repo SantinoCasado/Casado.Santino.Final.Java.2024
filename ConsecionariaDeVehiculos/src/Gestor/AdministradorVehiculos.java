@@ -30,7 +30,7 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
     @Override
     public void agregar(Vehiculo entidad) throws PatenteRepetidaException {
         if (this.vehiculos.contains(entidad)){
-           throw new PatenteRepetidaException("El medicamento ya se encuentra cargado!");
+           throw new PatenteRepetidaException("Ya se encuentra un vehiculo con la misma patente!");
        }
        this.vehiculos.add(entidad);
     }
@@ -81,7 +81,41 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
 
     @Override
     public void eliminar(Vehiculo vehiculo) {
-        this.vehiculos.remove(vehiculo);
+        // 1. Eliminar de la lista en memoria
+        boolean existiaEnMemoria = this.vehiculos.remove(vehiculo);
+        
+        if (!existiaEnMemoria) {
+            // Si no estaba en memoria, no hacer nada con los archivos
+            return;
+        }
+        
+        // Solo actualizar archivos si el vehículo podría haber estado guardado
+        try {
+            // Cargar la lista completa desde archivos
+            ArrayList<Vehiculo> vehiculosEnArchivos = new ArrayList<>();
+            
+            // Cargar desde CSV para verificar si existia
+            ArrayList<String> lineas = CsvUtilities.leerCSV();
+            boolean existeEnArchivos = false;
+            
+            for (String linea : lineas) {
+                String[] partes = linea.split(",");
+                if (partes.length > 1 && partes[1].equals(vehiculo.getPatente())) {
+                    existeEnArchivos = true;
+                    break;
+                }
+            }
+            
+            // Solo actualizar archivos si el vehículo existia en ellos
+            if (existeEnArchivos) {
+                guardarCSV();
+                guardarJSON();
+                exportarListadoFiltradoTXT(this.vehiculos, "LISTADO COMPLETO DE VEHÍCULOS ACTUALIZADO");
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error al actualizar archivos después de eliminar: " + e.getMessage());
+        }
     }
     
     //FILTRADO POR TIPO Y ESTADO
@@ -110,6 +144,28 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
     //----------------------------------- ARCHIVOS ------------------------------------------------------------------------------------------------------------------------------------------------------
     // Guardar en CSV
     public void guardarCSV() throws Exception {
+        // 1. Leer vehículos existentes en el archivo
+        ArrayList<String> lineasExistentes = CsvUtilities.leerCSV();
+        ArrayList<String> patentesEnArchivo = new ArrayList<>();
+        
+        // 2. Extraer las patentes ya guardadas
+        for (String linea : lineasExistentes) {
+            String[] partes = linea.split(",");
+            if (partes.length > 1) {
+                patentesEnArchivo.add(partes[1]); // La patente está en la posición 1
+            }
+        }
+        
+        // 3. Verificar duplicados antes de guardar
+        for (Vehiculo vehiculo : vehiculos) {
+            if (patentesEnArchivo.contains(vehiculo.getPatente())) {
+                throw new PatenteRepetidaException("Ya existe un vehículo con la patente " + 
+                                                vehiculo.getPatente() + " en el archivo CSV. " +
+                                                "Elimine el duplicado antes de guardar.");
+            }
+        }
+        
+        // 4. Si no hay duplicados, proceder con el guardado
         CsvUtilities.guardarVehiculosCSV(vehiculos);
     }
 
@@ -142,6 +198,27 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
 
     // Guardar en JSON
     public void guardarJSON() throws Exception {
+        // 1. Cargar vehículos existentes del archivo JSON
+        List<Map<String, String>> datosExistentes = JsonUtilities.cargarVehiculosJSON();
+        ArrayList<String> patentesEnArchivo = new ArrayList<>();
+        
+        // 2. Extraer patentes ya guardadas
+        for (Map<String, String> map : datosExistentes) {
+            if (map.containsKey("patente")) {
+                patentesEnArchivo.add(map.get("patente"));
+            }
+        }
+        
+        // 3. Verificar duplicados antes de guardar
+        for (Vehiculo vehiculo : vehiculos) {
+            if (patentesEnArchivo.contains(vehiculo.getPatente())) {
+                throw new PatenteRepetidaException("Ya existe un vehículo con la patente " + 
+                                                vehiculo.getPatente() + " en el archivo JSON. " +
+                                                "Elimine el duplicado antes de guardar.");
+            }
+        }
+        
+        // 4. Si no hay duplicados, proceder con el guardado
         JsonUtilities.guardarVehiculosJSON(vehiculos);
     }
 
