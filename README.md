@@ -83,10 +83,9 @@ _Generación de ticket al alquilar un vehículo_
 ### 📄 vehiculos.csv
 
 ```csv
-TIPO,PATENTE,AÑO_FABRICACION,COMBUSTIBLE,KILOMETROS,ESTADO,MARCA,ATRIBUTO_ESPECIFICO,FECHA_ALQUILER
-AUTO,ABC123,2020,NAFTA,15000.0,DISPONIBLE,FIAT,4,null
-MOTO,XYZ789,2021,NAFTA,8500.0,ALQUILADO,HONDA,250,2024-09-20
-CAMIONETA,DEF456,2019,DIESEL,32000.0,EN_MANTENIMIENTO,RAM,1500.0,null
+CAMIONETA,GAD563,2011,NAFTA,435.00,DISPONIBLE,2025-09-22,RAM,700.0
+AUTO,ANB521,2005,DIESEL,0.00,DISPONIBLE,2025-09-22,CHEVROLET,4
+MOTO,EQC151,2014,NAFTA,700.00,DISPONIBLE,2025-09-22,YAMAHA,180
 ```
 
 ### 🔧 vehiculos.json
@@ -94,26 +93,37 @@ CAMIONETA,DEF456,2019,DIESEL,32000.0,EN_MANTENIMIENTO,RAM,1500.0,null
 ```json
 [
   {
-    "tipo": "AUTO",
-    "patente": "ABC123",
-    "añoFabricacion": 2020,
-    "tipoCombustible": "NAFTA",
-    "kilometros": 15000.0,
-    "estadoVehiculo": "DISPONIBLE",
+    "añoFabricacion": "2010",
     "marca": "FIAT",
-    "numPuertas": 4,
-    "fechaAlquiler": null
+    "tipo": "AUTO",
+    "tipoCombustible": "NAFTA",
+    "estadoVehiculo": "DISPONIBLE",
+    "kilometros": "0.0",
+    "numPuertas": "4",
+    "patente": "AAA111",
+    "fechaAlquiler": "2025-09-22"
   },
   {
-    "tipo": "MOTO",
-    "patente": "XYZ789",
-    "añoFabricacion": 2021,
+    "añoFabricacion": "2010",
+    "marca": "FIAT",
+    "tipo": "AUTO",
     "tipoCombustible": "NAFTA",
-    "kilometros": 8500.0,
-    "estadoVehiculo": "ALQUILADO",
-    "marca": "HONDA",
-    "cilindrada": 250,
-    "fechaAlquiler": "2024-09-20"
+    "estadoVehiculo": "DISPONIBLE",
+    "kilometros": "3000.0",
+    "numPuertas": "4",
+    "patente": "AAA113",
+    "fechaAlquiler": "2025-09-22"
+  },
+  {
+    "añoFabricacion": "1990",
+    "marca": "KAWASAKI",
+    "tipo": "MOTO",
+    "tipoCombustible": "NAFTA",
+    "estadoVehiculo": "DISPONIBLE",
+    "cilindrada": "150",
+    "kilometros": "0.0",
+    "patente": "AAA123",
+    "fechaAlquiler": "2025-09-22"
   }
 ]
 ```
@@ -121,41 +131,17 @@ CAMIONETA,DEF456,2019,DIESEL,32000.0,EN_MANTENIMIENTO,RAM,1500.0,null
 ### 📝 vehiculos.txt
 
 ```
-=== REPORTE DE VEHÍCULOS ===
-Fecha de generación: 2024-09-22 14:30:15
-
-AUTO - ABC123 (2020)
-├── Marca: FIAT
-├── Combustible: NAFTA
-├── Kilómetros: 15000.0
-├── Puertas: 4
-└── Estado: DISPONIBLE
-
-MOTO - XYZ789 (2021)
-├── Marca: HONDA
-├── Combustible: NAFTA
-├── Kilómetros: 8500.0
-├── Cilindrada: 250cc
-├── Estado: ALQUILADO
-└── Fecha alquiler: 2024-09-20
-
-CAMIONETA - DEF456 (2019)
-├── Marca: RAM
-├── Combustible: DIESEL
-├── Kilómetros: 32000.0
-├── Capacidad: 1500.0 kg
-└── Estado: EN_MANTENIMIENTO
-
-=== ESTADÍSTICAS ===
-Total vehículos: 3
-├── Disponibles: 1
-├── Alquilados: 1
-└── En mantenimiento: 1
-
-Por tipo:
-├── Autos: 1
-├── Motos: 1
-└── Camionetas: 1
+Listado de Vehículos
+Patente	Tipo	Marca	Año	Estado	Km
+AAA111	AUTO	FIAT	2010	DISPONIBLE	12312.00
+Listado de Vehículos
+Patente	Tipo	Marca	Año	Estado	Km
+AAA111	MOTO	KAWASAKI	2010	DISPONIBLE	90.00
+LISTADO COMPLETO DE VEHÍCULOS ACTUALIZADO
+Patente	Tipo	Marca	Año	Estado	Km
+AAA123	CAMIONETA	RAM	2010	DISPONIBLE	0.00
+AAC111	MOTO	HONDA	2010	DISPONIBLE	0.00
+AVC111	AUTO	FIAT	2010	DISPONIBLE	500.00
 ```
 
 ## 🛠️ Tecnologías utilizadas
@@ -164,7 +150,6 @@ Por tipo:
 - **JavaFX** para la interfaz gráfica
 - **JSON.org** para manejo de JSON
 - **PlantUML** para diagramas UML
-- **Maven** para gestión de dependencias
 
 ## 🔍 Características técnicas destacadas
 
