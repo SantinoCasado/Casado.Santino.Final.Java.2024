@@ -54,13 +54,13 @@ _Generación de ticket al alquilar un vehículo_
 
 #### 📦 Diagramas por Módulos:
 
-| Módulo              | Diagrama                                            | Descripción                                     |
-| ------------------- | --------------------------------------------------- | ----------------------------------------------- |
-| **🏛️ Modelos**      | [![Modelos](uml/Modelos_Enums.svg)]                 | Jerarquía de vehículos, enums y relaciones base |
-| **⚙️ Interfaces**   | [![Interfaces](uml/Interfaces_Gestor.svg)]          | Contratos del sistema y gestor principal        |
-| **🎮 Controllers**  | [![Controllers](uml/Controllers_JavaFX.svg)]        | Controladores JavaFX y manejo de UI             |
-| **✅ Validaciones** | [![Validaciones](uml/Validaciones_Excepciones.svg)] | Sistema de validación y excepciones             |
-| **💾 Persistencia** | [![Utilities](uml/Utilitiess.svg)]                  | Utilidades para JSON, CSV y TXT                 |
+| Módulo              | Diagrama                                          | Descripción                                     |
+| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| **🏛️ Modelos**      | ![Modelos](uml/Modelos_Enums.svg)                 | Jerarquía de vehículos, enums y relaciones base |
+| **⚙️ Interfaces**   | ![Interfaces](uml/Interfaces_Gestor.svg)          | Contratos del sistema y gestor principal        |
+| **🎮 Controllers**  | ![Controllers](uml/Controllers_JavaFX.svg)        | Controladores JavaFX y manejo de UI             |
+| **✅ Validaciones** | ![Validaciones](uml/Validaciones_Excepciones.svg) | Sistema de validación y excepciones             |
+| **💾 Persistencia** | ![Utilities](uml/Utilities.svg)                   | Utilidades para JSON, CSV y TXT                 |
 
 ### 🔗 **Relaciones entre Módulos:**
 
