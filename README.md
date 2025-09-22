@@ -32,7 +32,7 @@ _Formulario dinámico que cambia según el tipo de vehículo seleccionado_
 
 #### Cambio de estado
 
-![Estado](img/cambiarEstadoView)
+![Estado](img/cambiarEstadoView.png)
 _Interfaz para cambiar el estado de un vehículo_
 
 #### Ticket de alquiler
