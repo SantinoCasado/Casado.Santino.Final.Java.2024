@@ -36,49 +36,47 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
     }
     
     @Override
-    public void modificar(Vehiculo vehiculo) {
+    public void modificar(Vehiculo vehiculoNuevo) {
         for (int i = 0; i < this.vehiculos.size(); i++) {
             Vehiculo actual = this.vehiculos.get(i);
+            
+            // Comparar por PATENTE, no por equals()
+            if (actual.getPatente().equals(vehiculoNuevo.getPatente())) {
 
-            System.out.println("Comparando " + actual.getPatente() + " con " + vehiculo.getPatente());
-            // Si encontramos el producto a modificar
-            if (actual.equals(vehiculo)) {
-
-                // Evita que haya otro producto igual (excepto el mismo que vamos a modificar)
+                // Evita que haya otro vehículo con la misma patente (excepto el que estamos modificando)
                 for (int j = 0; j < this.vehiculos.size(); j++) {
-                    if (j != i && this.vehiculos.get(j).equals(vehiculo)) {
+                    if (j != i && this.vehiculos.get(j).getPatente().equals(vehiculoNuevo.getPatente())) {
                         throw new PatenteRepetidaException("Ya existe un vehiculo con esta patente!.");
                     }
                 }
 
-                // Actualiza solo los atributos editables
-                actual.setEstadoVehiculo(vehiculo.getEstadoVehiculo());
-                actual.setFechaAlquiler(vehiculo.getFechaAlquiler());
-                actual.setKilometros(vehiculo.getKilometros());
-                actual.setAñoFabricacion(vehiculo.getAñoFabricacion());
-                actual.setTipo(vehiculo.getTipo());
+                // Actualiza TODOS los atributos del vehículo actual
+                actual.setEstadoVehiculo(vehiculoNuevo.getEstadoVehiculo());
+                actual.setFechaAlquiler(vehiculoNuevo.getFechaAlquiler());
+                actual.setKilometros(vehiculoNuevo.getKilometros());
+                actual.setAñoFabricacion(vehiculoNuevo.getAñoFabricacion());
+                actual.setTipo(vehiculoNuevo.getTipo());
+                actual.setTipoCombustible(vehiculoNuevo.getTipoCombustible()); 
+                actual.setPatente(vehiculoNuevo.getPatente());
 
-
-                if(vehiculo instanceof Auto auto){
-                    auto.setNumPuertas(((Auto) vehiculo).getNumPuertas());
-                    auto.setMarca(((Auto) vehiculo).getMarca());
-
-                }else  if(vehiculo instanceof Moto moto){
-                    moto.setCilindrada(((Moto) vehiculo).getCilindrada());
-                    moto.setMarca(((Moto) vehiculo).getMarca());
-
-                }else if(vehiculo instanceof Camioneta camioneta){
-                    camioneta.setCampacidadCargaKg(((Camioneta) vehiculo).getCampacidadCargaKg());
-                    camioneta.setMarca(((Camioneta) vehiculo).getMarca());
+                // Actualizar atributos específicos del vehículo ACTUAL
+                if (actual instanceof Auto && vehiculoNuevo instanceof Auto) {
+                    ((Auto) actual).setNumPuertas(((Auto) vehiculoNuevo).getNumPuertas());
+                    ((Auto) actual).setMarca(((Auto) vehiculoNuevo).getMarca());
+                } else if (actual instanceof Moto && vehiculoNuevo instanceof Moto) {
+                    ((Moto) actual).setCilindrada(((Moto) vehiculoNuevo).getCilindrada());
+                    ((Moto) actual).setMarca(((Moto) vehiculoNuevo).getMarca());
+                } else if (actual instanceof Camioneta && vehiculoNuevo instanceof Camioneta) {
+                    ((Camioneta) actual).setCampacidadCargaKg(((Camioneta) vehiculoNuevo).getCampacidadCargaKg());
+                    ((Camioneta) actual).setMarca(((Camioneta) vehiculoNuevo).getMarca());
                 }
 
-                return;
+                return; // Salir después de modificar
             }
         }
 
-        throw new IllegalArgumentException("No se encontró un vehiculo para modificar.");
+        throw new IllegalArgumentException("No se encontró un vehiculo para modificar con patente: " + vehiculoNuevo.getPatente());
     }
-
     @Override
     public void eliminar(Vehiculo vehiculo) {
         // 1. Eliminar de la lista en memoria

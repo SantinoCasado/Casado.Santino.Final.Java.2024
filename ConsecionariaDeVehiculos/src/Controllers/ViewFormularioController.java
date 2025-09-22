@@ -168,10 +168,17 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
                 if (indiceVehiculo == -1) {
                     // Es un vehículo nuevo - validar si se puede agregar
                     administrador.agregar(vehiculoTemporal); // Esto lanza excepción si hay duplicados
-                } else {
-                    // Es edición - validar si se puede modificar
-                    administrador.modificar(vehiculoTemporal); // Esto lanza excepción si hay duplicados
+            } else {
+                // Es edición
+                // Verificar que no haya otra patente duplicada (excluyendo el que estamos modificando)
+                for (int j = 0; j < administrador.listarTodo().size(); j++) {
+                    if (j != indiceVehiculo && administrador.listarTodo().get(j).getPatente().equals(patenteCompleta)) {
+                        throw new PatenteRepetidaException("Ya existe un vehículo con esta patente.");
+                    }
                 }
+                // Reemplazar directamente por índice
+                administrador.listarTodo().set(indiceVehiculo, vehiculoTemporal);
+            }
             }
 
             // SI LLEGAMOS AQUÍ, NO HAY DUPLICADOS - ASIGNAR EL VEHÍCULO
@@ -208,7 +215,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
             mostrarAlerta(e.getMessage());
         }
     }
-     
+    
     private void mostrarAlerta(String mensaje) {
         javafx.scene.control.Alert alerta = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
         alerta.setTitle("Error de validación");
@@ -216,7 +223,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
-     
+    
     @FXML
     void cancelar(ActionEvent event) {
         this.cerrar();
