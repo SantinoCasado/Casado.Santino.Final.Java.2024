@@ -54,13 +54,13 @@ _Generación de ticket al alquilar un vehículo_
 
 #### 📦 Diagramas por Módulos:
 
-| Módulo              | Diagrama                                                                               | Descripción                                     |
-| ------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| **🏛️ Modelos**      | [![Modelos](uml/Modelos_Enums.png)](uml/Modelos_Enums.puml)                            | Jerarquía de vehículos, enums y relaciones base |
-| **⚙️ Interfaces**   | [![Interfaces](uml/Interfaces_Gestor.png)](uml/Interfaces_Gestor.puml)                 | Contratos del sistema y gestor principal        |
-| **🎮 Controllers**  | [![Controllers](uml/Controllers_JavaFX.png)](uml/Controllers_JavaFX.puml)              | Controladores JavaFX y manejo de UI             |
-| **✅ Validaciones** | [![Validaciones](uml/Validaciones_Excepciones.png)](uml/Validaciones_Excepciones.puml) | Sistema de validación y excepciones             |
-| **💾 Persistencia** | [![Utilities](uml/Utilitiess.png)](uml/Utilities.puml)                                 | Utilidades para JSON, CSV y TXT                 |
+| Módulo              | Diagrama                                            | Descripción                                     |
+| ------------------- | --------------------------------------------------- | ----------------------------------------------- |
+| **🏛️ Modelos**      | [![Modelos](uml/Modelos_Enums.png)]                 | Jerarquía de vehículos, enums y relaciones base |
+| **⚙️ Interfaces**   | [![Interfaces](uml/Interfaces_Gestor.png)]          | Contratos del sistema y gestor principal        |
+| **🎮 Controllers**  | [![Controllers](uml/Controllers_JavaFX.png)]        | Controladores JavaFX y manejo de UI             |
+| **✅ Validaciones** | [![Validaciones](uml/Validaciones_Excepciones.png)] | Sistema de validación y excepciones             |
+| **💾 Persistencia** | [![Utilities](uml/Utilitiess.png)]                  | Utilidades para JSON, CSV y TXT                 |
 
 ### 🔗 **Relaciones entre Módulos:**
 
