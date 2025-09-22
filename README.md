@@ -22,22 +22,22 @@ incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, m
 
 #### Pantalla principal
 
-![Pantalla Principal](screenshots/main_view.png)
+![Pantalla Principal](img/mainView.png)
 _Vista principal con lista de vehículos y opciones de filtrado_
 
 #### Formulario de creación/edición
 
-![Formulario](screenshots/formulario_view.png)
+![Formulario](img/formularioView.png)
 _Formulario dinámico que cambia según el tipo de vehículo seleccionado_
 
 #### Cambio de estado
 
-![Estado](screenshots/estado_view.png)
+![Estado](img/cambiarEstadoView)
 _Interfaz para cambiar el estado de un vehículo_
 
 #### Ticket de alquiler
 
-![Ticket](screenshots/ticket_view.png)
+![Ticket](img/ticketView.png)
 _Generación de ticket al alquilar un vehículo_
 
 ### 🚀 Cómo usar la aplicación
