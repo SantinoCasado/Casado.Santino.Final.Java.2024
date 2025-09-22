@@ -165,7 +165,8 @@ AVC111	AUTO	FIAT	2010	DISPONIBLE	500.00
 - **Estudiante**: Santino Casado
 - **Materia**: Programación II
 - **Año**: 2024
-- **Email**: [tu-email@ejemplo.com]
+- **Email**: [santinocasado05@gmail.com]
+- **LinkedIng**: Santino Casado
 
 ---
 
