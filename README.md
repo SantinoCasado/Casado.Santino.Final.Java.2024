@@ -46,7 +46,7 @@ incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, m
 
 ## 🏗️ Diagrama de clases UML
 
-![Diagrama UML](uml/diagrama_clases.png)
+![Diagrama UML](uml/UML_General.svg)
 
 ### Arquitectura del sistema:
 
