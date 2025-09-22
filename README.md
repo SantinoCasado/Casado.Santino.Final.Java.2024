@@ -56,11 +56,11 @@ _Generación de ticket al alquilar un vehículo_
 
 | Módulo              | Diagrama                                            | Descripción                                     |
 | ------------------- | --------------------------------------------------- | ----------------------------------------------- |
-| **🏛️ Modelos**      | [![Modelos](uml/Modelos_Enums.png)]                 | Jerarquía de vehículos, enums y relaciones base |
-| **⚙️ Interfaces**   | [![Interfaces](uml/Interfaces_Gestor.png)]          | Contratos del sistema y gestor principal        |
-| **🎮 Controllers**  | [![Controllers](uml/Controllers_JavaFX.png)]        | Controladores JavaFX y manejo de UI             |
-| **✅ Validaciones** | [![Validaciones](uml/Validaciones_Excepciones.png)] | Sistema de validación y excepciones             |
-| **💾 Persistencia** | [![Utilities](uml/Utilitiess.png)]                  | Utilidades para JSON, CSV y TXT                 |
+| **🏛️ Modelos**      | [![Modelos](uml/Modelos_Enums.svg)]                 | Jerarquía de vehículos, enums y relaciones base |
+| **⚙️ Interfaces**   | [![Interfaces](uml/Interfaces_Gestor.svg)]          | Contratos del sistema y gestor principal        |
+| **🎮 Controllers**  | [![Controllers](uml/Controllers_JavaFX.svg)]        | Controladores JavaFX y manejo de UI             |
+| **✅ Validaciones** | [![Validaciones](uml/Validaciones_Excepciones.svg)] | Sistema de validación y excepciones             |
+| **💾 Persistencia** | [![Utilities](uml/Utilitiess.svg)]                  | Utilidades para JSON, CSV y TXT                 |
 
 ### 🔗 **Relaciones entre Módulos:**
 
