@@ -1,2 +1,164 @@
-# Casado.Santino.Final.Java.2024. 
+# 🚗 CRUD - Concesionaria de Vehículos
+
+## 📋 Sobre mí
+
+¡Hola! Soy **Santino Casado**, estudiante de la Tecnicatura en Programacion. Este proyecto representa mi examen final, donde he aplicado todos los conceptos aprendidos durante la cursado, 
+incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, manejo de archivos y patrones de diseño.
+
+## 📝 Resumen
+
+**Concesionaria de Vehículos** es una aplicación de escritorio desarrollada en **Java con JavaFX** que permite gestionar un inventario completo de vehículos (Autos, Motos y Camionetas). 
+
+### 🎯 Funcionalidades principales:
+
+- ✅ **CRUD completo**: Crear, leer, actualizar y eliminar vehículos
+- ✅ **Gestión de estados**: Disponible, Alquilado, En Mantenimiento
+- ✅ **Validaciones robustas**: Patentes únicas, datos correctos
+- ✅ **Filtros avanzados**: Por tipo de vehículo y estado
+- ✅ **Persistencia múltiple**: Guardado en CSV, JSON y TXT
+- ✅ **Interfaz intuitiva**: Formularios dinámicos según tipo de vehículo
+
+### 🖥️ Capturas de pantalla
+
+#### Pantalla principal
+![Pantalla Principal](screenshots/main_view.png)
+*Vista principal con lista de vehículos y opciones de filtrado*
+
+#### Formulario de creación/edición
+![Formulario](screenshots/formulario_view.png)
+*Formulario dinámico que cambia según el tipo de vehículo seleccionado*
+
+#### Cambio de estado
+![Estado](screenshots/estado_view.png)
+*Interfaz para cambiar el estado de un vehículo*
+
+#### Ticket de alquiler
+![Ticket](screenshots/ticket_view.png)
+*Generación de ticket al alquilar un vehículo*
+
+### 🚀 Cómo usar la aplicación
+
+1. **Agregar vehículo**: Clic en "Agregar" → Completar formulario → "Aceptar"
+2. **Editar vehículo**: Seleccionar vehículo → Clic en "Modificar" → Editar datos → "Aceptar"
+3. **Cambiar estado**: Seleccionar vehículo → Clic en "Cambiar Estado" → Elegir nuevo estado
+4. **Filtrar**: Usar los ComboBox superiores para filtrar por tipo o estado
+5. **Eliminar**: Seleccionar vehículo → Clic en "Eliminar" → Confirmar
+
+## 🏗️ Diagrama de clases UML
+
+![Diagrama UML](uml/diagrama_clases.png)
+
+### Arquitectura del sistema:
+
+- **Models**: Clases `Vehiculo` (abstracta), `Auto`, `Moto`, `Camioneta`
+- **Controllers**: Controladores JavaFX para cada vista
+- **Gestor**: `AdministradorVehiculos` implementa CRUD completo
+- **Interfaces**: CRUD, IVehiculoEditable, IMapAbleJson, etc.
+- **Validations**: Validadores específicos para cada tipo de vehículo
+- **Utilities**: Clases para serialización (CSV, JSON, TXT)
+
+## 📁 Archivos generados
+
+### 📄 vehiculos.csv
+```csv
+TIPO,PATENTE,AÑO_FABRICACION,COMBUSTIBLE,KILOMETROS,ESTADO,MARCA,ATRIBUTO_ESPECIFICO,FECHA_ALQUILER
+AUTO,ABC123,2020,NAFTA,15000.0,DISPONIBLE,FIAT,4,null
+MOTO,XYZ789,2021,NAFTA,8500.0,ALQUILADO,HONDA,250,2024-09-20
+CAMIONETA,DEF456,2019,DIESEL,32000.0,EN_MANTENIMIENTO,RAM,1500.0,null
+```
+
+### 🔧 vehiculos.json
+```json
+[
+  {
+    "tipo": "AUTO",
+    "patente": "ABC123",
+    "añoFabricacion": 2020,
+    "tipoCombustible": "NAFTA",
+    "kilometros": 15000.0,
+    "estadoVehiculo": "DISPONIBLE",
+    "marca": "FIAT",
+    "numPuertas": 4,
+    "fechaAlquiler": null
+  },
+  {
+    "tipo": "MOTO",
+    "patente": "XYZ789",
+    "añoFabricacion": 2021,
+    "tipoCombustible": "NAFTA",
+    "kilometros": 8500.0,
+    "estadoVehiculo": "ALQUILADO",
+    "marca": "HONDA",
+    "cilindrada": 250,
+    "fechaAlquiler": "2024-09-20"
+  }
+]
+```
+
+### 📝 vehiculos.txt
+```
+=== REPORTE DE VEHÍCULOS ===
+Fecha de generación: 2024-09-22 14:30:15
+
+AUTO - ABC123 (2020)
+├── Marca: FIAT
+├── Combustible: NAFTA
+├── Kilómetros: 15000.0
+├── Puertas: 4
+└── Estado: DISPONIBLE
+
+MOTO - XYZ789 (2021)
+├── Marca: HONDA
+├── Combustible: NAFTA
+├── Kilómetros: 8500.0
+├── Cilindrada: 250cc
+├── Estado: ALQUILADO
+└── Fecha alquiler: 2024-09-20
+
+CAMIONETA - DEF456 (2019)
+├── Marca: RAM
+├── Combustible: DIESEL
+├── Kilómetros: 32000.0
+├── Capacidad: 1500.0 kg
+└── Estado: EN_MANTENIMIENTO
+
+=== ESTADÍSTICAS ===
+Total vehículos: 3
+├── Disponibles: 1
+├── Alquilados: 1
+└── En mantenimiento: 1
+
+Por tipo:
+├── Autos: 1
+├── Motos: 1
+└── Camionetas: 1
+```
+
+## 🛠️ Tecnologías utilizadas
+
+- **Java 17+**
+- **JavaFX** para la interfaz gráfica
+- **JSON.org** para manejo de JSON
+- **PlantUML** para diagramas UML
+- **Maven** para gestión de dependencias
+
+## 🔍 Características técnicas destacadas
+
+- **Patrón CRUD**: Implementación completa con interfaz genérica
+- **Validaciones robustas**: Sistema de validaciones por tipo de vehículo
+- **Persistencia múltiple**: Guardado simultáneo en 3 formatos diferentes
+- **Polimorfismo**: Uso extensivo de herencia y interfaces
+- **Manejo de excepciones**: Excepciones personalizadas para casos específicos
+- **Interfaz dinámica**: Formularios que cambian según el contexto
+
+## 📞 Contacto
+
+- **Estudiante**: Santino Casado
+- **Materia**: Programación II
+- **Año**: 2024
+- **Email**: [tu-email@ejemplo.com]
+
+---
+
+*Este proyecto fue desarrollado como parte del examen final de Programación II, demostrando el dominio de conceptos avanzados de programación orientada a objetos, interfaces gráficas y persistencia de datos.*
 
