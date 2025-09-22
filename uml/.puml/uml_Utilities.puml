@@ -1,0 +1,51 @@
+@startuml Utilities y Persistencia
+!theme plain
+scale 0.9
+skinparam dpi 300
+
+package "Utilities" {
+    class JsonUtilities {
+        + {static} escribirJson(String, List<Vehiculo>): void
+        + {static} leerJson(String): List<Vehiculo>
+        + {static} vehiculoFromJson(JSONObject): Vehiculo
+        + {static} autoFromJson(JSONObject): Auto
+        + {static} motoFromJson(JSONObject): Moto
+        + {static} camionetaFromJson(JSONObject): Camioneta
+    }
+
+    class CsvUtilities {
+        + {static} escribirCsv(String, List<Vehiculo>): void
+        + {static} leerCsv(String): List<Vehiculo>
+        + {static} vehiculoFromCsvLine(String): Vehiculo
+    }
+
+    class TxtUtilities {
+        + {static} escribirTxt(String, List<Vehiculo>): void
+        + {static} leerTxt(String): List<Vehiculo>
+        + {static} generarReporte(List<Vehiculo>): String
+        + {static} generarEstadisticas(List<Vehiculo>): String
+    }
+}
+
+' Relaciones de dependencia
+JsonUtilities ..> Vehiculo
+JsonUtilities ..> Auto
+JsonUtilities ..> Moto
+JsonUtilities ..> Camioneta
+
+CsvUtilities ..> Vehiculo
+CsvUtilities ..> Auto
+CsvUtilities ..> Moto
+CsvUtilities ..> Camioneta
+
+TxtUtilities ..> Vehiculo
+
+AdministradorVehiculos ..> JsonUtilities
+AdministradorVehiculos ..> CsvUtilities
+AdministradorVehiculos ..> TxtUtilities
+
+note right of JsonUtilities : Serialización y deserialización\nen formato JSON
+note right of CsvUtilities : Manejo de archivos CSV\npara importar/exportar
+note right of TxtUtilities : Generación de reportes\ny archivos de texto
+
+@enduml

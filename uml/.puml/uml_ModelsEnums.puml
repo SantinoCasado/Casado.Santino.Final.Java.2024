@@ -1,0 +1,170 @@
+@startuml Modelos y Enums
+!theme plain
+scale 0.8
+skinparam dpi 300
+
+package "Models" {
+    abstract class Vehiculo {
+        - patente: String
+        - añoFabricacion: int
+        - tipo: TipoVehiculos
+        - tipoCombustible: TipoCombustible
+        - kilometros: float
+        - estadoVehiculo: EstadoVehiculo
+        - fechaAlquiler: LocalDate
+        --
+        + Vehiculo(Map<String, String>): void
+        + Vehiculo(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, LocalDate):void
+        + Vehiculo(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo): void
+        --
+        + getPatente(): String
+        + setPatente(String): void
+        + getAñoFabricacion(): int
+        + setAñoFabricacion(int): void
+        + getTipo(): TipoVehiculos
+        + setTipo(TipoVehiculos): void
+        + getTipoCombustible(): TipoCombustible
+        + setTipoCombustible(TipoCombustible): void
+        + getKilometros(): float
+        + setKilometros(float): void
+        + getEstadoVehiculo(): EstadoVehiculo
+        + setEstadoVehiculo(EstadoVehiculo): void
+        + getFechaAlquiler(): LocalDate
+        + setFechaAlquiler(LocalDate): void
+        + obtenerHorasUso(LocalDate): float
+        + registrarUso(float): void
+        + compareTo(Vehiculo): int
+        + equals(Object): boolean
+        + hashCode(): int
+        + toString(): String
+        + toMap(): Map<String, String>
+        + {abstract} toCsv(): String
+        + {static} fromCsv(String): Vehiculo
+    }
+
+    class Auto extends Vehiculo {
+        - marca: MarcasAuto
+        - numPuertas: int
+        --
+        + Auto(Map<String, String>): void
+        + Auto(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, LocalDate): void
+        + Auto(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, MarcasAuto, int, LocalDate): void
+        --
+        + getMarca(): MarcasAuto
+        + setMarca(MarcasAuto): void
+        + getNumPuertas(): int
+        + setNumPuertas(int): void
+        + toMap(): Map<String, String>
+        + toCsv(): String
+        + {static}fromCsv(String): Auto
+        + fromMap(Map<String, String>): Auto
+        + calcularCostosAlquiler(int): float
+        + mostrarDetalles(): String
+        + ImprimirTicket(LocalDate): String
+        + compareTo(Vehiculo): int
+        + realizarMantenimiento(): void
+        + alquilarVehiculo(): void
+        + disponerVehiuculo(): void
+    }
+
+    class Moto extends Vehiculo {
+        - marca: MarcasMoto
+        - cilindrada: int
+        --
+        + Moto(Map<String, String>): void
+        + Moto(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, MarcasMoto, int, LocalDate): void
+        + Moto(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, LocalDate): void
+        --
+        + getMarca(): MarcasMoto
+        + setMarca(MarcasMoto): void
+        + getCilindrada(): int
+        + setCilindrada(int): void
+        + toMap(): Map<String, String>
+        + toCsv(): String
+        + {static}fromCsv(String): Moto
+        + fromMap(Map<String, String>): Moto
+        + calcularCostosAlquiler(int): float
+        + mostrarDetalles(): String
+        + ImprimirTicket(LocalDate): String
+        + compareTo(Vehiculo): int
+        + realizarMantenimiento(): void
+        + alquilarVehiculo(): void
+        + disponerVehiculo(): void
+    }
+
+    class Camioneta extends Vehiculo {
+        - marca: MarcasCamioneta
+        - capacidadCargaKg: float
+        --
+        + Camioneta(Map<String, String>): void
+        + Camioneta(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, MarcasCamioneta, float, LocalDate)
+        + Camioneta(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, LocalDate)
+        --
+        + getMarca(): MarcasCamioneta
+        + setMarca(MarcasCamioneta): void
+        + getCapacidadCargaKg(): float
+        + setCapacidadCargaKg(float): void
+        + toMap(): Map<String, String>
+        + toCsv(): String
+        + {static}fromCsv(String): Camioneta
+        + fromMap(Map<String, String>): Camioneta
+        + calcularCostosAlquiler(int): float
+        + mostrarDetalles(): String
+        + ImprimirTicket(LocalDate): String
+        + compareTo(Vehiculo): int
+        + realizarMantenimiento(): void
+        + alquilarVehiculo(): void
+        + disponerVehiculo(): void
+    }
+}
+
+package "Enums" {
+    enum TipoVehiculos {
+        AUTO
+        MOTO
+        CAMIONETA
+        TODOS
+    }
+
+    enum EstadoVehiculo {
+        TODOS
+        DISPONIBLE
+        ALQUILADO
+        EN_MANTENIMIENTO
+    }
+
+    enum TipoCombustible {
+        NAFTA
+        DIESEL
+        ELECTRICO
+        HIBRIDO
+    }
+
+    enum MarcasAuto {
+        FORD, CHEVROLET, TOYOTA, VOLKSWAGEN
+        BMW, FIAT, RENAULT, NISSAN, PEUGEOT
+    }
+
+    enum MarcasMoto {
+        HONDA, YAMAHA, SUZUKI, KAWASAKI
+        BMW, DUCATI, MOTOMEL
+    }
+
+    enum MarcasCamioneta {
+        RENAULT, NISSAN, JEEP, DODGE, RAM
+    }
+}
+
+' Relaciones
+Auto --|> Vehiculo
+Moto --|> Vehiculo
+Camioneta --|> Vehiculo
+
+Vehiculo -> TipoVehiculos
+Vehiculo -> TipoCombustible
+Vehiculo -> EstadoVehiculo
+Auto -> MarcasAuto
+Moto -> MarcasMoto
+Camioneta -> MarcasCamioneta
+
+@enduml

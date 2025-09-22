@@ -1,0 +1,74 @@
+@startuml Validaciones y Excepciones
+!theme plain
+scale 0.9
+skinparam dpi 300
+
+package "Exceptions" {
+    class DatoErroneoException extends Exception {
+        + DatoErroneoException(String): void
+    }
+
+    class PatenteRepetidaException extends Exception {
+        + PatenteRepetidaException(String): void
+    }
+
+    class VehiculoAlquiladoException extends Exception {
+        + VehiculoAlquiladoException(String): void
+    }
+}
+
+package "Validations" {
+    class ValidadorAtributosVehiculo {
+        --
+        + {static} validarPatenteVieja(String, String): void
+        + {static} validarAñoFabricacion(String): void
+        + {static} validarTipoCombustible(TipoCombustible): void
+        + {static} validarEstadoVehiculo(EstadoVehiculo): void
+        + {static} validarKilometraje(String): void
+        + {static} validarFechaFutura(DatePicker): void
+        - {static} esLetra(char): boolean
+        - {static} esDigito(char): boolean
+    }
+
+    class ValidadorAtributosAuto {
+        --
+        + {static} validarMarca(String): void
+        + {static} validarNumPuertas(String): void
+        - {static} validarRangoNumerico(String, int, int, String): void
+    }
+
+    class ValidadorAtributosMoto {
+        --
+        + {static} validarMarca(String): void
+        + {static} validarCilindrada(String): void
+        - {static} validarRangoNumerico(String, int, int, String): void
+    }
+
+    class ValidadorAtributosCamioneta {
+        --
+        + {static} validarMarca(String): void
+        + {static} validarCapacidadCarga(String): void
+        - {static} validarRangoNumerico(String, float, float, String): void
+    }
+}
+
+' Relaciones de herencia
+DatoErroneoException --|> Exception
+PatenteRepetidaException --|> Exception
+VehiculoAlquiladoException --|> Exception
+
+' Relaciones de dependencia
+ValidadorAtributosVehiculo ..> DatoErroneoException
+ValidadorAtributosAuto ..> DatoErroneoException
+ValidadorAtributosMoto ..> DatoErroneoException
+ValidadorAtributosCamioneta ..> DatoErroneoException
+
+ValidadorAtributosAuto ..> Auto
+ValidadorAtributosMoto ..> Moto
+ValidadorAtributosCamioneta ..> Camioneta
+
+note right of ValidadorAtributosVehiculo : Valida atributos comunes\na todos los vehículos
+
+note bottom of DatoErroneoException : Excepción para datos\ninválidos en formularios
+
+@enduml

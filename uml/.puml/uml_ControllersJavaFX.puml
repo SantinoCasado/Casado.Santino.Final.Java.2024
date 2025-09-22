@@ -1,0 +1,103 @@
+@startuml Controllers JavaFX
+!theme plain
+scale 0.8
+skinparam dpi 300
+
+package "Controllers" {
+    class MainViewController implements Initializable {
+        @FXML - tablaVehiculos: TableView<Vehiculo>
+        @FXML - tipoCol, patenteCol, añoCol: TableColumn
+        @FXML - combustibleCol, kmCol, estadoCol: TableColumn
+        @FXML - marcaCol, segundoAtributoCol: TableColumn
+        @FXML - btnAgregar, btnEliminar, btnModificar: Button
+        @FXML - btnFiltrar, btnCambiarEstado, btnAceptar: Button
+        @FXML - cbFiltrarEstado: ChoiceBox<EstadoVehiculo>
+        @FXML - cbFiltrarTipo: ChoiceBox<TipoVehiculos>
+        @FXML - cbSave: ChoiceBox<String>
+        @FXML - lblPrimerAtributo, lblSegundoAtributo: Label
+        - administrador: AdministradorVehiculos
+        --
+        + initialize(URL, ResourceBundle): void
+        + agregar(ActionEvent): void
+        + modificar(ActionEvent): void
+        + eliminar(ActionEvent): void
+        + cambiarEstado(ActionEvent): void
+        - aceptarAccion(ActionEvent): void
+        + filtrar(ActionEvent): void
+        + abrirView(Vehiculo, String): void
+        + refrescarVista(): void
+        + refrescarVistaFiltrada(): void
+        + mostrarAlerta(AlertType, String, String): void
+    }
+
+    class ViewFormularioController implements Initializable, IVehiculoEditable {
+        @FXML - btnAceptar, btnCancelar: Button
+        @FXML - cbTipoCombustible: ChoiceBox<TipoCombustible>
+        @FXML - cbTipoVehiculo: ChoiceBox<TipoVehiculos>
+        @FXML - cbMarca: ChoiceBox<String>
+        @FXML - lblSegundoAtributo: Label
+        @FXML - txtPatente1, txtPatente2: TextField
+        @FXML - txtAñoFabricacion, txtSegundoAtributo: TextField
+        @FXML - txtKilometraje: TextField
+        - administrador: AdministradorVehiculos
+        - indiceVehiculo: int
+        - v: Vehiculo
+        --
+        + initialize(URL, ResourceBundle): void
+        + getVehiculo(): Vehiculo
+        + setAdministrador(AdministradorVehiculos): void
+        + setIndiceVehiculo(int): void
+        + cambiadoTipo(ActionEvent): void
+        + aceptar(ActionEvent): void
+        + cancelar(ActionEvent): void
+        + setVehiculo(Vehiculo): void
+        - mostrarAlerta(String): void
+        - cerrar(): void
+    }
+
+    class ViewEstadoVehiculoController implements IVehiculoEditable {
+        @FXML - cbEstadoVehiculo: ChoiceBox<EstadoVehiculo>
+        @FXML - dpFechaAlquiler: DatePicker
+        @FXML - lblFecha, lblSegundoAtributo, lblKmExtra: Label
+        @FXML - txtTipo, txtMarca, txtAnioFabricacion: TextField
+        @FXML - txtSegundoAtributo, txtPatente: TextField
+        @FXML - txtKilometraje, txtKmExtra: TextField
+        @FXML - btnAceptar, btnCancelar: Button
+        - v: Vehiculo
+        --
+        + initialize(URL, ResourceBundle): void
+        + aceptar(ActionEvent): void
+        + cancelar(ActionEvent): void
+        + onAceptarKilometraje(Vehiculo): void
+        - cerrar(): void
+        + setVehiculo(Vehiculo): void
+        + getVehiculo(): Vehiculo
+        - mostrarAlerta(String, String): void
+    }
+
+    class ViewTicketController {
+        @FXML - btnCerrar: Button
+        @FXML - listViewTicket: ListView<String>
+        --
+        + initialize(): void
+        + setVehiculo(Vehiculo): void
+        + cerrar(ActionEvent): void
+    }
+}
+
+' Relaciones
+MainViewController ..|> Initializable
+ViewFormularioController ..|> Initializable
+ViewFormularioController ..|> IVehiculoEditable
+ViewEstadoVehiculoController ..|> IVehiculoEditable
+
+MainViewController -> AdministradorVehiculos
+ViewFormularioController -> AdministradorVehiculos
+ViewFormularioController -> Vehiculo
+ViewEstadoVehiculoController -> Vehiculo
+
+MainViewController ..> ViewFormularioController
+MainViewController ..> ViewEstadoVehiculoController
+MainViewController ..> ViewTicketController
+
+@enduml

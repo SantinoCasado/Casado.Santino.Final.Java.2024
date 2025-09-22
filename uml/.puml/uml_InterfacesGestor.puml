@@ -1,0 +1,62 @@
+@startuml Interfaces y Gestor
+!theme plain
+scale 0.9
+skinparam dpi 300
+
+package "Interfaces" {
+    interface CRUD<T> {
+        + agregar(T): void
+        + eliminar(T): void
+        + modificar(T): void
+        + listarTodo(): List<T>
+        + buscarPorTipos(TipoVehiculos, EstadoVehiculo): List<T>
+    }
+
+    interface ICambiarEstado {
+        + realizarMantenimiento(): void
+        + alquilarVehiculo(): void
+        + disponerVehiculo(): void
+    }
+
+    interface IVehiculoEditable {
+        + setVehiculo(Vehiculo): void
+        + getVehiculo(): Vehiculo
+    }
+
+    interface IMapAbleJson {
+        + toMap(): Map<T, T>
+    }
+
+    interface ISerializableCsv {
+        + toCsv(): String
+    }
+}
+
+package "Gestor" {
+    class AdministradorVehiculos implements CRUD, ICambiarEstado {
+        - vehiculos: ArrayList<Vehiculo>
+        - vehiculosFiltrados: ArrayList<Vehiculo>
+        --
+        + AdministradorVehiculos(): void
+        --
+        + agregar(Vehiculo): void
+        + eliminar(Vehiculo): void
+        + modificar(Vehiculo): void
+        + buscarPorTipos(TipoVehiculos, EstadoVehiculo): ArrayList<Vehiculo>
+        + listarTodo(): ArrayList<Vehiculo>
+        + guardarCSV():void
+        + cargarCSV(): void
+        + guardarJSON(): void
+        + cargarJSON(): void
+        + exportarListadoFiltradoTxt(): void
+    }
+}
+
+' Relaciones
+AdministradorVehiculos ..|> CRUD
+AdministradorVehiculos ..|> ICambiarEstado
+AdministradorVehiculos *-- "0..*" Vehiculo
+
+note right of AdministradorVehiculos : Gestiona la colección\nde vehículos y operaciones CRUD
+
+@enduml

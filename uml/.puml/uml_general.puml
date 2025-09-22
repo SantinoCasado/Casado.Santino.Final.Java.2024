@@ -420,9 +420,8 @@ package "Utilities" {
     }
 }
 
-' ================================
+' ====================================================
 ' GENERALIZACION (Herencia)
-' ================================
 Auto --|> Vehiculo
 Moto --|> Vehiculo 
 Camioneta --|> Vehiculo
@@ -431,9 +430,8 @@ DatoErroneoException --|> Exception
 PatenteRepetidaException --|> Exception  
 VehiculoAlquiladoException --|> Exception    
 
-' ================================
+' ===================================================
 ' REALIZACION (Implementacion de interfaces)
-' ================================
 Vehiculo ..|> IMapAbleJson
 Vehiculo ..|> ISerializableCsv
 AdministradorVehiculos ..|> CRUD
@@ -444,14 +442,12 @@ MainViewController ..|> Initializable
 ViewFormularioController ..|> Initializable
 ViewEstadoVehiculoController ..|> Initializable 
 
-' ================================
+' ==================================================
 ' COMPOSICION (Una clase no puede existir sin otra)
-' ================================
 AdministradorVehiculos *-- Vehiculo
 
-' ================================
+' ==================================================
 ' ASOCIACION (Una clase conoce o usa otra)
-' ================================
 Vehiculo -> TipoVehiculos 
 Vehiculo -> TipoCombustible 
 Vehiculo -> EstadoVehiculo
@@ -464,9 +460,8 @@ ViewFormularioController -> AdministradorVehiculos
 ViewFormularioController -> Vehiculo 
 ViewEstadoVehiculoController -> Vehiculo 
 
-' ================================
+' ================================================
 ' DEPENDENCIA (Métodos dependen de otras clases)
-' ================================
 ViewFormularioController ..> ValidadorAtributosVehiculo     
 ViewFormularioController ..> ValidadorAtributosAuto         
 ViewFormularioController ..> ValidadorAtributosMoto         
