@@ -1,0 +1,503 @@
+@startuml Concesionaria de Vehiculos
+
+!theme plain
+scale 0.7
+skinparam dpi 300
+
+package "Models" {
+    abstract class Vehiculo {
+        - patente: String
+        - añoFabricacion: int
+        - tipo: TipoVehiculos
+        - tipoCombustible: TipoCombustible
+        - kilometros: float
+        - estadoVehiculo: EstadoVehiculo
+        - fechaAlquiler: LocalDate
+        --
+        + Vehiculo(Map<String, String>): void
+        + Vehiculo(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, LocalDate):void
+        + Vehiculo(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo): void
+        --
+        + getPatente(): String
+        + setPatente(String): void
+        + getAñoFabricacion(): int
+        + setAñoFabricacion(int): void
+        + getTipo(): TipoVehiculos
+        + setTipo(TipoVehiculos): void
+        + getTipoCombustible(): TipoCombustible
+        + setTipoCombustible(TipoCombustible): void
+        + getKilometros(): float
+        + setKilometros(float): void
+        + getEstadoVehiculo(): EstadoVehiculo
+        + setEstadoVehiculo(EstadoVehiculo): void
+        + getFechaAlquiler(): LocalDate
+        + setFechaAlquiler(LocalDate): void
+
+        + obtenerHorasUso(LocalDate): float
+        + registrarUso(float): void
+        + compareTo(Vehiculo): int
+        + equals(Object): boolean
+        + hashCode(): int
+        + toString(): String
+
+        + toMap(): Map<String, String>
+        + {abstract} toCsv(): String
+        + {static} fromCsv(String): Vehiculo
+    }
+
+    class Auto extends Vehiculo {
+        - marca: MarcasAuto
+        - numPuertas: int
+        --
+        + Auto(Map<String, String>): void
+        + Auto(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, LocalDate): void
+        + Auto(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, MarcasAuto, int, LocalDate): void
+        --
+        + getMarca(): MarcasAuto
+        + setMarca(MarcasAuto): void
+        + getNumPuertas(): int
+        + setNumPuertas(int): void
+
+        + toMap(): Map<String, String>
+        + toCsv(): String
+        + {static}fromCsv(String): Auto
+        + fromMap(Map<String, String>): Auto
+
+        + calcularCostosAlquiler(int): float
+        + mostrarDetalles(): String
+        + ImprimirTicket(LocalDate): String
+        + compareTo(Vehiculo): int
+
+        + realizarMantenimiento(): void
+        + alquilarVehiculo(): void
+        + disponerVehiuculo(): void
+    }
+
+    class Moto extends Vehiculo {
+        - marca: MarcasMoto
+        - cilindrada: int
+        --
+        + Moto(Map<String, String>): void
+        + Moto(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, MarcasMoto, int, LocalDate): void
+        + Moto(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, LocalDate): void
+        --
+        + getMarca(): MarcasMoto
+        + setMarca(MarcasMoto): void
+        + getCilindrada(): int
+        + setCilindrada(int): void
+
+        + toMap(): Map<String, String>
+        + toCsv(): String
+        + {static}fromCsv(String): Moto
+        + fromMap(Map<String, String>): Moto
+
+        + calcularCostosAlquiler(int): float
+        + mostrarDetalles(): String
+        + ImprimirTicket(LocalDate): String
+        + compareTo(Vehiculo): int
+
+        + realizarMantenimiento(): void
+        + alquilarVehiculo(): void
+        + disponerVehiculo(): void
+    }
+
+    class Camioneta extends Vehiculo {
+        - marca: MarcasCamioneta
+        - capacidadCargaKg: float
+        --
+        + Camioneta(Map<String, String>): void
+        + Camioneta(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, MarcasCamioneta, float, LocalDate)
+        + Camioneta(TipoVehiculos, String, int, TipoCombustible, float, EstadoVehiculo, LocalDate)
+        --
+        + getMarca(): MarcasCamioneta
+        + setMarca(MarcasCamioneta): void
+        + getCapacidadCargaKg(): float
+        + setCapacidadCargaKg(float): void
+
+        + toMap(): Map<String, String>
+        + toCsv(): String
+        + {static}fromCsv(String): Camioneta
+        + fromMap(Map<String, String>): Camioneta
+
+        + calcularCostosAlquiler(int): float
+        + mostrarDetalles(): String
+        + ImprimirTicket(LocalDate): String
+        + compareTo(Vehiculo): int
+
+        + realizarMantenimiento(): void
+        + alquilarVehiculo(): void
+        + disponerVehiculo(): void
+    }
+}
+
+package "Enums" {
+    enum TipoVehiculos {
+        AUTO
+        MOTO
+        CAMIONETA
+        TODOS
+    }
+
+    enum EstadoVehiculo {
+        TODOS
+        DISPONIBLE
+        ALQUILADO
+        EN_MANTENIMIENTO
+    }
+
+    enum TipoCombustible {
+        NAFTA
+        DIESEL
+        ELECTRICO
+        HIBRIDO
+    }
+
+    enum MarcasAuto {
+        FORD
+        CHEVROLET
+        TOYOTA
+        VOLKSWAGEN
+        BMW
+        FIAT
+        RENAULT
+        NISSAN
+        PEUGEOT
+    }
+
+    enum MarcasMoto {
+        HONDA
+        YAMAHA
+        SUZUKI
+        KAWASAKI
+        BMW
+        DUCATI
+        MOTOMEL
+    }
+
+    enum MarcasCamioneta {
+        RENAULT
+        NISSAN
+        JEEP
+        DODGE
+        RAM
+    }
+}
+
+package "Interfaces" {
+    interface CRUD<T> {
+        + agregar(T): void
+        + eliminar(T): void
+        + modificar(T): void
+        + listarTodo(): List<T>
+        + buscarPorTipos(TipoVehiculos, EstadoVehiculo): List<T>
+    }
+
+    interface ICambiarEstado {
+        + realizarMantenimiento(): void
+        + alquilarVehiculo(): void
+        + disponerVehiculo(): void
+    }
+
+    interface IVehiculoEditable {
+        + setVehiculo(Vehiculo): void
+        + getVehiculo(): Vehiculo
+    }
+
+    interface IMapAbleJson {
+        + toMap(): Map<T, T>
+    }
+
+    interface ISerializableCsv {
+        + toCsv(): String
+    }
+}
+
+package "Gestor" {
+    class AdministradorVehiculos implements CRUD, ICambiarEstado {
+        - vehiculos: ArrayList<Vehiculo>
+        - vehiculosFiltrados: ArrayList<Vehiculo>
+        --
+        + AdministradorVehiculos(): void
+        --
+        + agregar(Vehiculo): void
+        + eliminar(Vehiculo): void
+        + modificar(Vehiculo): void
+        + buscarPorTipos(TipoVehiculos, EstadoVehiculo): ArrayList<Vehiculo>
+        + listarTodo(): ArrayList<Vehiculo>
+        + guardarCSV():void
+        + cargarCSV(): void
+        + guardarJSON(): void
+        + cargarJSON(): void
+        + exportarListadoFiltradoTxt(): void
+    }
+}
+
+package "Controllers" {
+    class MainViewController implements Initializable {
+        @FXML - tablaVehiculos: TableView<Vehiculo>
+        @FXML - tipoCol: TableColumn<Vehiculo, String>
+        @FXML - patenteCol: TableColumn<Vehiculo, String>
+        @FXML - añoCol: TableColumn<Vehiculo, Integer>
+        @FXML - combustibleCol: TableColumn<Vehiculo, String>
+        @FXML - kmCol: TableColumn<Vehiculo, Float>
+        @FXML - estadoCol: TableColumn<Vehiculo, String>
+        @FXML - marcaCol: TableColumn<Vehiculo, String>
+        @FXML - segundoAtributoCol: TableColumn<Vehiculo, String>
+        @FXML - btnAgregar: Button
+        @FXML - btnEliminar: Button
+        @FXML - btnModificar: Button
+        @FXML - btnFiltrar: Button
+        @FXML - btnCambiarEstado: Button
+        @FXML - btnAceptar: Button
+        @FXML - cbFiltrarEstado: ChoiceBox<EstadoVehiculo>
+        @FXML - cbFiltrarTipo: ChoiceBox<TipoVehiculos>
+        @FXML - cbSave: ChoiceBox<String>
+        @FXML - lblPrimerAtributo: Label
+        @FXML - lblSegundoAtributo: Label
+        - administrador: AdministradorVehiculos
+        --
+        + initialize(URL, ResourceBundle): void
+        --
+        + agregar(ActionEvent): void
+        + modificar(ActionEvent): void
+        + eliminar(ActionEvent): void
+        + cambiarEstado(ActionEvent): void
+        - aceptarAccion(ActionEvent): void
+        + filtrar(ActionEvent): void
+        + abrirView(Vehiculo, String): void
+        + refrescarVista(): void
+        + refrescarVistaFiltrada(): void
+        + mostrarAlerta(AlertType, String, String): void
+    }
+
+    class ViewFormularioController implements Initializable, IVehiculoEditable {
+        @FXML - btnAceptar: Button
+        @FXML - btnCancelar: Button
+
+        @FXML - cbTipoCombustible: ChoiceBox<TipoCombustible>
+        @FXML - cbTipoVehiculo: ChoiceBox<TipoVehiculos>
+        @FXML - cbMarca: ChoiceBox<String>
+
+        @FXML - lblSegundoAtributo: Label
+
+        @FXML - txtPatente1: TextField
+        @FXML - txtPatente2: TextField
+        @FXML - txtAñoFabricacion: TextField
+        @FXML - txtSegundoAtributo: TextField
+        @FXML - txtKilometraje: TextField
+
+        - administrador: AdministradorVehiculos
+        - indiceVehiculo: int
+        - v: Vehiculo
+        --
+        + initialize(URL, ResourceBundle): void
+        --
+        + getVehiculo(): Vehiculo
+        + setAdministrador(AdministradorVehiculos): void
+        + setIndiceVehiculo(int): void
+        + cambiadoTipo(ActionEvent): void
+        + aceptar(ActionEvent): void
+        + cancelar(ActionEvent): void
+        + setVehiculo(Vehiculo): void
+        - mostrarAlerta(String): void
+        - cerrar(): void
+    }
+
+    class ViewEstadoVehiculoController implements IVehiculoEditable {
+        @FXML - cbEstadoVehiculo: ChoiceBox<EstadoVehiculo>
+
+        @FXML - dpFechaAlquiler: DatePicker
+
+        @FXML - lblFecha: Label
+        @FXML - lblSegundoAtributo: Label
+        @FXML - lblKmExtra: Label
+
+        @FXML - txtTipo: TextField
+        @FXML - txtMarca: TextField
+        @FXML - txtAnioFabricacion: TextField
+        @FXML - txtSegundoAtributo: TextField
+        @FXML - txtPatente: TextField
+        @FXML - txtKilometraje: TextField
+        @FXML - txtKmExtra: TextField
+
+        @FXML - btnAceptar: Button
+        @FXML - btnCancelar: Button
+
+        - v: Vehiculo
+        --
+        + initialize(URL, ResourceBundle): void
+        --
+        + aceptar(ActionEvent): void
+        + cancelar(ActionEvent): void
+        + onAceptarKilometraje(Vehiculo): void
+        - cerrar(): void
+        + setVehiculo(Vehiculo): void
+        + getVehiculo(): Vehiculo
+        - mostrarAlerta(String, String): void
+    }
+
+    class ViewTicketController {
+        @FXML - btnCerrar: Button
+        @FXML - listViewTicket: ListView<String>
+        --
+        + initialize(): void
+        --
+        + setVehiculo(Vehiculo): void
+        + cerrar(ActionEvent): void
+    }
+}
+
+package "Exceptions" {
+    class DatoErroneoException extends Exception {
+        + DatoErroneoException(String): void
+    }
+
+    class PatenteRepetidaException extends Exception {
+        + PatenteRepetidaException(String): void
+    }
+
+    class VehiculoAlquiladoException extends Exception {
+        + VehiculoAlquiladoException(String): void
+    }
+}
+
+package "Validations" {
+    class ValidadorAtributosVehiculo {
+        --
+        + {static} validarPatenteVieja(String, String): void
+        + {static} validarAñoFabricacion(String): void
+        + {static} validarTipoCombustible(TipoCombustible): void
+        + {static} validarEstadoVehiculo(EstadoVehiculo): void
+        + {static} validarKilometraje(String): void
+        + {static} validarFechaFutura(DatePicker): void
+        - {static} esLetra(char): boolean
+        - {static} esDigito(char): boolean
+    }
+
+    class ValidadorAtributosAuto {
+        --
+        + {static} validarMarca(String): void
+        + {static} validarNumPuertas(String): void
+        - {static} validarRangoNumerico(String, int, int, String): void
+    }
+
+    class ValidadorAtributosMoto {
+        --
+        + {static} validarMarca(String): void
+        + {static} validarCilindrada(String): void
+        - {static} validarRangoNumerico(String, int, int, String): void
+    }
+
+    class ValidadorAtributosCamioneta {
+        --
+        + {static} validarMarca(String): void
+        + {static} validarCapacidadCarga(String): void
+        - {static} validarRangoNumerico(String, float, float, String): void
+    }
+}
+
+package "Utilities" {
+    class JsonUtilities {
+        + {static} escribirJson(String, List<Vehiculo>): void
+        + {static} leerJson(String): List<Vehiculo>
+        + {static} vehiculoFromJson(JSONObject): Vehiculo
+        + {static} autoFromJson(JSONObject): Auto
+        + {static} motoFromJson(JSONObject): Moto
+        + {static} camionetaFromJson(JSONObject): Camioneta
+    }
+
+    class CsvUtilities {
+        + {static} escribirCsv(String, List<Vehiculo>): void
+        + {static} leerCsv(String): List<Vehiculo>
+        + {static} vehiculoFromCsvLine(String): Vehiculo
+    }
+
+    class TxtUtilities {
+        + {static} escribirTxt(String, List<Vehiculo>): void
+        + {static} leerTxt(String): List<Vehiculo>
+        + {static} generarReporte(List<Vehiculo>): String
+        + {static} generarEstadisticas(List<Vehiculo>): String
+    }
+}
+
+' ================================
+' GENERALIZACION (Herencia)
+' ================================
+Auto --|> Vehiculo
+Moto --|> Vehiculo 
+Camioneta --|> Vehiculo
+
+DatoErroneoException --|> Exception  
+PatenteRepetidaException --|> Exception  
+VehiculoAlquiladoException --|> Exception    
+
+' ================================
+' REALIZACION (Implementacion de interfaces)
+' ================================
+Vehiculo ..|> IMapAbleJson
+Vehiculo ..|> ISerializableCsv
+AdministradorVehiculos ..|> CRUD
+AdministradorVehiculos ..|> ICambiarEstado
+ViewFormularioController ..|> IVehiculoEditable
+ViewEstadoVehiculoController ..|> IVehiculoEditable
+MainViewController ..|> Initializable
+ViewFormularioController ..|> Initializable
+ViewEstadoVehiculoController ..|> Initializable 
+
+' ================================
+' COMPOSICION (Una clase no puede existir sin otra)
+' ================================
+AdministradorVehiculos *-- Vehiculo
+
+' ================================
+' ASOCIACION (Una clase conoce o usa otra)
+' ================================
+Vehiculo -> TipoVehiculos 
+Vehiculo -> TipoCombustible 
+Vehiculo -> EstadoVehiculo
+Auto -> MarcasAuto 
+Moto -> MarcasMoto
+Camioneta -> MarcasCamioneta
+
+MainViewController -> AdministradorVehiculos
+ViewFormularioController -> AdministradorVehiculos
+ViewFormularioController -> Vehiculo 
+ViewEstadoVehiculoController -> Vehiculo 
+
+' ================================
+' DEPENDENCIA (Métodos dependen de otras clases)
+' ================================
+ViewFormularioController ..> ValidadorAtributosVehiculo     
+ViewFormularioController ..> ValidadorAtributosAuto         
+ViewFormularioController ..> ValidadorAtributosMoto         
+ViewFormularioController ..> ValidadorAtributosCamioneta    
+ViewEstadoVehiculoController ..> ValidadorAtributosVehiculo 
+
+ViewFormularioController ..> Auto        
+ViewFormularioController ..> Moto        
+ViewFormularioController ..> Camioneta
+
+MainViewController ..> ViewFormularioController      
+MainViewController ..> ViewEstadoVehiculoController 
+MainViewController ..> ViewTicketController 
+
+AdministradorVehiculos ..> JsonUtilities
+AdministradorVehiculos ..> CsvUtilities 
+AdministradorVehiculos ..> TxtUtilities 
+
+JsonUtilities ..> Auto       
+JsonUtilities ..> Moto       
+JsonUtilities ..> Camioneta  
+CsvUtilities ..> Auto       
+CsvUtilities ..> Moto       
+CsvUtilities ..> Camioneta
+
+ValidadorAtributosVehiculo ..> DatoErroneoException
+ValidadorAtributosAuto ..> DatoErroneoException   
+ValidadorAtributosMoto ..> DatoErroneoException   
+ValidadorAtributosCamioneta ..> DatoErroneoException   
+
+AdministradorVehiculos ..> PatenteRepetidaException     
+AdministradorVehiculos ..> VehiculoAlquiladoException   
+
+@enduml

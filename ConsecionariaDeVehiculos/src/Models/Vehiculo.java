@@ -48,14 +48,14 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable, IM
         this.fechaAlquiler = fechaAlquiler;
     }
 
-    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estadoVehiculo, LocalDate fechaAlquiler) {
+    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estadoVehiculo) {
         this.tipo = tipo;
         this.patente = patente;
         this.añoFabricacion = añoFabricacion;
         this.tipoCombustible = tipoCombustible;
         this.kilometros = kilometros;
         this.estadoVehiculo = estadoVehiculo;
-        this.fechaAlquiler = fechaAlquiler;
+        this.fechaAlquiler = LocalDate.now();
     }
 
     // ----------------------------------- GETERS Y SETERS ------------------------------------------------------------------------------------------------------------------------------------------------------
