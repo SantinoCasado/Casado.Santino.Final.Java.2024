@@ -1,19 +1,56 @@
-# 🚗 Sistema de Concesionaria de Vehículos
+# 🚗 CRUD - Concesionaria de Vehículos
 
-## 📋 Descripción
+## 📋 Sobre mí
 
-Sistema de gestión para una concesionaria que permite administrar vehículos (Autos, Motos, Camionetas) con funcionalidades de CRUD, filtrado, cambio de estados y persistencia en múltiples formatos.
+¡Hola! Soy **Santino Casado**, estudiante de la Tecnicatura en Programacion. Este proyecto representa mi examen final, donde he aplicado todos los conceptos aprendidos durante la cursado,
+incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, manejo de archivos y patrones de diseño.
 
-## 🏗️ Arquitectura del Sistema
+## 📝 Resumen
 
-### 📊 Diagramas UML
+**Concesionaria de Vehículos** es una aplicación de escritorio desarrollada en **Java con JavaFX** que permite gestionar un inventario completo de vehículos (Autos, Motos y Camionetas).
 
-El sistema está documentado a través de diagramas UML modulares para facilitar su comprensión:
+### 🎯 Funcionalidades principales:
 
-#### 🎯 [Vista General Completa](uml/uml_general.puml)
+- ✅ **CRUD completo**: Crear, leer, actualizar y eliminar vehículos
+- ✅ **Gestión de estados**: Disponible, Alquilado, En Mantenimiento
+- ✅ **Validaciones robustas**: Patentes únicas, datos correctos
+- ✅ **Filtros avanzados**: Por tipo de vehículo y estado
+- ✅ **Persistencia múltiple**: Guardado en CSV, JSON y TXT
+- ✅ **Interfaz intuitiva**: Formularios dinámicos según tipo de vehículo
 
-![Diagrama General](uml/uml_general.png)
-_Diagrama completo del sistema con todas las relaciones_
+### 🖥️ Capturas de pantalla
+
+#### Pantalla principal
+
+![Pantalla Principal](screenshots/main_view.png)
+_Vista principal con lista de vehículos y opciones de filtrado_
+
+#### Formulario de creación/edición
+
+![Formulario](screenshots/formulario_view.png)
+_Formulario dinámico que cambia según el tipo de vehículo seleccionado_
+
+#### Cambio de estado
+
+![Estado](screenshots/estado_view.png)
+_Interfaz para cambiar el estado de un vehículo_
+
+#### Ticket de alquiler
+
+![Ticket](screenshots/ticket_view.png)
+_Generación de ticket al alquilar un vehículo_
+
+### 🚀 Cómo usar la aplicación
+
+1. **Agregar vehículo**: Clic en "Agregar" → Completar formulario → "Aceptar"
+2. **Editar vehículo**: Seleccionar vehículo → Clic en "Modificar" → Editar datos → "Aceptar"
+3. **Cambiar estado**: Seleccionar vehículo → Clic en "Cambiar Estado" → Elegir nuevo estado
+4. **Filtrar**: Usar los ComboBox superiores para filtrar por tipo o estado
+5. **Eliminar**: Seleccionar vehículo → Clic en "Eliminar" → Confirmar
+
+## 🏗️ Diagrama de clases UML
+
+![Diagrama UML](uml/UML_General.svg)
 
 #### 📦 Diagramas por Módulos:
 
@@ -21,21 +58,9 @@ _Diagrama completo del sistema con todas las relaciones_
 | ------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | **🏛️ Modelos**      | [![Modelos](uml/Modelos_Enums.png)](uml/Modelos_Enums.puml)                            | Jerarquía de vehículos, enums y relaciones base |
 | **⚙️ Interfaces**   | [![Interfaces](uml/Interfaces_Gestor.png)](uml/Interfaces_Gestor.puml)                 | Contratos del sistema y gestor principal        |
-| **🎮 Controllers**  | [![Controllers](uml/Controllers_JavaFx.png)](uml/Controllers_JavaFx.puml)              | Controladores JavaFX y manejo de UI             |
+| **🎮 Controllers**  | [![Controllers](uml/Controllers_JavaFX.png)](uml/Controllers_JavaFX.puml)              | Controladores JavaFX y manejo de UI             |
 | **✅ Validaciones** | [![Validaciones](uml/Validaciones_Excepciones.png)](uml/Validaciones_Excepciones.puml) | Sistema de validación y excepciones             |
-| **💾 Persistencia** | [![Utilities](uml/Utilities.png)](uml/Utilities.puml)                                  | Utilidades para JSON, CSV y TXT                 |
-
-### 🎯 **Navegación Rápida por Diagramas:**
-
-```
-📁 uml/
-├── 🌍 uml_general.puml          # Diagrama completo del sistema
-├── 🏛️ 01_modelos_enums.puml     # Modelos de dominio y enumeraciones
-├── ⚙️ 02_interfaces_gestor.puml # Interfaces y administrador principal
-├── 🎮 03_controllers.puml       # Controladores JavaFX de la UI
-├── ✅ 04_validaciones_excepciones.puml # Sistema de validación
-└── 💾 05_utilities.puml         # Utilidades de persistencia
-```
+| **💾 Persistencia** | [![Utilities](uml/Utilitiess.png)](uml/Utilities.puml)                                 | Utilidades para JSON, CSV y TXT                 |
 
 ### 🔗 **Relaciones entre Módulos:**
 
@@ -44,105 +69,119 @@ _Diagrama completo del sistema con todas las relaciones_
 - **Controllers** ← Validan con → **Validaciones**
 - **Gestor** ← Persiste con → **Utilities**
 
-## 🚀 Características Principales
+### Arquitectura del sistema:
 
-### ✨ **Funcionalidades:**
+- **Models**: Clases `Vehiculo` (abstracta), `Auto`, `Moto`, `Camioneta`
+- **Controllers**: Controladores JavaFX para cada vista
+- **Gestor**: `AdministradorVehiculos` implementa CRUD completo
+- **Interfaces**: CRUD, IVehiculoEditable, IMapAbleJson, etc.
+- **Validations**: Validadores específicos para cada tipo de vehículo
+- **Utilities**: Clases para serialización (CSV, JSON, TXT)
 
-- ✅ **CRUD Completo** - Crear, leer, actualizar, eliminar vehículos
-- 🔍 **Filtrado Avanzado** - Por tipo y estado de vehículo
-- 🔄 **Gestión de Estados** - Disponible, Alquilado, En Mantenimiento
-- 💾 **Persistencia Múltiple** - JSON, CSV, TXT
-- 🎫 **Sistema de Tickets** - Generación de comprobantes
-- ✅ **Validación Robusta** - Validación de datos en tiempo real
+## 📁 Archivos generados
 
-### 🏛️ **Tipos de Vehículos:**
+### 📄 vehiculos.csv
 
-| Tipo             | Atributos Específicos | Marcas Disponibles                 |
-| ---------------- | --------------------- | ---------------------------------- |
-| **🚗 Auto**      | Número de puertas     | Ford, Chevrolet, Toyota, BMW, etc. |
-| **🏍️ Moto**      | Cilindrada            | Honda, Yamaha, Kawasaki, BMW, etc. |
-| **🚚 Camioneta** | Capacidad de carga    | Renault, Nissan, Jeep, Dodge, RAM  |
-
-## 🛠️ Tecnologías Utilizadas
-
-- **☕ Java 17+** - Lenguaje principal
-- **🎨 JavaFX** - Interfaz gráfica de usuario
-- **📊 JSON** - Persistencia de datos
-- **📋 CSV** - Importación/exportación
-- **🏗️ PlantUML** - Documentación de arquitectura
-
-## 📁 Estructura del Proyecto
-
-```
-ConsecionariaDeVehiculos/
-├── 📦 src/
-│   ├── 🏛️ Models/           # Clases de dominio (Vehiculo, Auto, Moto, Camioneta)
-│   ├── 🎮 Controllers/      # Controladores JavaFX
-│   ├── ⚙️ Gestor/          # AdministradorVehiculos
-│   ├── 🔗 Interfaces/       # Contratos del sistema
-│   ├── 📝 Enums/           # Enumeraciones (Tipos, Estados, Marcas)
-│   ├── ✅ Validations/      # Validadores de datos
-│   ├── ❌ Exceptions/       # Excepciones personalizadas
-│   └── 💾 Utilities/        # Utilidades de persistencia
-├── 🎨 resources/           # Archivos FXML y estilos
-├── 📊 uml/                # Diagramas de arquitectura
-└── 📖 README.md           # Esta documentación
+```csv
+TIPO,PATENTE,AÑO_FABRICACION,COMBUSTIBLE,KILOMETROS,ESTADO,MARCA,ATRIBUTO_ESPECIFICO,FECHA_ALQUILER
+AUTO,ABC123,2020,NAFTA,15000.0,DISPONIBLE,FIAT,4,null
+MOTO,XYZ789,2021,NAFTA,8500.0,ALQUILADO,HONDA,250,2024-09-20
+CAMIONETA,DEF456,2019,DIESEL,32000.0,EN_MANTENIMIENTO,RAM,1500.0,null
 ```
 
-## 🎯 **Puntos Destacados de la Arquitectura:**
+### 🔧 vehiculos.json
 
-### 🏗️ **Patrones Implementados:**
-
-- **🏛️ Factory Pattern** - Creación de vehículos según tipo
-- **🎯 Strategy Pattern** - Validaciones específicas por tipo
-- **🔗 Observer Pattern** - Actualización de vistas
-- **💾 Repository Pattern** - Persistencia de datos
-
-### 🔐 **Principios SOLID:**
-
-- **S** - Responsabilidad única en cada validador
-- **O** - Extensible para nuevos tipos de vehículos
-- **L** - Substitución de Liskov en jerarquía de vehículos
-- **I** - Interfaces segregadas (CRUD, IVehiculoEditable)
-- **D** - Inversión de dependencias con interfaces
-
-## 🚀 Instalación y Uso
-
-### 📋 **Requisitos:**
-
-- Java 17 o superior
-- JavaFX 17+
-- IDE compatible (VS Code, IntelliJ, Eclipse)
-
-### ▶️ **Ejecución:**
-
-```bash
-# Clonar repositorio
-git clone [URL-del-repositorio]
-
-# Compilar y ejecutar
-javac -cp "path/to/javafx/lib/*" src/**/*.java
-java -cp "path/to/javafx/lib/*:src" Controllers.MainViewController
+```json
+[
+  {
+    "tipo": "AUTO",
+    "patente": "ABC123",
+    "añoFabricacion": 2020,
+    "tipoCombustible": "NAFTA",
+    "kilometros": 15000.0,
+    "estadoVehiculo": "DISPONIBLE",
+    "marca": "FIAT",
+    "numPuertas": 4,
+    "fechaAlquiler": null
+  },
+  {
+    "tipo": "MOTO",
+    "patente": "XYZ789",
+    "añoFabricacion": 2021,
+    "tipoCombustible": "NAFTA",
+    "kilometros": 8500.0,
+    "estadoVehiculo": "ALQUILADO",
+    "marca": "HONDA",
+    "cilindrada": 250,
+    "fechaAlquiler": "2024-09-20"
+  }
+]
 ```
 
-## 📈 **Métricas del Proyecto:**
+### 📝 vehiculos.txt
 
-- **📦 Clases:** 25+
-- **🔗 Interfaces:** 5
-- **📝 Enums:** 6
-- **✅ Validadores:** 4
-- **🎮 Controllers:** 4
-- **🧪 Tests:** En desarrollo
+```
+=== REPORTE DE VEHÍCULOS ===
+Fecha de generación: 2024-09-22 14:30:15
+
+AUTO - ABC123 (2020)
+├── Marca: FIAT
+├── Combustible: NAFTA
+├── Kilómetros: 15000.0
+├── Puertas: 4
+└── Estado: DISPONIBLE
+
+MOTO - XYZ789 (2021)
+├── Marca: HONDA
+├── Combustible: NAFTA
+├── Kilómetros: 8500.0
+├── Cilindrada: 250cc
+├── Estado: ALQUILADO
+└── Fecha alquiler: 2024-09-20
+
+CAMIONETA - DEF456 (2019)
+├── Marca: RAM
+├── Combustible: DIESEL
+├── Kilómetros: 32000.0
+├── Capacidad: 1500.0 kg
+└── Estado: EN_MANTENIMIENTO
+
+=== ESTADÍSTICAS ===
+Total vehículos: 3
+├── Disponibles: 1
+├── Alquilados: 1
+└── En mantenimiento: 1
+
+Por tipo:
+├── Autos: 1
+├── Motos: 1
+└── Camionetas: 1
+```
+
+## 🛠️ Tecnologías utilizadas
+
+- **Java 17+**
+- **JavaFX** para la interfaz gráfica
+- **JSON.org** para manejo de JSON
+- **PlantUML** para diagramas UML
+- **Maven** para gestión de dependencias
+
+## 🔍 Características técnicas destacadas
+
+- **Patrón CRUD**: Implementación completa con interfaz genérica
+- **Validaciones robustas**: Sistema de validaciones por tipo de vehículo
+- **Persistencia múltiple**: Guardado simultáneo en 3 formatos diferentes
+- **Polimorfismo**: Uso extensivo de herencia y interfaces
+- **Manejo de excepciones**: Excepciones personalizadas para casos específicos
+- **Interfaz dinámica**: Formularios que cambian según el contexto
+
+## 📞 Contacto
+
+- **Estudiante**: Santino Casado
+- **Materia**: Programación II
+- **Año**: 2024
+- **Email**: [tu-email@ejemplo.com]
 
 ---
 
-## 👨‍💻 **Desarrollado por:**
-
-**Santino Casado** - Programación II - 2024
-
-### 📊 **Ver Diagramas:**
-
-- [🌍 Diagrama General](uml/uml_general.png) - Vista completa del sistema
-- [📦 Por Módulos](uml/) - Diagramas específicos por área
-
-_Para generar los diagramas: usar PlantUML con los archivos .puml_
+_Este proyecto fue desarrollado como parte del examen final de Programación II, demostrando el dominio de conceptos avanzados de programación orientada a objetos, interfaces gráficas y persistencia de datos._
