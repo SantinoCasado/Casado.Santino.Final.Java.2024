@@ -23,7 +23,7 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable, IM
     private EstadoVehiculo estadoVehiculo;
     private LocalDate fechaAlquiler;
 
-    // ----------------------------------- CONSTRUCTORES ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------- CONSTRUCTORES ------------------------------------------------------------------------------------------------------------------------------------------------------
     public Vehiculo() {
     }
 
@@ -35,19 +35,24 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable, IM
         this.tipoCombustible = TipoCombustible.valueOf(map.get("tipoCombustible"));
         this.kilometros = Float.parseFloat(map.get("kilometros"));
         this.estadoVehiculo = EstadoVehiculo.valueOf(map.get("estadoVehiculo"));
-        this.fechaAlquiler = map.get("fechaAlquiler").isEmpty() ? null : LocalDate.parse(map.get("fechaAlquiler"));
-    }
+        
+        // Manejo seguro de fecha
+        String fecha = map.get("fechaAlquiler");
+        this.fechaAlquiler = (fecha == null || fecha.isEmpty()) ? null : LocalDate.parse(fecha);
+        }
 
-    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float  kilometros, LocalDate fechaAlquiler) {
+    // Constructor con fecha pero estado DISPONIBLE por defecto
+    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, LocalDate fechaAlquiler) {
         this.tipo = tipo;
         this.patente = patente;
         this.añoFabricacion = añoFabricacion;
         this.tipoCombustible = tipoCombustible;
-        this.kilometros =  kilometros;
+        this.kilometros = kilometros;
         this.estadoVehiculo = EstadoVehiculo.DISPONIBLE; 
         this.fechaAlquiler = fechaAlquiler;
     }
 
+    // Constructor con estado pero fecha actual por defecto
     public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estadoVehiculo) {
         this.tipo = tipo;
         this.patente = patente;
@@ -56,6 +61,17 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable, IM
         this.kilometros = kilometros;
         this.estadoVehiculo = estadoVehiculo;
         this.fechaAlquiler = LocalDate.now();
+    }
+
+    // Constructor completo con estado Y fecha (EL QUE FALTABA)
+    public Vehiculo(TipoVehiculos tipo, String patente, int añoFabricacion, TipoCombustible tipoCombustible, float kilometros, EstadoVehiculo estadoVehiculo, LocalDate fechaAlquiler) {
+        this.tipo = tipo;
+        this.patente = patente;
+        this.añoFabricacion = añoFabricacion;
+        this.tipoCombustible = tipoCombustible;
+        this.kilometros = kilometros;
+        this.estadoVehiculo = estadoVehiculo;
+        this.fechaAlquiler = fechaAlquiler;
     }
 
     // ----------------------------------- GETERS Y SETERS ------------------------------------------------------------------------------------------------------------------------------------------------------

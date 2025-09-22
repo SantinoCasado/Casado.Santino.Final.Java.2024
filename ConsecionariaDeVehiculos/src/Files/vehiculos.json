@@ -1,0 +1,35 @@
+[
+  {
+    "añoFabricacion": "2010",
+    "marca": "FIAT",
+    "tipo": "AUTO",
+    "tipoCombustible": "NAFTA",
+    "estadoVehiculo": "DISPONIBLE",
+    "kilometros": "0.0",
+    "numPuertas": "4",
+    "patente": "AAA111",
+    "fechaAlquiler": "2025-09-22"
+  },
+  {
+    "añoFabricacion": "2010",
+    "marca": "FIAT",
+    "tipo": "AUTO",
+    "tipoCombustible": "NAFTA",
+    "estadoVehiculo": "DISPONIBLE",
+    "kilometros": "3000.0",
+    "numPuertas": "4",
+    "patente": "AAA113",
+    "fechaAlquiler": "2025-09-22"
+  },
+  {
+    "añoFabricacion": "1990",
+    "marca": "KAWASAKI",
+    "tipo": "MOTO",
+    "tipoCombustible": "NAFTA",
+    "estadoVehiculo": "DISPONIBLE",
+    "cilindrada": "150",
+    "kilometros": "0.0",
+    "patente": "AAA123",
+    "fechaAlquiler": "2025-09-22"
+  }
+]

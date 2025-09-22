@@ -16,23 +16,50 @@ public class JsonUtilities {
     //------------------------------------ METODOS ------------------------------------------------------------------------------------------------------------------------------------------------------
     //GUARDADO
     public static <T extends IMapAbleJson> void guardarVehiculosJSON(List<T> lista) {
-        File dir = new File(CARPETA);       // Crear el directorio si no existe
+        File dir = new File(CARPETA);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        List<Map<String, String>> listaExportable = new ArrayList<>();      // Convertir cada entidad a un Map
+        // CARGARGO datos existentes desde el archivo
+        List<Map<String, String>> datosExistentes = cargarVehiculosJSON();
+        
+        // Creao Map para vehículos actuales (por patente)
+        Map<String, Map<String, String>> vehiculosActuales = new HashMap<>();
         for (T entidad : lista) {
-            listaExportable.add(entidad.toMap());                           // Usar el método toMap() de la interfaz
+            Map<String, String> mapaVehiculo = entidad.toMap();
+            String patente = mapaVehiculo.get("patente");
+            vehiculosActuales.put(patente, mapaVehiculo);
         }
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();         // Crear el JSON con formato
-        String json = gson.toJson(listaExportable);                         // Convertir la lista de Maps a JSON
+        
+        // 3. ACTUALIZAR/AGREGAR: Recorrer datos existentes
+        List<Map<String, String>> datosFinales = new ArrayList<>();
+        
+        //Preservo los datos que no se encuentran en memoria
+        for (Map<String, String> vehiculoExistente : datosExistentes) {
+            String patente = vehiculoExistente.get("patente");
+            
+            if (vehiculosActuales.containsKey(patente)) {
+                // Si está en memoria, usar la versión de memoria (pisar)
+                datosFinales.add(vehiculosActuales.get(patente));
+                vehiculosActuales.remove(patente); // Marcar como procesado
+            } else {
+                // Si NO está en memoria, mantener la versión del archivo (preservar)
+                datosFinales.add(vehiculoExistente);
+            }
+        }
+        
+        // Agrego vehículos nuevos que no estaban en el archivo
+        datosFinales.addAll(vehiculosActuales.values());
+        
+        // GUARDARDO resultado final
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(datosFinales);
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_JSON, true))) {        // Escribir el JSON en el archivo
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_JSON, false))) {
             writer.write(json);
-            System.out.println("Lista serializada en: " + ARCHIVO_JSON);
         } catch (IOException e) {
-            System.err.println("Error al guardar JSON: " + e.getMessage());
+            System.err.println("❌ Error al guardar JSON: " + e.getMessage());
         }
     }
 

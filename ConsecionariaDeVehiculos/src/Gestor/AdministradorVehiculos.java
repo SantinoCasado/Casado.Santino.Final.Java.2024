@@ -77,6 +77,7 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
 
         throw new IllegalArgumentException("No se encontró un vehiculo para modificar con patente: " + vehiculoNuevo.getPatente());
     }
+
     @Override
     public void eliminar(Vehiculo vehiculo) {
         // 1. Eliminar de la lista en memoria
@@ -112,7 +113,7 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
             }
             
         } catch (Exception e) {
-            System.err.println("Error al actualizar archivos después de eliminar: " + e.getMessage());
+            throw new RuntimeException("Error al actualizar archivos después de eliminar: " + e.getMessage(), e);
         }
     }
     
@@ -140,112 +141,148 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
     }
 
     //----------------------------------- ARCHIVOS ------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Guardar en CSV
+    
+    // Guardar en CSV - NUEVO MÉTODO SIN VALIDACIÓN DE DUPLICADOS (usa lógica inteligente)
     public void guardarCSV() throws Exception {
-        // 1. Leer vehículos existentes en el archivo
-        ArrayList<String> lineasExistentes = CsvUtilities.leerCSV();
-        ArrayList<String> patentesEnArchivo = new ArrayList<>();
-        
-        // 2. Extraer las patentes ya guardadas
-        for (String linea : lineasExistentes) {
-            String[] partes = linea.split(",");
-            if (partes.length > 1) {
-                patentesEnArchivo.add(partes[1]); // La patente está en la posición 1
-            }
-        }
-        
-        // 3. Verificar duplicados antes de guardar
-        for (Vehiculo vehiculo : vehiculos) {
-            if (patentesEnArchivo.contains(vehiculo.getPatente())) {
-                throw new PatenteRepetidaException("Ya existe un vehículo con la patente " + 
-                                                vehiculo.getPatente() + " en el archivo CSV. " +
-                                                "Elimine el duplicado antes de guardar.");
-            }
-        }
-        
-        // 4. Si no hay duplicados, proceder con el guardado
-        CsvUtilities.guardarVehiculosCSV(vehiculos);
+        CsvUtilities.guardarVehiculosCSV(this.vehiculos);
     }
 
-    // Cargar desde CSV
+    // Cargar desde CSV - COMPLETO (limpia la lista)
     public void cargarCSV() throws Exception {
         ArrayList<String> lineas = CsvUtilities.leerCSV();
         ArrayList<Vehiculo> lista = new ArrayList<>();
+        
+        // Limpiar lista actual
+        this.vehiculos.clear();
+        
         for (String linea : lineas) {
             String[] partes = linea.split(",");
             if (partes.length < 1) continue;
-            TipoVehiculos tipo = TipoVehiculos.valueOf(partes[0]);
-            Vehiculo v = null;
+            
+            try {
+                TipoVehiculos tipo = TipoVehiculos.valueOf(partes[0]);
+                Vehiculo v = null;
+                
+                switch (tipo) {
+                    case AUTO:
+                        v = Auto.fromCSV(linea);
+                        break;
+                    case MOTO:
+                        v = Moto.fromCSV(linea);
+                        break;
+                    case CAMIONETA:
+                        v = Camioneta.fromCSV(linea);
+                        break;
+                    default:
+                        continue;
+                }
+                
+                if (v != null) {
+                    lista.add(v);
+                }
+            } catch (Exception e) {
+                throw new Exception("Error al procesar línea CSV: " + linea + " - " + e.getMessage(), e);
+            }
+        }
+        
+        this.vehiculos = lista;
+    }
+
+    // MÉTODO NUEVO: Cargar y mergear CSV (mantiene vehículos en memoria)
+    public void cargarYMergeCSV() throws Exception {
+        ArrayList<String> lineas = CsvUtilities.leerCSV();
+        
+        for (String linea : lineas) {
+            String[] partes = linea.split(",");
+            if (partes.length < 1) continue;
+            
+            try {
+                TipoVehiculos tipo = TipoVehiculos.valueOf(partes[0]);
+                Vehiculo vehiculoCargado = null;
+                
+                switch (tipo) {
+                    case AUTO:
+                        vehiculoCargado = Auto.fromCSV(linea);
+                        break;
+                    case MOTO:
+                        vehiculoCargado = Moto.fromCSV(linea);
+                        break;
+                    case CAMIONETA:
+                        vehiculoCargado = Camioneta.fromCSV(linea);
+                        break;
+                    default:
+                        continue;
+                }
+                
+                if (vehiculoCargado != null) {
+                    // Usar método que permite actualizar
+                    agregarOActualizar(vehiculoCargado);
+                }
+            } catch (Exception e) {
+                throw new Exception("Error al procesar línea CSV para merge: " + linea + " - " + e.getMessage(), e);
+            }
+        }
+    }
+
+    // Guardar en JSON - SIN validación de duplicados
+    public void guardarJSON() throws Exception {
+        JsonUtilities.guardarVehiculosJSON(this.vehiculos);
+    }
+
+    // Cargar desde JSON - COMPLETO (limpia la lista)
+    public void cargarJSON() throws Exception {
+        List<Map<String, String>> datos = JsonUtilities.cargarVehiculosJSON();
+        
+        // Limpiar lista actual
+        this.vehiculos.clear();
+        
+        for (Map<String, String> map : datos) {
+            TipoVehiculos tipo = TipoVehiculos.valueOf(map.get("tipo"));
+            Vehiculo v;
+            
             switch (tipo) {
                 case AUTO:
-                    v = Auto.fromCSV(linea);
+                    v = new Auto(map);
                     break;
                 case MOTO:
-                    v = Moto.fromCSV(linea);
+                    v = new Moto(map);
                     break;
                 case CAMIONETA:
-                    v = Camioneta.fromCSV(linea);
+                    v = new Camioneta(map);
                     break;
                 default:
                     continue;
             }
-            if (v != null) lista.add(v);
+            this.vehiculos.add(v);
         }
-        this.vehiculos = lista;
     }
 
-    // Guardar en JSON
-    public void guardarJSON() throws Exception {
-        // 1. Cargar vehículos existentes del archivo JSON
-        List<Map<String, String>> datosExistentes = JsonUtilities.cargarVehiculosJSON();
-        ArrayList<String> patentesEnArchivo = new ArrayList<>();
+    // MÉTODO NUEVO: Cargar y mergear JSON (mantiene vehículos en memoria)
+    public void cargarYMergeJSON() throws Exception {
+        List<Map<String, String>> datos = JsonUtilities.cargarVehiculosJSON();
         
-        // 2. Extraer patentes ya guardadas
-        for (Map<String, String> map : datosExistentes) {
-            if (map.containsKey("patente")) {
-                patentesEnArchivo.add(map.get("patente"));
+        for (Map<String, String> map : datos) {
+            TipoVehiculos tipo = TipoVehiculos.valueOf(map.get("tipo"));
+            Vehiculo vehiculoCargado;
+            
+            switch (tipo) {
+                case AUTO:
+                    vehiculoCargado = new Auto(map);
+                    break;
+                case MOTO:
+                    vehiculoCargado = new Moto(map);
+                    break;
+                case CAMIONETA:
+                    vehiculoCargado = new Camioneta(map);
+                    break;
+                default:
+                    continue;
             }
+            
+            // Usar método que permite actualizar
+            agregarOActualizar(vehiculoCargado);
         }
-        
-        // 3. Verificar duplicados antes de guardar
-        for (Vehiculo vehiculo : vehiculos) {
-            if (patentesEnArchivo.contains(vehiculo.getPatente())) {
-                throw new PatenteRepetidaException("Ya existe un vehículo con la patente " + 
-                                                vehiculo.getPatente() + " en el archivo JSON. " +
-                                                "Elimine el duplicado antes de guardar.");
-            }
-        }
-        
-        // 4. Si no hay duplicados, proceder con el guardado
-        JsonUtilities.guardarVehiculosJSON(vehiculos);
     }
-
-    // Cargar desde JSON
-    public void cargarJSON() {
-      List<Map<String, String>> datos = JsonUtilities.cargarVehiculosJSON();
-      ArrayList<Vehiculo> lista = new ArrayList<>();
-      
-      for (Map<String, String> map : datos) {
-          TipoVehiculos tipo = TipoVehiculos.valueOf(map.get("tipo"));
-          Vehiculo v;
-          
-          switch (tipo) {
-              case AUTO:
-                  v = new Auto(map);
-                  break;
-              case MOTO:
-                  v = new Moto(map);
-                  break;
-              case CAMIONETA:
-                  v = new Camioneta(map);
-                  break;
-              default:
-                  continue;
-          }
-          lista.add(v);
-      }
-      this.vehiculos = lista;
-  }
 
     // Exportar listado filtrado a TXT
     public void exportarListadoFiltradoTXT(ArrayList<Vehiculo> listaFiltrada, String encabezado) throws Exception {
@@ -267,5 +304,31 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>{
             ));
         }
         TxtUtilities.guardarTexto(sb.toString());
+    }
+
+    // MÉTODO NUEVO: Agregar o actualizar (sin excepciones de duplicados)
+    public boolean agregarOActualizar(Vehiculo vehiculo) {
+        // Buscar si ya existe un vehículo con la misma patente
+        for (int i = 0; i < this.vehiculos.size(); i++) {
+            if (this.vehiculos.get(i).getPatente().equals(vehiculo.getPatente())) {
+                // Si existe, actualizar (reemplazar)
+                this.vehiculos.set(i, vehiculo);
+                return true;
+            }
+        }
+        
+        // Si no existe, agregar nuevo
+        this.vehiculos.add(vehiculo);
+        return true;
+    }
+
+    // MÉTODO AUXILIAR: Buscar por patente
+    public Vehiculo buscarPorPatente(String patente) {
+        for (Vehiculo vehiculo : vehiculos) {
+            if (vehiculo.getPatente().equals(patente)) {
+                return vehiculo;
+            }
+        }
+        return null;
     }
 }

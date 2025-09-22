@@ -78,9 +78,10 @@ public class MainViewController implements Initializable {
         cbFiltrarTipo.getItems().addAll(TipoVehiculos.AUTO, TipoVehiculos.CAMIONETA, TipoVehiculos.MOTO, TipoVehiculos.TODOS);      //  Tipos de vehiculo 
         cbFiltrarTipo.setValue(TipoVehiculos.TODOS);
 
-        cbSave.getItems().addAll(                                                                                                   // Achivos
+        cbSave.getItems().addAll(                                                                                                   // Archivos
                     "Guardar CSV",
                     "Cargar CSV",
+                    "Cargar CSV (Merge)",
                     "Guardar JSON",
                     "Cargar JSON",
                     "Exportar TXT"
@@ -129,7 +130,11 @@ public class MainViewController implements Initializable {
     // AGREGAR
     @FXML
     void agregar(ActionEvent event) {
-        AbrirView(null, "Formulario");
+        try {
+            AbrirView(null, "Formulario");
+        } catch (Exception e) {
+            mostrarAlerta(AlertType.ERROR, "Error", "Error al agregar vehículo: " + e.getMessage());
+        }
     }
 
     // ELIMINAR
@@ -144,9 +149,16 @@ public class MainViewController implements Initializable {
 
             Optional<ButtonType> resultado = alerta.showAndWait();
             if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-                administrador.eliminar(seleccionado);
-                refrescarVista();
+                try {
+                    administrador.eliminar(seleccionado);
+                    refrescarVista();
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Vehículo eliminado correctamente.");
+                } catch (Exception e) {
+                    mostrarAlerta(AlertType.ERROR, "Error", "Error al eliminar vehículo: " + e.getMessage());
+                }
             }
+        } else {
+            mostrarAlerta(AlertType.WARNING, "Advertencia", "Debe seleccionar un vehículo para eliminar.");
         }
     }
 
@@ -155,7 +167,13 @@ public class MainViewController implements Initializable {
     void modificar(ActionEvent event) {
         Vehiculo seleccionado = tablaVehiculos.getSelectionModel().getSelectedItem();
         if (seleccionado != null) {
-            AbrirView(seleccionado, "Formulario");
+            try {
+                AbrirView(seleccionado, "Formulario");
+            } catch (Exception e) {
+                mostrarAlerta(AlertType.ERROR, "Error", "Error al modificar vehículo: " + e.getMessage());
+            }
+        } else {
+            mostrarAlerta(AlertType.WARNING, "Advertencia", "Debe seleccionar un vehículo para modificar.");
         }
     }
 
@@ -164,42 +182,101 @@ public class MainViewController implements Initializable {
     public void cambiarEstado(ActionEvent event) {
         Vehiculo seleccionado = tablaVehiculos.getSelectionModel().getSelectedItem();
         if (seleccionado != null) {
-            AbrirView(seleccionado, "EstadoVehiculo");
+            try {
+                AbrirView(seleccionado, "EstadoVehiculo");
+            } catch (Exception e) {
+                mostrarAlerta(AlertType.ERROR, "Error", "Error al cambiar estado: " + e.getMessage());
+            }
+        } else {
+            mostrarAlerta(AlertType.WARNING, "Advertencia", "Debe seleccionar un vehículo para cambiar estado.");
         }
     }
 
     // ------------------------------------------------- ARCHIVOS -------------------------------------------
     @FXML
-    private void aceptarAccion(ActionEvent event) throws Exception {
+    private void aceptarAccion(ActionEvent event) {
         String accion = cbSave.getValue();
-        try{
+        
+        try {
             switch (accion) {
                 case "Guardar CSV":
+                    if (administrador.listarTodo().isEmpty()) {
+                        mostrarAlerta(AlertType.WARNING, "Advertencia", "No hay vehículos para guardar en CSV.");
+                        return;
+                    }
                     administrador.guardarCSV();
-                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo CSV guardado correctamente.");
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito", 
+                                 "Archivo CSV guardado correctamente.\nTotal vehículos guardados: " + 
+                                 administrador.listarTodo().size());
                     break;
+                    
                 case "Cargar CSV":
-                    administrador.cargarCSV();
-                    refrescarVista();
-                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo CSV cargado correctamente.");
+                    if (confirmarAccion("¿Desea cargar los vehículos desde CSV? Esto reemplazará todos los vehículos actuales.")) {
+                        administrador.cargarCSV();
+                        refrescarVista();
+                        mostrarAlerta(AlertType.INFORMATION, "Éxito", 
+                                     "Archivo CSV cargado correctamente.\nTotal vehículos cargados: " + 
+                                     administrador.listarTodo().size());
+                    }
                     break;
+                    
+                case "Cargar CSV (Merge)":
+                    if (confirmarAccion("¿Desea cargar los vehículos desde CSV? Esto se combinará con los vehículos actuales.")) {
+                        int cantidadAntes = administrador.listarTodo().size();
+                        administrador.cargarYMergeCSV();
+                        refrescarVista();
+                        int cantidadDespues = administrador.listarTodo().size();
+                        mostrarAlerta(AlertType.INFORMATION, "Éxito", 
+                                     "Archivo CSV cargado y combinado correctamente.\n" +
+                                     "Vehículos antes: " + cantidadAntes + "\n" +
+                                     "Vehículos después: " + cantidadDespues);
+                    }
+                    break;
+                    
                 case "Guardar JSON":
+                    if (administrador.listarTodo().isEmpty()) {
+                        mostrarAlerta(AlertType.WARNING, "Advertencia", "No hay vehículos para guardar en JSON.");
+                        return;
+                    }
                     administrador.guardarJSON();
-                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo JSON guardado correctamente.");
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito", 
+                                 "Archivo JSON guardado correctamente.\nTotal vehículos guardados: " + 
+                                 administrador.listarTodo().size());
                     break;
+                    
                 case "Cargar JSON":
-                    administrador.cargarJSON();
-                    refrescarVista();
-                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo JSON cargado correctamente.");
+                    if (confirmarAccion("¿Desea cargar los vehículos desde JSON? Esto se combinará con los vehículos actuales.")) {
+                        int cantidadAntes = administrador.listarTodo().size();
+                        administrador.cargarYMergeJSON(); // Usar método que hace merge
+                        refrescarVista();
+                        int cantidadDespues = administrador.listarTodo().size();
+                        mostrarAlerta(AlertType.INFORMATION, "Éxito", 
+                                     "Archivo JSON cargado y combinado correctamente.\n" +
+                                     "Vehículos antes: " + cantidadAntes + "\n" +
+                                     "Vehículos después: " + cantidadDespues);
+                    }
                     break;
+                    
                 case "Exportar TXT":
-                    ArrayList<Vehiculo> filtrados = administrador.buscarPorTipos(TipoVehiculos.TODOS, EstadoVehiculo.TODOS);
-                    administrador.exportarListadoFiltradoTXT(filtrados, "Listado de Vehículos");
-                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo TXT exportado correctamente.");
+                    if (administrador.listarTodo().isEmpty()) {
+                        mostrarAlerta(AlertType.WARNING, "Advertencia", "No hay vehículos para exportar.");
+                        return;
+                    }
+                    // Exportar los vehículos actualmente mostrados (respeta filtros)
+                    ArrayList<Vehiculo> vehiculosAExportar = new ArrayList<>(tablaVehiculos.getItems());
+                    administrador.exportarListadoFiltradoTXT(vehiculosAExportar, "Listado de Vehículos");
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito", 
+                                 "Archivo TXT exportado correctamente.\nVehículos exportados: " + 
+                                 vehiculosAExportar.size());
                     break;
-        }
-        }catch (PatenteRepetidaException  e) {
-            mostrarAlerta(AlertType.WARNING, "Error", "Ocurrió un error: " + e.getMessage());
+                    
+                default:
+                    mostrarAlerta(AlertType.WARNING, "Advertencia", "Acción no válida seleccionada.");
+                    break;
+            }
+            
+        } catch (Exception e) {
+            mostrarAlerta(AlertType.ERROR, "Error", "Ocurrió un error: " + e.getMessage());
         }
     }
 
@@ -212,14 +289,17 @@ public class MainViewController implements Initializable {
         try {
             ArrayList<Vehiculo> filtrados = administrador.buscarPorTipos(tipoSeleccionado, estadoSeleccionado);
             refrescarVistaFiltrada(filtrados);
+            mostrarAlerta(AlertType.INFORMATION, "Filtro aplicado", "Se encontraron " + filtrados.size() + " vehículos que coinciden con los criterios.");
         } catch (IllegalArgumentException e) {
-            mostrarAlerta(AlertType.ERROR,"Error", e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error", e.getMessage());
+        } catch (Exception e) {
+            mostrarAlerta(AlertType.ERROR, "Error", "Error al filtrar: " + e.getMessage());
         }
     }
 
     // ------------------------------------------------- METODOS PARTICULARES -----------------------------------------------------------------------------------
     // Apertura de views
-    private void AbrirView(Vehiculo v, String name) {
+    private void AbrirView(Vehiculo v, String name) throws Exception {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/view" + name + ".fxml"));
             Scene scene = new Scene(loader.load());
@@ -231,8 +311,8 @@ public class MainViewController implements Initializable {
             if (name.equals("Formulario")) {
                 ViewFormularioController cfc = loader.getController();
                 
-                // ¡AGREGAR ESTAS LÍNEAS CRÍTICAS!
-                cfc.setAdministrador(this.administrador); // Pasar el administrador
+                // Pasar el administrador y configurar índice
+                cfc.setAdministrador(this.administrador);
                 if (v == null) {
                     cfc.setIndiceVehiculo(-1); // Nuevo vehículo
                 } else {
@@ -250,14 +330,19 @@ public class MainViewController implements Initializable {
                 stage.showAndWait();
                 Vehiculo resultado = cevc.getVehiculo();
                 if (resultado != null) {
-                    administrador.modificar(resultado); 
+                    try {
+                        administrador.modificar(resultado);
+                        mostrarAlerta(AlertType.INFORMATION, "Éxito", "Estado del vehículo cambiado correctamente.");
+                    } catch (Exception e) {
+                        mostrarAlerta(AlertType.ERROR, "Error", "Error al cambiar estado: " + e.getMessage());
+                    }
                 }
             }
 
             refrescarVista();
 
         } catch (IOException e) {
-            mostrarAlerta(AlertType.ERROR, "Error", "Error al abrir la vista: " + e.getMessage());
+            throw new Exception("Error al abrir la vista: " + e.getMessage(), e);
         }
     }
 
@@ -280,5 +365,16 @@ public class MainViewController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    // Método para confirmar acciones
+    private boolean confirmarAccion(String mensaje) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        
+        Optional<ButtonType> resultado = alert.showAndWait();
+        return resultado.isPresent() && resultado.get() == ButtonType.OK;
     }
 }
