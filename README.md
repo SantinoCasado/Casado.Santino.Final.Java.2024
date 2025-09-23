@@ -6,7 +6,7 @@
 
 ## 📝 Resumen
 
-Realize una aplicación de escritorio sobre una concecionaria de vehiculos la cual fue desarrollada en **Java con JavaFX** que permite gestionar un inventario completo de vehículos (Autos, Motos y Camionetas) con funcionalidades avanzadas y características técnicas de nivel profesional.
+Realize una aplicación de escritorio sobre una concecionaria de vehiculos la cual fue desarrollada en Java con JavaFX que permite gestionar un inventario completo de vehículos (Autos, Motos y Camionetas) con funcionalidades avanzadas y características técnicas de nivel profesional.
 =======
 ¡Hola! Soy **Santino Casado**, estudiante de la Tecnicatura en Programacion. Este proyecto representa mi examen final de Programacion II, donde he aplicado todos los conceptos aprendidos durante la cursado,
 incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, manejo de archivos y patrones de diseño.
