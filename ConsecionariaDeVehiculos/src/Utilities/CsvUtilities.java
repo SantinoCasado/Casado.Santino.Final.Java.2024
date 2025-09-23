@@ -14,6 +14,7 @@ public class CsvUtilities<T extends ISerializableCsv> {
     private static final String CARPETA = "src/Files";
     private static final String ARCHIVO_CSV = CARPETA + File.separator + "vehiculos.csv";
 
+    //------------------------------------ METODOS ------------------------------------------------------------------------------------------------------------------------------------------------------
     //GUARDADO 
     public static <T extends ISerializableCsv> void guardarVehiculosCSV(ArrayList<T> lista) throws Exception {
         File dir = new File(CARPETA);
@@ -116,6 +117,77 @@ public class CsvUtilities<T extends ISerializableCsv> {
             }
         }
         return lista;
+    }
+
+    // ELIMINAR VEHICULO DE CSV
+    public static boolean eliminarVehiculoCSV(String patente) {
+        try {
+            // Verificar si el archivo existe
+            File archivoCSV = new File(ARCHIVO_CSV);
+            if (!archivoCSV.exists()) {
+                return false;
+            }
+            
+            // Leer todas las líneas y filtrar
+            ArrayList<String> lineas = new ArrayList<>();
+            boolean vehiculoEncontrado = false;
+            
+            // Leer todas las líneas
+            try (BufferedReader reader = new BufferedReader(new FileReader(archivoCSV))) {
+                String linea;
+                while ((linea = reader.readLine()) != null) {
+                    // Verificar si la línea contiene la patente (formato: TIPO,PATENTE,...)
+                    String[] datos = linea.split(",");
+                    if (datos.length >= 2 && datos[1].equals(patente)) {
+                        vehiculoEncontrado = true;
+                        // No agregar esta línea (efectivamente la elimina)
+                    } else {
+                        lineas.add(linea);
+                    }
+                }
+            }
+            
+            // Reescribir el archivo sin la línea eliminada
+            if (vehiculoEncontrado) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivoCSV))) {
+                    for (String linea : lineas) {
+                        writer.write(linea);
+                        writer.newLine();
+                    }
+                }
+            }
+            
+            return vehiculoEncontrado;
+            
+        } catch (IOException e) {
+            throw new RuntimeException("Error al eliminar del archivo CSV: " + e.getMessage(), e);
+        }
+    }
+
+    //--------------------------------- METODOS AUXILIARES ------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Verificar si un vehículo con la patente dada existe en el CSV
+    public static boolean existeVehiculoEnCSV(String patente) {
+        try {
+            File archivoCSV = new File(ARCHIVO_CSV);
+            if (!archivoCSV.exists()) {
+                return false;
+            }
+            
+            try (BufferedReader reader = new BufferedReader(new FileReader(archivoCSV))) {
+                String linea;
+                while ((linea = reader.readLine()) != null) {
+                    String[] datos = linea.split(",");
+                    if (datos.length >= 2 && datos[1].equals(patente)) {
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
+            
+        } catch (IOException e) {
+            throw new RuntimeException("Error al buscar en archivo CSV: " + e.getMessage(), e);
+        }
     }
     
     // Extraer patente de una línea CSV

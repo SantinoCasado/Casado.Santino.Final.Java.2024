@@ -4,7 +4,6 @@ import Controllers.ViewEstadoVehiculoController;
 import Controllers.ViewFormularioController;
 import Enums.EstadoVehiculo;
 import Enums.TipoVehiculos;
-import Exceptions.PatenteRepetidaException;
 import Gestor.AdministradorVehiculos;
 import Models.Auto;
 import Models.Camioneta;
@@ -35,6 +34,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import Exceptions.ErrorEnElFiltradoException;
+import Utilities.CsvUtilities;
+import Utilities.JsonUtilities;
 
 public class MainViewController implements Initializable {
     //------------------------------------------ ATRIBUTOS DE CLASE  --------------------------------------------------------------------------------------------------------------
@@ -147,7 +148,7 @@ public class MainViewController implements Initializable {
         try {
             AbrirView(null, "Formulario");
         } catch (Exception e) {
-            mostrarAlerta(AlertType.ERROR, "Error", "Error al agregar vehículo: " + e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error", "Error al agregar", "Error al agregar vehículo: " + e.getMessage());
         }
     }
 
@@ -156,23 +157,70 @@ public class MainViewController implements Initializable {
     void eliminar(ActionEvent event) {
         Vehiculo seleccionado = tablaVehiculos.getSelectionModel().getSelectedItem();
         if (seleccionado != null) {
-            Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-            alerta.setTitle("Confirmar eliminación");
-            alerta.setHeaderText("¿Estás seguro de eliminar este vehículo? Este sera eliminado de todos los archivos tambien!");
-            alerta.setContentText(seleccionado.mostrarDetalles());
+            
+            // PRIMERA CONFIRMACIÓN - Solo eliminar de memoria
+            Alert primeraAlerta = new Alert(Alert.AlertType.CONFIRMATION);
+            primeraAlerta.setTitle("Confirmar eliminación");
+            primeraAlerta.setHeaderText("¿Estás seguro de eliminar este vehículo de la aplicación?");
+            primeraAlerta.setContentText("Vehículo a eliminar:\n" + seleccionado.mostrarDetalles());
 
-            Optional<ButtonType> resultado = alerta.showAndWait();
-            if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+            Optional<ButtonType> primerResultado = primeraAlerta.showAndWait();
+            if (primerResultado.isPresent() && primerResultado.get() == ButtonType.OK) {
+                
                 try {
+                    // Eliminar de memoria
                     administrador.eliminar(seleccionado);
                     refrescarVista();
-                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Vehículo eliminado correctamente.");
+                    
+                    // SEGUNDA CONFIRMACIÓN - Eliminar de archivos
+                    Alert segundaAlerta = new Alert(Alert.AlertType.CONFIRMATION);
+                    segundaAlerta.setTitle("Eliminar de archivos");
+                    segundaAlerta.setHeaderText("¿Desea también eliminar este vehículo de los archivos CSV y JSON?");
+                    segundaAlerta.setContentText("Patente: " + seleccionado.getPatente() + 
+                                            "\n\nEsto buscará y eliminará el vehículo de:\n" +
+                                            "• vehiculos.csv\n" + 
+                                            "• vehiculos.json");
+                    
+                    Optional<ButtonType> segundoResultado = segundaAlerta.showAndWait();
+                    if (segundoResultado.isPresent() && segundoResultado.get() == ButtonType.OK) {
+                        
+                        // Intentar eliminar de ambos archivos, capturando errores individualmente
+                        boolean eliminadoCSV = false;
+                        boolean eliminadoJSON = false;
+                        
+                        // Eliminar de CSV
+                        try {
+                            eliminadoCSV = CsvUtilities.eliminarVehiculoCSV(seleccionado.getPatente());
+                        } catch (Exception e) {
+                            System.err.println("Error al eliminar de CSV: " + e.getMessage());
+                        }
+                        
+                        // Eliminar de JSON
+                        try {
+                            eliminadoJSON = JsonUtilities.eliminarVehiculoJSON(seleccionado.getPatente());
+                        } catch (Exception e) {
+                            System.err.println("Error al eliminar de JSON: " + e.getMessage());
+                        }
+                        
+                        // Mostrar resultado de eliminación de archivos
+                        StringBuilder mensajeResultado = new StringBuilder();
+                        mensajeResultado.append("Vehículo eliminado de la aplicación correctamente.\n\n");
+
+                        mensajeResultado.append("• CSV: ").append(eliminadoCSV ? "Eliminado" : "No encontrado o error").append("\n");
+                        mensajeResultado.append("• JSON: ").append(eliminadoJSON ? "Eliminado" : "No encontrado o error");
+                        
+                        AlertType tipoAlerta = (eliminadoCSV || eliminadoJSON) ? AlertType.INFORMATION : AlertType.WARNING;
+                        mostrarAlerta(tipoAlerta, "Eliminación completada", "Resultado de la eliminación", mensajeResultado.toString());         
+                    } else {
+                        // Solo se eliminó de memoria
+                        mostrarAlerta(AlertType.INFORMATION, "Eliminación parcial", "Solo memoria", "Vehículo eliminado de la aplicación.\nLos archivos CSV y JSON no fueron modificados.");
+                    }
                 } catch (Exception e) {
-                    mostrarAlerta(AlertType.ERROR, "Error", "Error al eliminar vehículo: " + e.getMessage());
+                    mostrarAlerta(AlertType.ERROR, "Error", "Eliminacion de vehículo", e.getMessage());
                 }
             }
         } else {
-            mostrarAlerta(AlertType.WARNING, "Advertencia", "Debe seleccionar un vehículo para eliminar.");
+            mostrarAlerta(AlertType.WARNING, "Advertencia", "Seleccion de vehiculo" ,"Debe seleccionar un vehículo para eliminar.");
         }
     }
 
@@ -184,10 +232,10 @@ public class MainViewController implements Initializable {
             try {
                 AbrirView(seleccionado, "Formulario");
             } catch (Exception e) {
-                mostrarAlerta(AlertType.ERROR, "Error", "Error al modificar vehículo: " + e.getMessage());
+                mostrarAlerta(AlertType.ERROR, "Error", "Modificacion de vehículo", e.getMessage());
             }
         } else {
-            mostrarAlerta(AlertType.WARNING, "Advertencia", "Debe seleccionar un vehículo para modificar.");
+            mostrarAlerta(AlertType.WARNING, "Advertencia", "Seleccion de vehiculo" , "Debe seleccionar un vehículo para modificar.");
         }
     }
 
@@ -199,10 +247,10 @@ public class MainViewController implements Initializable {
             try {
                 AbrirView(seleccionado, "EstadoVehiculo");
             } catch (Exception e) {
-                mostrarAlerta(AlertType.ERROR, "Error", "Error al cambiar estado: " + e.getMessage());
+                mostrarAlerta(AlertType.ERROR, "Error", "Cambio de estado", e.getMessage());
             }
         } else {
-            mostrarAlerta(AlertType.WARNING, "Advertencia", "Debe seleccionar un vehículo para cambiar estado.");
+            mostrarAlerta(AlertType.WARNING, "Advertencia", "Seleccion de vehiculo" , "Debe seleccionar un vehículo para cambiar estado.");
         }
     }
 
@@ -215,13 +263,11 @@ public class MainViewController implements Initializable {
             switch (accion) {
                 case "Guardar CSV":
                     if (administrador.listarTodo().isEmpty()) {
-                        mostrarAlerta(AlertType.WARNING, "Advertencia", "No hay vehículos para guardar en CSV.");
+                        mostrarAlerta(AlertType.WARNING, "Advertencia", "Guardado de archivo CSV" , "No hay vehículos para guardar en CSV.");
                         return;
                     }
                     administrador.guardarCSV();
-                    mostrarAlerta(AlertType.INFORMATION, "Éxito", 
-                                "Archivo CSV guardado correctamente.\nTotal vehículos guardados: " + 
-                                administrador.listarTodo().size());
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Guardado de archivo CSV", "Total vehículos guardados: " + administrador.listarTodo().size());
                     break;
                     
                 case "Cargar CSV":
@@ -230,8 +276,7 @@ public class MainViewController implements Initializable {
                         administrador.cargarCSV();
                         refrescarVista();
                         int cantidadDespues = administrador.listarTodo().size();
-                        mostrarAlerta(AlertType.INFORMATION, "Éxito", 
-                                    "Archivo CSV cargado y combinado correctamente.\n" +
+                        mostrarAlerta(AlertType.INFORMATION, "Éxito", "Carga de datos archivo CSV",
                                     "Vehículos antes: " + cantidadAntes + "\n" +
                                     "Vehículos después: " + cantidadDespues);
                     }
@@ -239,13 +284,11 @@ public class MainViewController implements Initializable {
                     
                 case "Guardar JSON":
                     if (administrador.listarTodo().isEmpty()) {
-                        mostrarAlerta(AlertType.WARNING, "Advertencia", "No hay vehículos para guardar en JSON.");
+                        mostrarAlerta(AlertType.WARNING, "Advertencia", "Guardado de archivos JSON" , "No hay vehículos para guardar en JSON.");
                         return;
                     }
                     administrador.guardarJSON();
-                    mostrarAlerta(AlertType.INFORMATION, "Éxito", 
-                                "Archivo JSON guardado correctamente.\nTotal vehículos guardados: " + 
-                                administrador.listarTodo().size());
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito",  "Guardado de archivos JSON", "Total vehículos guardados: " + administrador.listarTodo().size());
                     break;
                     
                 case "Cargar JSON":
@@ -254,8 +297,7 @@ public class MainViewController implements Initializable {
                         administrador.cargarJSON();
                         refrescarVista();
                         int cantidadDespues = administrador.listarTodo().size();
-                        mostrarAlerta(AlertType.INFORMATION, "Éxito", 
-                                    "Archivo JSON cargado y combinado correctamente.\n" + 
+                        mostrarAlerta(AlertType.INFORMATION, "Éxito", "Carga de archivo JSON", 
                                     "Vehículos antes: " + cantidadAntes + "\n" + 
                                     "Vehículos después: " + cantidadDespues);
                     }
@@ -263,25 +305,24 @@ public class MainViewController implements Initializable {
                     
                 case "Exportar TXT":
                     if (administrador.listarTodo().isEmpty()) {
-                        mostrarAlerta(AlertType.WARNING, "Advertencia", "No hay vehículos para exportar.");
+                        mostrarAlerta(AlertType.WARNING, "Advertencia", "Exportacion de datos" , "No hay vehículos para exportar.");
                         return;
                     }
                     ArrayList<Vehiculo> vehiculosAExportar = new ArrayList<>(tablaVehiculos.getItems());
                     administrador.exportarListadoFiltradoTXT(vehiculosAExportar, "Listado de Vehículos");
-                    mostrarAlerta(AlertType.INFORMATION, "Éxito", 
-                                "Archivo TXT exportado correctamente.\nVehículos exportados: " + 
+                    mostrarAlerta(AlertType.INFORMATION, "Éxito", "Archivo TXT exportado", "Vehículos exportados: " +
                                 vehiculosAExportar.size());
                     break;
                     
                 default:
-                    mostrarAlerta(AlertType.WARNING, "Advertencia", "Acción de archivo no válida seleccionada.");
+                    mostrarAlerta(AlertType.WARNING, "Advertencia", "Acciones de archivos" , "Acción de archivo no válida seleccionada.");
                     break;
             }
             
         } catch (ErrorEnElFiltradoException e) {
-            mostrarAlerta(AlertType.ERROR, "Error de Filtrado", e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error", "Filtrado de datos", e.getMessage());
         } catch (Exception e) {
-            mostrarAlerta(AlertType.ERROR, "Error", "Ocurrió un error con archivos: " + e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error Inesperado", "Archivos de Dato",  e.getMessage());
         }
     }
     
@@ -296,24 +337,20 @@ public class MainViewController implements Initializable {
                 case "Ordenar por Patente":
                     ArrayList<Vehiculo> ordenadosPatente = administrador.ordenarPorCriterioNatural();
                     refrescarVistaFiltrada(ordenadosPatente);
-                    mostrarAlerta(AlertType.INFORMATION, "Ordenamiento", 
-                                "Vehículos ordenados por patente (criterio natural).\nTotal: " + 
-                                ordenadosPatente.size());
+                    mostrarAlerta(AlertType.INFORMATION, "Ordenamiento",  "Vehículos ordenados por patente (criterio natural)", "Total: " + ordenadosPatente.size());
                     break;
                     
                 case "Ordenar por Kilómetros":
                     ArrayList<Vehiculo> ordenadosKm = administrador.ordenarPorKilometros();
                     refrescarVistaFiltrada(ordenadosKm);
-                    mostrarAlerta(AlertType.INFORMATION, "Ordenamiento", 
-                                "Vehículos ordenados por kilómetros (menor a mayor).\nTotal: " + 
+                    mostrarAlerta(AlertType.INFORMATION, "Exito" , "Ordenamiento", "Vehículos ordenados por kilómetros (menor a mayor).\nTotal: " + 
                                 ordenadosKm.size());
                     break;
                     
                 case "Ordenar por Año":
                     ArrayList<Vehiculo> ordenadosAño = administrador.ordenarPorAño();
                     refrescarVistaFiltrada(ordenadosAño);
-                    mostrarAlerta(AlertType.INFORMATION, "Ordenamiento", 
-                                "Vehículos ordenados por año (más viejo a más nuevo).\nTotal: " + 
+                    mostrarAlerta(AlertType.INFORMATION, "Exito" , "Ordenamiento", "Vehículos ordenados por año (más viejo a más nuevo).\nTotal: " + 
                                 ordenadosAño.size());
                     break;
                     
@@ -326,8 +363,7 @@ public class MainViewController implements Initializable {
                             contador++;
                         }
                         refrescarVista();
-                        mostrarAlerta(AlertType.INFORMATION, "Modificación", 
-                                    "Se agregaron 100 km a " + contador + " vehículos usando Iterator personalizado.");
+                        mostrarAlerta(AlertType.INFORMATION, "Exito" , "Modificación",  "Se agregaron 100 km a " + contador + " vehículos usando Iterator personalizado.");
                     }
                     break;
 
@@ -345,14 +381,14 @@ public class MainViewController implements Initializable {
                     break;
                     
                 default:
-                    mostrarAlerta(AlertType.WARNING, "Advertencia", "Acción de ordenamiento/demostración no válida seleccionada.");
+                    mostrarAlerta(AlertType.WARNING, "Advertencia", "Ordenamiento", "Acción de ordenamiento/demostración no válida seleccionada.");
                     break;
             }
             
         } catch (ErrorEnElFiltradoException e) {
-            mostrarAlerta(AlertType.ERROR, "Error de Filtrado", e.getMessage());
+            mostrarAlerta(AlertType.ERROR,"Error" ,"Filtrado de datos", e.getMessage());
         } catch (Exception e) {
-            mostrarAlerta(AlertType.ERROR, "Error", "Ocurrió un error en ordenamientos/demostraciones: " + e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error", "Ordenamientos/Demostraciones", e.getMessage());
         }
     }
 
@@ -365,11 +401,11 @@ public class MainViewController implements Initializable {
         try {
             ArrayList<Vehiculo> filtrados = administrador.buscarPorTipos(tipoSeleccionado, estadoSeleccionado);
             refrescarVistaFiltrada(filtrados);
-            mostrarAlerta(AlertType.INFORMATION, "Filtro aplicado", "Se encontraron " + filtrados.size() + " vehículos que coinciden con los criterios.");
+            mostrarAlerta(AlertType.INFORMATION, "Exito" , "Filtro aplicado", "Se encontraron " + filtrados.size() + " vehículos que coinciden con los criterios.");
         } catch (IllegalArgumentException e) {
-            mostrarAlerta(AlertType.ERROR, "Error", e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error", "Datos Invalidos" ,e.getMessage());
         } catch (Exception e) {
-            mostrarAlerta(AlertType.ERROR, "Error", "Error al filtrar: " + e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error Inesperado", "Filtro de datos",e.getMessage());
         }
     }
     
@@ -379,19 +415,19 @@ public class MainViewController implements Initializable {
         try {
             // Filtrar solo autos usando Wildcard genérico
             ArrayList<Auto> soloAutos = administrador.filtrarPorTipo(Auto.class);
-            mostrarAlerta(AlertType.INFORMATION, "Wildcards - Filtrar Autos", 
+            mostrarAlerta(AlertType.INFORMATION, "Exito" ,"Wildcards - Filtrar Autos", 
                          "Se encontraron " + soloAutos.size() + " autos usando wildcards genéricos.");
             
             // Copiar autos a otra lista usando Wildcard ? super
             ArrayList<Auto> listaAutos = new ArrayList<>();
             administrador.copiarAutosSolamente(listaAutos);
-            mostrarAlerta(AlertType.INFORMATION, "Wildcards - Copiar Autos", 
+            mostrarAlerta(AlertType.INFORMATION, "Exito" , "Wildcards - Copiar Autos", 
                          "Se copiaron " + listaAutos.size() + " autos usando wildcard ? super Auto.");
             
         } catch (ErrorEnElFiltradoException e) {
-            mostrarAlerta(AlertType.ERROR, "Error de Wildcards", e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error" ,"Wildcards", e.getMessage());
         } catch (Exception e) {
-            mostrarAlerta(AlertType.ERROR, "Error", "Error en demostración de wildcards: " + e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error Inesperado", "Demostración de wildcards", e.getMessage());
         }
     }
 
@@ -400,15 +436,15 @@ public class MainViewController implements Initializable {
         try {
             // Usar el método que prueba el Iterator personalizado
             String resultado = administrador.probarIterator();
-            mostrarAlerta(AlertType.INFORMATION, "Iterator Personalizado", resultado);
+            mostrarAlerta(AlertType.INFORMATION, "Exito" , "Iterator Personalizado", resultado);
             
             // Exportar listado usando Iterator personalizado
             administrador.mostrarTodosConIterator();
-            mostrarAlerta(AlertType.INFORMATION, "Iterator - Exportación", 
+            mostrarAlerta(AlertType.INFORMATION, "Exito" , "Iterator - Exportación", 
                          "Se exportó un archivo TXT usando el Iterator personalizado.");
             
         } catch (Exception e) {
-            mostrarAlerta(AlertType.ERROR, "Error", "Error al demostrar Iterator: " + e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error Inesperado", "Demostracion de Iterator", e.getMessage());
         }
     }
 
@@ -425,18 +461,18 @@ public class MainViewController implements Initializable {
                 // Ordenar por Estado
                 ArrayList<Vehiculo> porEstado = administrador.ordenarPorEstado();
                 refrescarVistaFiltrada(porEstado);
-                mostrarAlerta(AlertType.INFORMATION, "Ordenamiento por Estado", 
+                mostrarAlerta(AlertType.INFORMATION, "Exito" , "Ordenamiento por Estado", 
                              "Vehículos ordenados alfabéticamente por estado.");
             } else {
                 // Ordenar por Tipo
                 ArrayList<Vehiculo> porTipo = administrador.ordenarPorTipo();
                 refrescarVistaFiltrada(porTipo);
-                mostrarAlerta(AlertType.INFORMATION, "Ordenamiento por Tipo", 
+                mostrarAlerta(AlertType.INFORMATION, "Exito" , "Ordenamiento por Tipo", 
                              "Vehículos ordenados alfabéticamente por tipo.");
             }
             
         } catch (Exception e) {
-            mostrarAlerta(AlertType.ERROR, "Error", "Error en ordenamientos: " + e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error Inesperado", "Ordenamientos de datos", e.getMessage());
         }
     }
     
@@ -475,9 +511,9 @@ public class MainViewController implements Initializable {
                 if (resultado != null) {
                     try {
                         administrador.modificar(resultado);
-                        mostrarAlerta(AlertType.INFORMATION, "Éxito", "Estado del vehículo cambiado correctamente.");
+                        mostrarAlerta(AlertType.INFORMATION, "Éxito", "Cambio de estado del vehículo", "Cambio de estado aplicado correctamente.");
                     } catch (Exception e) {
-                        mostrarAlerta(AlertType.ERROR, "Error", "Error al cambiar estado: " + e.getMessage());
+                        mostrarAlerta(AlertType.ERROR, "Error Inesperado", "Cambio de estado", e.getMessage());
                     }
                 }
             }
@@ -502,11 +538,11 @@ public class MainViewController implements Initializable {
     }
 
     // Alert
-    private void mostrarAlerta(AlertType tipo, String titulo, String mensaje) {
+    private void mostrarAlerta(AlertType tipo, String titulo, String mensaje, String texto) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
+        alert.setHeaderText(mensaje);
+        alert.setContentText(texto);
         alert.showAndWait();
     }
 

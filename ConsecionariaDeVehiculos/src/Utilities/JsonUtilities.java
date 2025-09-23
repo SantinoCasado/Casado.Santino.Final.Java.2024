@@ -3,8 +3,13 @@ package Utilities;
 import Interfaces.IMapAbleJson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
+import com.google.gson.reflect.TypeToken;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
 
 public class JsonUtilities {
@@ -21,10 +26,10 @@ public class JsonUtilities {
             dir.mkdirs();
         }
 
-        // CARGARGO datos existentes desde el archivo
+        // CARGO datos existentes desde el archivo
         List<Map<String, String>> datosExistentes = cargarVehiculosJSON();
         
-        // Creao Map para vehículos actuales (por patente)
+        // Creo Map para vehículos actuales (por patente)
         Map<String, Map<String, String>> vehiculosActuales = new HashMap<>();
         for (T entidad : lista) {
             Map<String, String> mapaVehiculo = entidad.toMap();
@@ -32,7 +37,7 @@ public class JsonUtilities {
             vehiculosActuales.put(patente, mapaVehiculo);
         }
         
-        // 3. ACTUALIZAR/AGREGAR: Recorrer datos existentes
+        // ACTUALIZAR/AGREGAR: Recorrer datos existentes
         List<Map<String, String>> datosFinales = new ArrayList<>();
         
         //Preservo los datos que no se encuentran en memoria
@@ -52,33 +57,94 @@ public class JsonUtilities {
         // Agrego vehículos nuevos que no estaban en el archivo
         datosFinales.addAll(vehiculosActuales.values());
         
-        // GUARDARDO resultado final
+        // GUARDO resultado final
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(datosFinales);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO_JSON, false))) {
             writer.write(json);
         } catch (IOException e) {
-            System.err.println("❌ Error al guardar JSON: " + e.getMessage());
+            System.err.println("Error al guardar JSON: " + e.getMessage());
         }
     }
 
     //LECTURA Y CARGA
     public static List<Map<String, String>> cargarVehiculosJSON() {
-        try (BufferedReader br = new BufferedReader(new FileReader(ARCHIVO_JSON))) {        // Leer el archivo JSON
+        try (BufferedReader br = new BufferedReader(new FileReader(ARCHIVO_JSON))) {
             Gson gson = new Gson();
-            Map[] entidades = gson.fromJson(br, Map[].class);       // Convertir el JSON a un array de Maps
-
-            List<Map<String, String>> lista = new ArrayList<>();    // Convertir el array a una lista de Maps
-            if (entidades != null) {                                // Verificar que no sea nulo
-                for (Map entidad : entidades) {
-                    lista.add((Map<String, String>) entidad);
-                }
-            }
-            return lista;
+            Type tipoLista = new TypeToken<List<Map<String, String>>>(){}.getType();
+            List<Map<String, String>> lista = gson.fromJson(br, tipoLista);
+            
+            return lista != null ? lista : new ArrayList<>();
         } catch (IOException e) {
             System.err.println("Error al leer JSON: " + e.getMessage());
             return new ArrayList<>();
+        }
+    }
+
+    // ELIMINAR VEHICULO DE JSON 
+    public static boolean eliminarVehiculoJSON(String patente) {
+        try {
+            File archivoJSON = new File(ARCHIVO_JSON);
+            if (!archivoJSON.exists()) {
+                return false;
+            }
+            
+            // Cargar todos los vehículos usando Gson
+            List<Map<String, String>> vehiculos = cargarVehiculosJSON();
+            boolean vehiculoEncontrado = false;
+            
+            // Buscar y eliminar el vehículo con la patente especificada
+            Iterator<Map<String, String>> iterator = vehiculos.iterator();
+            while (iterator.hasNext()) {
+                Map<String, String> vehiculo = iterator.next();
+                if (patente.equals(vehiculo.get("patente"))) {
+                    iterator.remove();
+                    vehiculoEncontrado = true;
+                    break;
+                }
+            }
+            
+            // Reescribir el archivo JSON sin el vehículo eliminado
+            if (vehiculoEncontrado) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                String json = gson.toJson(vehiculos);
+                
+                try (FileWriter writer = new FileWriter(archivoJSON)) {
+                    writer.write(json);
+                }
+            }
+            
+            return vehiculoEncontrado;
+            
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar del archivo JSON: " + e.getMessage(), e);
+        }
+    }
+    
+    //-------------------------------------------------------------------- METODOS AUXILIARES ---------------------------------------------------------------------------
+    // VERIFICAR EXISTENCIA
+    public static boolean existeVehiculoEnJSON(String patente) {
+        try {
+            File archivoJSON = new File(ARCHIVO_JSON);
+            if (!archivoJSON.exists()) {
+                return false;
+            }
+            
+            // Cargar todos los vehículos usando Gson
+            List<Map<String, String>> vehiculos = cargarVehiculosJSON();
+            
+            // Buscar el vehículo con la patente especificada
+            for (Map<String, String> vehiculo : vehiculos) {
+                if (patente.equals(vehiculo.get("patente"))) {
+                    return true;
+                }
+            }
+            
+            return false;
+            
+        } catch (Exception e) {
+            throw new RuntimeException("Error al buscar en archivo JSON: " + e.getMessage(), e);
         }
     }
 }

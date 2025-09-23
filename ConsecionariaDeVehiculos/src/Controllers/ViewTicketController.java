@@ -16,11 +16,8 @@ import javafx.stage.Stage;
 
 
 public class ViewTicketController implements Initializable {
-    @FXML
-    private Button btnCerrar;
-    @FXML
-    private ListView<String> listViewTicket;
-    
+    @FXML private Button btnCerrar;
+    @FXML private ListView<String> listViewTicket;
 
 
     @Override
@@ -51,7 +48,4 @@ public class ViewTicketController implements Initializable {
         Stage stage = (Stage)btnCerrar.getScene().getWindow();
         stage.close();
     }
-
-    
-    
 }

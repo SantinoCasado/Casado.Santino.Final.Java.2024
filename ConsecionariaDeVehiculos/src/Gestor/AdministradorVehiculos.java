@@ -35,6 +35,7 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>, Iterable<Vehiculo
     }
 
     //----------------------------------- IMPLEMENTACION DE CRUD ------------------------------------------------------------------------------------------------------------------------------------------------------
+    // AGREGAR CON VALIDACIÓN DE PATENTE (LANZA EXCEPCIÓN SI YA EXISTE)
     @Override
     public void agregar(Vehiculo entidad) throws PatenteRepetidaException {
         if (this.vehiculos.contains(entidad)){
@@ -43,6 +44,7 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>, Iterable<Vehiculo
        this.vehiculos.add(entidad);
     }
     
+    // MODIFICAR (BUSCA POR PATENTE Y ACTUALIZA TODOS LOS ATRIBUTOS)
     @Override
     public void modificar(Vehiculo vehiculoNuevo) {
         for (int i = 0; i < this.vehiculos.size(); i++) {
@@ -86,6 +88,7 @@ public class AdministradorVehiculos implements CRUD<Vehiculo>, Iterable<Vehiculo
         throw new IllegalArgumentException("No se encontró un vehiculo para modificar con patente: " + vehiculoNuevo.getPatente());
     }
 
+    // ELIMINAR (BUSCA POR PATENTE Y ELIMINA)
     @Override
     public void eliminar(Vehiculo vehiculo) {
         // 1. Eliminar de la lista en memoria
