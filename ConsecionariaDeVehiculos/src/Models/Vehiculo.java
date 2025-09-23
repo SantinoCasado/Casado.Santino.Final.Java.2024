@@ -170,7 +170,10 @@ public abstract class Vehiculo implements Comparable<Vehiculo>, Serializable, IM
     // ----------------------------------- METODOS DE CLASE ------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public int compareTo(Vehiculo otro) {
-        return this.patente.compareTo(otro.patente);
+        if (otro == null) {
+            return 1; // Este objeto es "mayor" que null
+        }
+        return this.patente.compareToIgnoreCase(otro.patente); // Ignorar mayúsculas/minúsculas
     }
     
     public float obtenerHorasUso(LocalDate fechaFinUso){
