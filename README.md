@@ -2,7 +2,6 @@
 
 ## 📋 Sobre mí
 
-<<<<<<< HEAD
 ¡Hola! Soy **Santino Casado**, estudiante de la Tecnicatura en Programación. Este proyecto representa mi examen final, donde he aplicado todos los conceptos aprendidos durante el cursado, incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, manejo de archivos, patrones de diseño y **características avanzadas de Java** como Iterator personalizado, Comparable/Comparator y Wildcards genéricos.
 
 ## 📝 Resumen
@@ -15,7 +14,6 @@ incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, m
 ## 📝 Resumen
 
 **Concesionaria de Vehículos** es una aplicación de escritorio desarrollada en **Java con JavaFX** que permite gestionar un inventario completo de vehículos (Autos, Motos y Camionetas). Todavia esta en proceso ya que tengo varias ideas que me gustaria implementar, por lo que este proyecto se encontrara en constante cambio.
->>>>>>> 8c95dc4cf9f016d6cbff61f6507422b11bd27230
 
 ### 🎯 Funcionalidades principales:
 
