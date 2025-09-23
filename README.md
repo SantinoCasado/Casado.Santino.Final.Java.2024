@@ -2,11 +2,20 @@
 
 ## 📋 Sobre mí
 
+<<<<<<< HEAD
 ¡Hola! Soy **Santino Casado**, estudiante de la Tecnicatura en Programación. Este proyecto representa mi examen final, donde he aplicado todos los conceptos aprendidos durante el cursado, incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, manejo de archivos, patrones de diseño y **características avanzadas de Java** como Iterator personalizado, Comparable/Comparator y Wildcards genéricos.
 
 ## 📝 Resumen
 
 **Concesionaria de Vehículos** es una aplicación de escritorio desarrollada en **Java con JavaFX** que permite gestionar un inventario completo de vehículos (Autos, Motos y Camionetas) con funcionalidades avanzadas y características técnicas de nivel profesional.
+=======
+¡Hola! Soy **Santino Casado**, estudiante de la Tecnicatura en Programacion. Este proyecto representa mi examen final de Programacion II, donde he aplicado todos los conceptos aprendidos durante la cursado,
+incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, manejo de archivos y patrones de diseño.
+
+## 📝 Resumen
+
+**Concesionaria de Vehículos** es una aplicación de escritorio desarrollada en **Java con JavaFX** que permite gestionar un inventario completo de vehículos (Autos, Motos y Camionetas). Todavia esta en proceso ya que tengo varias ideas que me gustaria implementar, por lo que este proyecto se encontrara en constante cambio.
+>>>>>>> 8c95dc4cf9f016d6cbff61f6507422b11bd27230
 
 ### 🎯 Funcionalidades principales:
 
@@ -32,21 +41,29 @@
 
 ![Pantalla Principal](screenshots/main_view.png)
 _Vista principal con opciones avanzadas: ordenamientos, wildcards e iterator_
+=======
+![Pantalla Principal](img/mainView.png)
+_Vista principal con lista de vehículos y opciones de filtrado_
+>>>>>>> 8c95dc4cf9f016d6cbff61f6507422b11bd27230
 
 #### Formulario de creación/edición
 
-![Formulario](screenshots/formulario_view.png)
+![Formulario](img/formularioView.png)
 _Formulario dinámico que cambia según el tipo de vehículo seleccionado_
 
 #### Cambio de estado
 
-![Estado](screenshots/estado_view.png)
+![Estado](img/cambiarEstadoView.png)
 _Interfaz para cambiar el estado de un vehículo_
 
 #### Demostraciones de características avanzadas
 
 ![Características Avanzadas](screenshots/advanced_features.png)
 _Opciones para demostrar Iterator, Wildcards y ordenamientos personalizados_
+=======
+![Ticket](img/ticketView.png)
+_Generación de ticket al alquilar un vehículo_
+>>>>>>> 8c95dc4cf9f016d6cbff61f6507422b11bd27230
 
 ### 🚀 Cómo usar la aplicación
 
@@ -220,8 +237,13 @@ Este proyecto demuestra dominio completo en:
 - **Estudiante**: Santino Casado
 - **Materia**: Programación II
 - **Año**: 2024
+<<<<<<< HEAD
 - **Email**: [santino.casado@ejemplo.com]
 - **GitHub**: [github.com/santino-casado]
+=======
+- **Email**: santinocasado05@gmail.com
+- **LinkedIn**: Santino Casado
+>>>>>>> 8c95dc4cf9f016d6cbff61f6507422b11bd27230
 
 ---
 
