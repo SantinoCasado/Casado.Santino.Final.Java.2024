@@ -2,12 +2,6 @@
 
 ## 📋 Sobre mí
 
-¡Hola! Soy **Santino Casado**, estudiante de la Tecnicatura en Programación. Este proyecto representa mi examen final, donde he aplicado todos los conceptos aprendidos durante el cursado, incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, manejo de archivos, patrones de diseño y **características avanzadas de Java** como Iterator personalizado, Comparable/Comparator y Wildcards genéricos.
-
-## 📝 Resumen
-
-Realize una aplicación de escritorio sobre una concecionaria de vehiculos la cual fue desarrollada en Java con JavaFX que permite gestionar un inventario completo de vehículos (Autos, Motos y Camionetas) con funcionalidades avanzadas y características técnicas de nivel profesional.
-=======
 ¡Hola! Soy **Santino Casado**, estudiante de la Tecnicatura en Programacion. Este proyecto representa mi examen final de Programacion II, donde he aplicado todos los conceptos aprendidos durante la cursado,
 incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, manejo de archivos y patrones de diseño.
 
@@ -37,12 +31,9 @@ incluyendo programación orientada a objetos, interfaces gráficas con JavaFX, m
 
 #### Pantalla principal con nuevas opciones
 
-![Pantalla Principal](screenshots/main_view.png)
-_Vista principal con opciones avanzadas: ordenamientos, wildcards e iterator_
-=======
 ![Pantalla Principal](img/mainView.png)
 _Vista principal con lista de vehículos y opciones de filtrado_
->>>>>>> 8c95dc4cf9f016d6cbff61f6507422b11bd27230
+
 
 #### Formulario de creación/edición
 
@@ -54,14 +45,11 @@ _Formulario dinámico que cambia según el tipo de vehículo seleccionado_
 ![Estado](img/cambiarEstadoView.png)
 _Interfaz para cambiar el estado de un vehículo_
 
-#### Demostraciones de características avanzadas
+#### Ticket
 
-![Características Avanzadas](screenshots/advanced_features.png)
-_Opciones para demostrar Iterator, Wildcards y ordenamientos personalizados_
-=======
 ![Ticket](img/ticketView.png)
 _Generación de ticket al alquilar un vehículo_
->>>>>>> 8c95dc4cf9f016d6cbff61f6507422b11bd27230
+
 
 ### 🚀 Cómo usar la aplicación
 
@@ -94,8 +82,6 @@ _Generación de ticket al alquilar un vehículo_
 | **⚙️ Interfaces**   | ![Interfaces](uml/Interfaces_Gestor.svg)          | Contratos del sistema y gestor principal        |
 | **🎮 Controllers**  | ![Controllers](uml/Controllers_JavaFX.svg)        | Controladores JavaFX y manejo de UI             |
 | **✅ Validaciones** | ![Validaciones](uml/Validaciones_Excepciones.svg) | Sistema de validación y excepciones             |
-| **💾 Persistencia** | ![Utilities](uml/Utilities.svg)                   | Utilidades para JSON, CSV y TXT                 |
-| **🔄 Avanzadas**    | ![Avanzadas](uml/Iterator_Comparable.svg)         | Iterator, Comparable, Wildcards y algoritmos    |
 
 ### 🔗 **Relaciones entre Módulos:**
 
@@ -184,8 +170,6 @@ EQC151	MOTO	YAMAHA	2014	DISPONIBLE	900.00
 
 ## 🔍 Características técnicas destacadas
 
-## 🔍 Características técnicas destacadas
-
 ### Características básicas:
 
 - **Patrón CRUD**: Implementación completa con interfaz genérica
@@ -233,15 +217,10 @@ Este proyecto demuestra dominio completo en:
 ## 📞 Contacto
 
 - **Estudiante**: Santino Casado
-- **Materia**: Programación II
-- **Año**: 2024
-<<<<<<< HEAD
 - **Email**: [santino.casado@ejemplo.com]
 - **GitHub**: [github.com/santino-casado]
-=======
 - **Email**: santinocasado05@gmail.com
 - **LinkedIn**: Santino Casado
->>>>>>> 8c95dc4cf9f016d6cbff61f6507422b11bd27230
 
 ---
 
