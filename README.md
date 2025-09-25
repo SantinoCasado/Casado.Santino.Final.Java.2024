@@ -60,6 +60,7 @@ _Generación de ticket al alquilar un vehículo_
 3. **Cambiar estado**: Seleccionar vehículo → Clic en "Cambiar Estado" → Elegir nuevo estado
 4. **Filtrar**: Usar los ComboBox superiores para filtrar por tipo o estado
 5. **Eliminar**: Seleccionar vehículo → Clic en "Eliminar" → Confirmar
+6. **Imprimir Ticket**: Seleccionar vehículo → Clic en "Cambiar estado" → Cambiar el estado a "ALQUILADO" → Click en "confirmar" → Click en "si"
 
 #### Características avanzadas:
 
