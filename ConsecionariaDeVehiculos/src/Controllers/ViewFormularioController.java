@@ -31,6 +31,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
     @FXML private ChoiceBox<TipoCombustible> cbTipoCombustible;
     @FXML private ChoiceBox<TipoVehiculos> cbTipoVehiculo;
     @FXML private ChoiceBox<String> cbMarca;
+    @FXML private ChoiceBox<Integer> cbAñoFabricacion;
 
     //Labels
     @FXML private Label lblSegundoAtributo;
@@ -38,7 +39,6 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
     //Text Fields
     @FXML private TextField txtPatente1;
     @FXML private TextField txtPatente2;
-    @FXML private TextField txtAñoFabricacion;
     @FXML private TextField txtSegundoAtributo;
     @FXML private TextField txtKilometraje;        
 
@@ -51,11 +51,11 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Inicializo los ChoiceBox
-        this.cbTipoCombustible.getItems().addAll(TipoCombustible.DIESEL, TipoCombustible.NAFTA, TipoCombustible.ELECTRICO, TipoCombustible.HIBRIDO);
-        this.cbTipoCombustible.setValue(TipoCombustible.NAFTA);
-        
         this.cbTipoVehiculo.getItems().addAll(TipoVehiculos.AUTO, TipoVehiculos.CAMIONETA, TipoVehiculos.MOTO);
         this.cbTipoVehiculo.setValue(TipoVehiculos.AUTO);
+        
+        this.cbAñoFabricacion.getItems().addAll(2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025);
+        this.cbAñoFabricacion.setValue(2025);
     }    
     
     //------------------------------------------ SETTERS & GETTERS ---------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
         if (v != null) {    // Si es distinto de null, cargo los datos del vehículo en los campos
             //Datos comunes
             String patente = v.getPatente();
-            txtAñoFabricacion.setText(String.valueOf(v.getAñoFabricacion()));
+            cbAñoFabricacion.setValue(v.getAñoFabricacion());
             txtKilometraje.setText(String.valueOf(v.getKilometros()));
             
             cbTipoCombustible.setValue(v.getTipoCombustible());
@@ -104,7 +104,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
                 this.cbMarca.setValue(String.valueOf(camioneta.getMarca()));
             }
         }else{  // Si es null, limpio los campos para un nuevo vehículo
-            txtAñoFabricacion.clear();
+            cbAñoFabricacion.setValue(2025);
             txtKilometraje.clear();
             txtPatente1.clear();
             txtPatente2.clear();
@@ -115,7 +115,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
             cbTipoCombustible.setValue(TipoCombustible.NAFTA);
             cbTipoVehiculo.setValue(TipoVehiculos.AUTO);
         }
-        cambiadoTipo(null);
+        cambiandoTipo(null);
     }
     
     // Métodos para setear el administrador y el índice
@@ -131,7 +131,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
     //------------------------------------------ MÉTODOS DE LOS BOTONES ----------------------------------------------------------------------------------------
     //Método que se ejecuta al cambiar el tipo de vehículo en el ChoiceBox
     @FXML
-    void cambiadoTipo(ActionEvent event) {
+    void cambiandoTipo(ActionEvent event) {
         // Limpiar y setear el cb
         this.cbMarca.getItems().clear();
 
@@ -154,6 +154,76 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
             }
         }
     }
+        
+    //Método que se ejecuta al cambiar la marca en el ChoiceBox
+    @FXML
+    void cambiandoMarca(ActionEvent event) {
+        String marcaSeleccionada = cbMarca.getValue();
+        if (marcaSeleccionada == null) return;
+        
+        // Limpiar combustibles actuales
+        cbTipoCombustible.getItems().clear();
+        
+        // Configurar combustibles según la marca
+        switch (marcaSeleccionada) {
+            // Marcas premium - todos los combustibles
+            case "BMW", "AUDI", "MERCEDES", "DUCATI" -> {
+                cbTipoCombustible.getItems().addAll(
+                    TipoCombustible.NAFTA, 
+                    TipoCombustible.DIESEL, 
+                    TipoCombustible.ELECTRICO, 
+                    TipoCombustible.HIBRIDO
+                );
+                cbTipoCombustible.setValue(TipoCombustible.NAFTA);
+            }
+            
+            // Marcas eco-friendly
+            case "TOYOTA", "NISSAN", "HONDA" -> {
+                cbTipoCombustible.getItems().addAll(
+                    TipoCombustible.NAFTA, 
+                    TipoCombustible.HIBRIDO, 
+                    TipoCombustible.ELECTRICO
+                );
+                cbTipoCombustible.setValue(TipoCombustible.HIBRIDO);
+            }
+            
+            // Marcas comerciales/trabajo
+            case "FORD", "CHEVROLET", "RENAULT", "RAM", "DODGE", "JEEP" -> {
+                cbTipoCombustible.getItems().addAll(
+                    TipoCombustible.NAFTA, 
+                    TipoCombustible.DIESEL
+                );
+                cbTipoCombustible.setValue(TipoCombustible.DIESEL);
+            }
+            
+            // Motos básicas - solo nafta
+            case "MOTOMEL", "SUZUKI", "KAWASAKI", "YAMAHA" -> {
+                cbTipoCombustible.getItems().add(TipoCombustible.NAFTA);
+                cbTipoCombustible.setValue(TipoCombustible.NAFTA);
+            }
+            
+            // Marcas económicas
+            case "FIAT", "VOLKSWAGEN", "PEUGEOT" -> {
+                cbTipoCombustible.getItems().addAll(
+                    TipoCombustible.NAFTA, 
+                    TipoCombustible.DIESEL
+                );
+                cbTipoCombustible.setValue(TipoCombustible.NAFTA);
+            }
+            
+            // Por defecto - todos los combustibles
+            default -> {
+                cbTipoCombustible.getItems().addAll(
+                    TipoCombustible.NAFTA, 
+                    TipoCombustible.DIESEL, 
+                    TipoCombustible.ELECTRICO, 
+                    TipoCombustible.HIBRIDO
+                );
+                cbTipoCombustible.setValue(TipoCombustible.NAFTA);
+            }
+        }
+    }
+    
     //Método que se ejecuta al presionar el botón Aceptar
     @FXML
     void aceptar(ActionEvent event) {
@@ -167,7 +237,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
             //Obtener valores comunes
             TipoVehiculos tipo = cbTipoVehiculo.getValue();
             String valor = txtKilometraje.getText().trim();
-            String añoStr = txtAñoFabricacion.getText().trim();
+            String añoStr = String.valueOf(cbAñoFabricacion.getValue());
             String patenteParte1 = txtPatente1.getText().trim();
             String patenteParte2 = txtPatente2.getText().trim();
             String patenteCompleta = ((patenteParte1 + patenteParte2).trim().toUpperCase());
@@ -202,7 +272,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
             
             // Parseos comunes
             float kilometraje = Float.parseFloat(valor);
-            int añoFabricacion = Integer.parseInt(txtAñoFabricacion.getText().trim());
+            int añoFabricacion = cbAñoFabricacion.getValue();
 
             // CREAR VEHÍCULO TEMPORAL PARA VALIDAR PATENTE
             Vehiculo vehiculoTemporal;

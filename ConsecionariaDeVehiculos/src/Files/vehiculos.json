@@ -1,57 +1,24 @@
 [
   {
-    "añoFabricacion": "2010",
+    "añoFabricacion": "2016",
     "marca": "FIAT",
     "tipo": "AUTO",
     "tipoCombustible": "NAFTA",
-    "estadoVehiculo": "EN_MANTENIMIENTO",
-    "kilometros": "3100.0",
-    "numPuertas": "4",
-    "patente": "AAA113",
-    "fechaAlquiler": "2025-09-25"
-  },
-  {
-    "añoFabricacion": "1990",
-    "marca": "KAWASAKI",
-    "tipo": "MOTO",
-    "tipoCombustible": "NAFTA",
     "estadoVehiculo": "DISPONIBLE",
-    "cilindrada": "150",
     "kilometros": "100.0",
-    "patente": "AAA123",
+    "numPuertas": "4",
+    "patente": "AAA111",
     "fechaAlquiler": "2025-09-22"
   },
   {
-    "añoFabricacion": "2011",
-    "marca": "RAM",
-    "tipo": "CAMIONETA",
-    "tipoCombustible": "NAFTA",
-    "estadoVehiculo": "ALQUILADO",
-    "kilometros": "535.0",
-    "campacidadCargaKg": "700.0",
-    "patente": "GAD563",
-    "fechaAlquiler": "2025-09-30"
-  },
-  {
-    "añoFabricacion": "2014",
-    "marca": "YAMAHA",
-    "tipo": "MOTO",
-    "tipoCombustible": "NAFTA",
-    "estadoVehiculo": "DISPONIBLE",
-    "cilindrada": "180",
-    "kilometros": "800.0",
-    "patente": "EQC151",
-    "fechaAlquiler": "2025-09-22"
-  },
-  {
-    "añoFabricacion": "2005",
-    "marca": "CHEVROLET",
+    "añoFabricacion": "2023",
+    "marca": "VOLKSWAGEN",
     "tipo": "AUTO",
     "tipoCombustible": "DIESEL",
     "estadoVehiculo": "DISPONIBLE",
-    "kilometros": "100.0",
+    "kilometros": "0.0",
     "numPuertas": "4",
-    "patente": "ANB521",
+    "patente": "ECO001",
     "fechaAlquiler": "2025-09-22"
   }
 ]
