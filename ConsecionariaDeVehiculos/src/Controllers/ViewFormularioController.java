@@ -35,10 +35,12 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
 
     //Labels
     @FXML private Label lblSegundoAtributo;
+    @FXML private Label lblGuion;
 
     //Text Fields
     @FXML private TextField txtPatente1;
     @FXML private TextField txtPatente2;
+    @FXML private TextField txtPatente3;
     @FXML private TextField txtSegundoAtributo;
     @FXML private TextField txtKilometraje;        
 
@@ -54,8 +56,14 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
         this.cbTipoVehiculo.getItems().addAll(TipoVehiculos.AUTO, TipoVehiculos.CAMIONETA, TipoVehiculos.MOTO);
         this.cbTipoVehiculo.setValue(TipoVehiculos.AUTO);
         
-        this.cbAñoFabricacion.getItems().addAll(2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025);
+        this.cbAñoFabricacion.getItems().addAll(2010, 2011, 2012, 2013 ,2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025);
         this.cbAñoFabricacion.setValue(2025);
+        
+        // Agregar listener para cambio de año
+        this.cbAñoFabricacion.setOnAction(this::cambiandoPatente);
+        this.cbMarca.setOnAction(this::cambiandoMarca);
+        
+        cambiandoPatente(null);
     }    
     
     //------------------------------------------ SETTERS & GETTERS ---------------------------------------------------------------------------------------------
@@ -76,11 +84,22 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
             
             cbTipoCombustible.setValue(v.getTipoCombustible());
             cbTipoVehiculo.setValue(v.getTipo());
-
-            //Divido la patente en dos partes
-            if (patente != null && patente.length() == 6) {
-                txtPatente1.setText(patente.substring(0, 3));
-                txtPatente2.setText(patente.substring(3, 6));
+            
+            // Dividir patente según el año de fabricación
+            if (v.getAñoFabricacion() >= 2016) {
+                // Formato nuevo AB123CD (7 caracteres)
+                if (patente != null && patente.length() == 7) {
+                    txtPatente1.setText(patente.substring(0, 2));   // AB
+                    txtPatente2.setText(patente.substring(2, 5));   // 123
+                    txtPatente3.setText(patente.substring(5, 7));   // CD
+                }
+            } else {
+                // Formato viejo AAA111 (6 caracteres)
+                if (patente != null && patente.length() == 6) {
+                    txtPatente1.setText(patente.substring(0, 3));   // AAA
+                    txtPatente2.setText(patente.substring(3, 6));   // 111
+                    txtPatente3.clear(); // Limpiar el tercer campo
+                }
             }
             
             //Dependiendo del tipo de vehiculo
@@ -108,6 +127,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
             txtKilometraje.clear();
             txtPatente1.clear();
             txtPatente2.clear();
+            txtPatente3.clear();
             txtSegundoAtributo.clear();
             if (cbMarca.getItems().size() > 0) {
                 cbMarca.getSelectionModel().selectFirst();
@@ -116,6 +136,7 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
             cbTipoVehiculo.setValue(TipoVehiculos.AUTO);
         }
         cambiandoTipo(null);
+        cambiandoPatente(null); // Actualizar visibilidad de campos de patente
     }
     
     // Métodos para setear el administrador y el índice
@@ -224,6 +245,21 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
         }
     }
     
+    @FXML
+    void cambiandoPatente(ActionEvent event){
+        int añoFabricacion = cbAñoFabricacion.getValue();
+        if (añoFabricacion >= 2016) {
+            // Mostrar formato nuevo (AB-123-CD)
+            lblGuion.setVisible(true);
+            txtPatente3.setVisible(true);
+        } else {
+            // Mostrar formato viejo (AAA111)
+            lblGuion.setVisible(false);
+            txtPatente3.setVisible(false);
+            txtPatente3.clear(); // Limpiar el campo cuando se oculta
+        }
+    }
+    
     //Método que se ejecuta al presionar el botón Aceptar
     @FXML
     void aceptar(ActionEvent event) {
@@ -238,15 +274,24 @@ public class ViewFormularioController implements Initializable, IVehiculoEditabl
             TipoVehiculos tipo = cbTipoVehiculo.getValue();
             String valor = txtKilometraje.getText().trim();
             String añoStr = String.valueOf(cbAñoFabricacion.getValue());
-            String patenteParte1 = txtPatente1.getText().trim();
-            String patenteParte2 = txtPatente2.getText().trim();
-            String patenteCompleta = ((patenteParte1 + patenteParte2).trim().toUpperCase());
+            String patenteCompleta;
+            if (cbAñoFabricacion.getValue() >= 2016) {
+                String patenteParte1 = txtPatente1.getText().trim();
+                String patenteParte2 = txtPatente2.getText().trim();
+                String patenteParte3 = txtPatente3.getText().trim();
+                ValidadorAtributosVehiculo.validarPatenteNueva(patenteParte1, patenteParte2, patenteParte3);
+                patenteCompleta = ((patenteParte1 + patenteParte2 + patenteParte3).trim().toUpperCase());
+            } else {
+                String patenteParte1 = txtPatente1.getText().trim();
+                String patenteParte2 = txtPatente2.getText().trim();
+                ValidadorAtributosVehiculo.validarPatenteVieja(patenteParte1, patenteParte2);
+                patenteCompleta = ((patenteParte1 + patenteParte2).trim().toUpperCase());
+            }
 
             TipoCombustible combustible = cbTipoCombustible.getValue();
             String marca = cbMarca.getValue();
             
             //Validaciones comunes
-            ValidadorAtributosVehiculo.validarPatenteVieja(patenteParte1, patenteParte2);
             ValidadorAtributosVehiculo.validarAñoFabricacion(añoStr);
             ValidadorAtributosVehiculo.validarTipoCombustible(combustible);
             ValidadorAtributosVehiculo.validarKilometraje(valor);

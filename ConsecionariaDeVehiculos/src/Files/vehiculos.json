@@ -7,11 +7,11 @@
     "estadoVehiculo": "DISPONIBLE",
     "kilometros": "100.0",
     "numPuertas": "4",
-    "patente": "AAA111",
+    "patente": "AA111AA",
     "fechaAlquiler": "2025-09-22"
   },
   {
-    "añoFabricacion": "2023",
+    "añoFabricacion": "2010",
     "marca": "VOLKSWAGEN",
     "tipo": "AUTO",
     "tipoCombustible": "DIESEL",

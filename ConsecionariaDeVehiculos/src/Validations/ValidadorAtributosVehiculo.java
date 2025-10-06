@@ -32,6 +32,34 @@ public class ValidadorAtributosVehiculo {
         }
     }
     
+    public static void validarPatenteNueva(String parte1, String parte2, String parte3) {          // Validar patente nueva AB 123 CD
+        if (parte1 == null || parte1.isBlank() || parte2 == null || parte2.isBlank() || parte3 == null || parte3.isBlank()) {     // Verificar si es nulo o vacio
+            throw new DatoErroneoException("La patente no puede estar vacía");
+        }
+
+        String patente = (parte1 + parte2 + parte3).toUpperCase().trim();            // Unir partes y convertir a mayusculas
+
+        if (patente.length() != 7) {        // Verificar longitud
+            throw new DatoErroneoException("La patente nueva debe tener exactamente 7 caracteres");
+        }
+
+        String letras = patente.substring(0, 2); // AB
+        String numeros = patente.substring(2, 5); // 123
+        String letras2 = patente.substring(5, 7); // CD
+
+        if (!letras.matches("^[a-zA-Z]{2}$")) {  // Verificar que sean 2 letras
+            throw new DatoErroneoException("Los dos primeros caracteres de la patente deben ser letras (A-Z)");
+        }
+        
+         if (!letras2.matches("^[a-zA-Z]{2}$")) {  // Verificar que sean 2 letras
+            throw new DatoErroneoException("Los ultimos dos caracteres de la patente deben ser letras (A-Z)");
+        }
+
+        if (!numeros.matches("\\d{3}$")) {      // Verificar que sean numeros
+            throw new DatoErroneoException("Los tres caracteres del medio de la patente deben ser números (0-9)");
+        }
+    }
+    
     //AÑO FABRICACION
     public static void validarAñoFabricacion(String añoFabricacion){
         int añoActual = java.time.Year.now().getValue();        // Obtener el año actual
